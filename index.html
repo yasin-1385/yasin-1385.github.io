@@ -780,6 +780,56 @@ body.intro-active{overflow:hidden}
  .intro-progress{opacity:1}.intro-progress:after{animation:none;transform:scaleX(1)}
 }
 
+
+/* 8-SECOND NARRATIVE INTRO */
+.intro-inner{width:min(88vw,1120px);gap:clamp(24px,5vw,82px)}
+.intro-visual{overflow:visible}
+.intro-image-frame img{animation:portraitStory 3.1s .25s cubic-bezier(.16,.78,.2,1) both}
+.intro-visual:before{animation:introGlow 3.2s .35s ease both}
+.intro-copy{min-height:340px;justify-content:center}
+.intro-kicker{animation:introTextIn .7s .65s both}
+.intro-story{position:relative;min-height:145px;width:100%;display:flex;align-items:center;margin:0 0 2px}
+.story-line{position:absolute;left:0;top:0;font-size:clamp(27px,4.1vw,49px);line-height:1.08;font-weight:800;letter-spacing:-.055em;color:#f2f4f7;opacity:0;transform:translateY(18px);animation:storyBeat 1.85s ease both}
+.story-one{animation-delay:1.15s}
+.story-two{animation-delay:2.95s}
+.story-three{animation-delay:4.75s}
+.intro-name{animation:introTextIn .8s 6.05s both}
+.intro-subtitle{animation:introTextIn .65s 6.3s both}
+.intro-rule{animation:introRule .6s 6.5s both}
+.intro-note{animation:introTextIn .6s 6.65s both}
+.intro-progress{opacity:1;animation:none}
+.intro-progress:after{animation:introProgress 6.5s 1.15s linear both}
+.intro-corner{animation:introTextIn .6s 6.75s both}
+@keyframes storyBeat{
+  0%{opacity:0;transform:translateY(18px);filter:blur(7px)}
+  18%,72%{opacity:1;transform:translateY(0);filter:blur(0)}
+  100%{opacity:0;transform:translateY(-13px);filter:blur(4px)}
+}
+@keyframes portraitStory{
+  0%{opacity:0;transform:translateY(35px) scale(.78) rotate(-7deg);filter:blur(8px) drop-shadow(0 28px 38px rgba(0,0,0,.5))}
+  55%{opacity:1;filter:blur(0) drop-shadow(0 28px 38px rgba(0,0,0,.5))}
+  100%{opacity:1;transform:translateY(0) scale(1.035) rotate(0);filter:blur(0) drop-shadow(0 28px 38px rgba(0,0,0,.5))}
+}
+@media(max-width:650px){
+ .intro-inner{gap:0;padding:16px 0 35px}
+ .intro-visual{width:min(70vw,300px)}
+ .intro-copy{min-height:285px}
+ .intro-story{min-height:105px;justify-content:center}
+ .story-line{left:50%;width:100%;transform:translate(-50%,18px);font-size:clamp(25px,7.5vw,36px);text-align:center}
+ @keyframes storyBeat{
+  0%{opacity:0;transform:translate(-50%,18px);filter:blur(7px)}
+  18%,72%{opacity:1;transform:translate(-50%,0);filter:blur(0)}
+  100%{opacity:0;transform:translate(-50%,-13px);filter:blur(4px)}
+ }
+ .intro-kicker{margin-bottom:13px}
+ .intro-name{font-size:clamp(55px,16vw,78px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .story-line{animation:none;opacity:0}
+ .story-one{opacity:1}
+ .intro-progress:after{animation:none;transform:scaleX(1)}
+}
+
 </style>
 
 </head>
@@ -794,11 +844,16 @@ body.intro-active{overflow:hidden}
    </div>
   </div>
   <div class="intro-copy">
-   <div class="intro-kicker">A LITTLE INTRODUCTION</div>
+   <div class="intro-kicker">A VISUAL STORY · 2026</div>
+   <div class="intro-story" aria-label="A thought takes shape and becomes visual design">
+    <span class="story-line story-one">IT BEGINS WITH<br> A THOUGHT.</span>
+    <span class="story-line story-two">THEN, IT TAKES<br> A SHAPE.</span>
+    <span class="story-line story-three">UNTIL AN IDEA<br> BECOMES VISUAL.</span>
+   </div>
    <div class="intro-name">YASIN<span>.</span></div>
-   <div class="intro-subtitle">CREATIVE VISUAL DESIGNER</div>
+   <div class="intro-subtitle">GRAPHIC DESIGNER</div>
    <div class="intro-rule"></div>
-   <div class="intro-note">INDEPENDENT DESIGNER / PORTFOLIO 2026</div>
+   <div class="intro-note">IDEAS INTO VISUALS</div>
    <div class="intro-progress" aria-hidden="true"></div>
   </div>
  </div>
@@ -1240,7 +1295,7 @@ document.addEventListener("keydown",event=>{
  if(!intro)return;
  document.body.classList.add("intro-active");
  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
- const duration=reduced?350:4300;
+ const duration=reduced?350:8000;
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
   document.body.classList.remove("intro-active");
