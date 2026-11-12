@@ -2042,6 +2042,94 @@ html,body,body *{
 }
 </style>
 
+
+<style id="november-requested-refinements">
+/* Clear typography for the portfolio heading */
+.section-heading h2{
+  font-family:"Picoopic",Tahoma,sans-serif!important;
+  font-weight:800!important;
+  letter-spacing:0!important;
+  line-height:1.35!important;
+  color:#101d35!important;
+}
+/* A slower, softer category transition */
+.category-card{
+  transition:
+    transform 1.35s cubic-bezier(.22,1,.36,1),
+    opacity 1.2s cubic-bezier(.22,1,.36,1),
+    filter 1.25s cubic-bezier(.22,1,.36,1),
+    box-shadow .7s ease!important;
+  will-change:transform,opacity;
+}
+.category-stage.category-enter .category-card.center{
+  animation:categoryFocusIn 1.45s cubic-bezier(.22,1,.36,1) both!important;
+}
+.category-stage.category-enter .category-card.side-prev{
+  animation:categorySideLeft 1.45s cubic-bezier(.22,1,.36,1) both!important;
+}
+.category-stage.category-enter .category-card.side-next{
+  animation:categorySideRight 1.45s cubic-bezier(.22,1,.36,1) both!important;
+}
+@media(max-width:700px){
+ .category-stage.category-enter .category-card.center{animation:categoryFocusMobile 1.45s cubic-bezier(.22,1,.36,1) both!important}
+ .category-stage.category-enter .category-card.side-prev{animation:categoryLeftMobile 1.45s cubic-bezier(.22,1,.36,1) both!important}
+ .category-stage.category-enter .category-card.side-next{animation:categoryRightMobile 1.45s cubic-bezier(.22,1,.36,1) both!important}
+}
+/* Category title centered in the floating gallery header */
+.category-gallery-toolbar{position:relative!important;justify-content:center!important;min-height:76px}
+.category-gallery-toolbar>div{text-align:center!important;margin:0 auto!important}
+.category-gallery-toolbar h3{font-weight:800!important}
+.category-gallery-toolbar .category-back{
+ position:absolute!important;right:16px!important;top:50%!important;
+ transform:translateY(-50%)!important;
+}
+@media(max-width:520px){
+ .category-gallery-toolbar{padding:13px 105px!important;min-height:68px}
+ .category-gallery-toolbar .category-back{right:9px!important;padding:8px 9px!important;font-size:9px!important}
+ .category-gallery-toolbar h3{font-size:15px!important}
+}
+/* Keep the golden figure clearly visible on phones while copy remains readable above it */
+@media(max-width:650px){
+ #orb{
+   display:block!important;
+   z-index:3!important;
+   opacity:.88!important;
+   width:clamp(225px,69vw,330px)!important;
+   height:clamp(320px,98vw,455px)!important;
+   right:-7%!important;
+   left:auto!important;
+   top:60%!important;
+   transform:translateY(-30%) rotate(-4deg) scaleX(-1)!important;
+   filter:drop-shadow(0 15px 28px rgba(0,0,0,.34))!important;
+ }
+ .hero-content{z-index:5!important}
+ .hero h1,.hero-description,.hero-bottom,.eyebrow{position:relative;z-index:6!important}
+}
+/* More visible scroll cue and a thicker native scrollbar */
+.hero-index{
+ display:flex!important;align-items:center;gap:12px;
+ letter-spacing:0!important;font-size:11px!important;
+}
+.scroll-cue{
+ display:inline-flex;align-items:center;justify-content:center;
+ width:34px;height:34px;border:2px solid rgba(201,226,255,.68);
+ border-radius:50%;font-size:22px;line-height:1;color:#eaf3ff;
+ animation:scrollCueFloat 2.1s ease-in-out infinite;
+}
+@keyframes scrollCueFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+html{scrollbar-width: auto;scrollbar-color:#7398c4 #101d35}
+html::-webkit-scrollbar{width:11px}
+html::-webkit-scrollbar-track{background:#101d35}
+html::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#a9c8ec,#557eae);border:2px solid #101d35;border-radius:20px}
+html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
+/* Make the custom cursor ring more substantial */
+#navyDotCursor{
+ width:27px!important;height:27px!important;
+ border-width:4px!important;
+ background:rgba(12,34,65,.42)!important;
+}
+</style>
+
 </head>
 
 
@@ -2119,7 +2207,7 @@ html,body,body *{
 
   </div>
 
-  <div class="hero-index">۰۱ — ۰۳ / برای دیدن بیشتر اسکرول کنید</div>
+  <div class="hero-index"><span class="scroll-cue" aria-hidden="true">↓</span><span>برای دیدن آثار بیشتر اسکرول کنید</span></div>
 
 </section>
 
@@ -2194,15 +2282,6 @@ html,body,body *{
       <div class="contact-icon">◎</div>
       <strong>اینستاگرام</strong>
       <span>@design__moradi</span>
-
-    </a>
-
-    <a class="contact-card"
-       href="tel:09960683266">
-
-      <div class="contact-icon">☎</div>
-      <strong>تلفن</strong>
-      <span>09960683266</span>
 
     </a>
 
@@ -2357,7 +2436,7 @@ function openCategory(index){
   const toolbar=document.createElement("div");
   toolbar.className="category-gallery-toolbar";
   const heading=document.createElement("div");
-  heading.innerHTML="<small>دسته‌بندی نمونه‌کارها</small><h3></h3>";
+  heading.innerHTML="<small>دسته فعال</small><h3></h3>";
   heading.querySelector("h3").textContent=category.name;
   const close=document.createElement("button");
   close.type="button";
