@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101D35">
-<title>YASIN — Creative Visual Designer</title>
+<title>یاسین — طراح گرافیک</title>
 
 <style>
 :root{
@@ -595,7 +595,7 @@ footer{
 /* GLASSMORPHISM REDESIGN */
 :root{--ink:#080d19;--glass:rgba(255,255,255,.075);--glass-strong:rgba(255,255,255,.12);--line:rgba(255,255,255,.17);--soft:#b9c4d7;--accent:#b8d9ff;--cream:#101827;--navy:#0b1220;--deep:#080d19;--yellow:#c9e2ff;--muted:#aab8cc}
 html{scroll-behavior:smooth;scroll-padding-top:110px}
-body{background:#080d19;color:#f4f7fc;font-family:Arial,sans-serif}
+body{background:#080d19;color:#f4f7fc;font-family:Tahoma,Arial,sans-serif;direction:rtl}
 body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 12% 15%,rgba(75,119,177,.24),transparent 34%),radial-gradient(ellipse at 88% 42%,rgba(111,157,196,.17),transparent 33%),radial-gradient(ellipse at 45% 100%,rgba(93,105,160,.14),transparent 38%),#080d19}
 body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
 
@@ -1195,24 +1195,26 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
   filter:drop-shadow(0 18px 38px rgba(0,0,0,.28))!important;
   opacity:1!important;
   transform:translate3d(0,-48%,0) rotate(-5deg) scaleX(-1)!important;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 65%,rgba(0,0,0,.78) 78%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 65%,rgba(0,0,0,.78) 78%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 72% 76% at 50% 43%,#000 38%,rgba(0,0,0,.82) 63%,rgba(0,0,0,.28) 82%,transparent 100%),linear-gradient(to bottom,#000 0%,#000 34%,rgba(0,0,0,.72) 56%,rgba(0,0,0,.18) 76%,transparent 91%);
+  -webkit-mask-composite:source-in;
+  mask-image:radial-gradient(ellipse 72% 76% at 50% 43%,#000 38%,rgba(0,0,0,.82) 63%,rgba(0,0,0,.28) 82%,transparent 100%),linear-gradient(to bottom,#000 0%,#000 34%,rgba(0,0,0,.72) 56%,rgba(0,0,0,.18) 76%,transparent 91%);
+  mask-composite:intersect;
   pointer-events:none!important;
 }
 @media(max-width:900px){
   #orb{right:2%!important;width:48vw!important;height:68vw!important}
 }
 @media(max-width:650px){
-  #orb{right:-5%!important;top:52%!important;width:66vw!important;height:82vw!important;opacity:.88!important}
+  #orb{display:none!important}
 }
 </style>
 
 </head>
 
 
-<body>
+<body dir="rtl">
 
-<div id="siteIntro" role="presentation" aria-label="Yasin portfolio cinematic introduction">
+<div id="siteIntro" role="presentation" aria-label="مقدمه سینمایی نمونه‌کارهای یاسین">
   <div class="rift-world" aria-hidden="true">
     <div class="rift-backlight"></div>
     <div class="rift-vortex"></div>
@@ -1231,11 +1233,11 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
     <div class="rift-flare"></div>
   </div>
   <div class="rift-copy">
-    <div class="rift-kicker">A WORLD OF VISUAL IDEAS</div>
-    <div class="rift-title">YASIN<span>.</span></div>
-    <div class="rift-subtitle">GRAPHIC DESIGNER · SELECTED WORKS</div>
+    <div class="rift-kicker">جهانی از ایده‌های بصری</div>
+    <div class="rift-title">یاسین<span>.</span></div>
+    <div class="rift-subtitle">طراح گرافیک · آثار منتخب</div>
   </div>
-  <div class="rift-counter">PORTFOLIO / 2026</div>
+  <div class="rift-counter">نمونه‌کارها / ۱۴۰۵</div>
 </div>
 <div id="fabricAtmosphere" aria-hidden="true"></div>
 <canvas id="silkFlow" aria-hidden="true"></canvas>
@@ -1246,12 +1248,12 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
 <!-- HEADER -->
 
 <header>
-  <a class="logo" href="#">YASIN<span>.</span></a>
+  <a class="logo" href="#">یاسین<span>.</span></a>
 
   <nav class="nav">
-    <a href="#works">WORKS</a>
-    <a href="#about">ABOUT</a>
-    <a class="contact-link" href="#contact">CONTACT ↗</a>
+    <a href="#works">آثار</a>
+    <a href="#about">درباره من</a>
+    <a class="contact-link" href="#contact">ارتباط ↗</a>
   </nav>
 </header>
 
@@ -1265,26 +1267,26 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
 
   <div class="hero-content">
 
-    <div class="eyebrow">INDEPENDENT GRAPHIC DESIGNER</div>
+    <div class="eyebrow">طراح گرافیک مستقل</div>
 
     <h1>
       IDEAS INTO<br>
-      <span>VISUALS.</span>
+      <span>تصویرها.</span>
     </h1>
 
     <p class="hero-description">
-      I create visual experiences through graphic design,
-      creative thinking and digital aesthetics.
+      با طراحی گرافیک، تجربه‌های بصری خلق می‌کنم.
+      با تفکر خلاق و زیبایی‌شناسی دیجیتال.
     </p>
 
     <div class="hero-bottom">
-      <a href="#works" class="hero-button">EXPLORE MY WORKS ↗</a>
-      <span class="hero-note">PORTFOLIO / 2026</span>
+      <a href="#works" class="hero-button">مشاهده آثار ↗</a>
+      <span class="hero-note">نمونه‌کارها / ۱۴۰۵</span>
     </div>
 
   </div>
 
-  <div class="hero-index">01 — 03 / SCROLL TO EXPLORE</div>
+  <div class="hero-index">۰۱ — ۰۳ / برای دیدن بیشتر اسکرول کنید</div>
 
 </section>
 
@@ -1295,11 +1297,11 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
   <div class="section-heading">
 
     <div>
-      <small>SELECTED CREATIONS</small>
-      <h2>My Works.</h2>
+      <small>گزیده آثار</small>
+      <h2>آثار من.</h2>
     </div>
 
-    <div class="work-count" id="count">LOADING...</div>
+    <div class="work-count" id="count">در حال بارگذاری...</div>
 
   </div>
 
@@ -1311,14 +1313,14 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
 
 <section class="end-section" id="about">
 
-  <small>THANKS FOR VISITING</small>
+  <small>ممنون از بازدید شما</small>
 
   <h2>
     MAKE IT<br>
-    <span>MEMORABLE.</span>
+    <span>ماندگار.</span>
   </h2>
 
-  <p>YASIN — GRAPHIC DESIGNER · 2026</p>
+  <p>یاسین — طراح گرافیک · ۱۴۰۵</p>
 
 </section>
 
@@ -1326,12 +1328,12 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
 
 <section class="contact-section" id="contact">
 
-  <small>LET'S CONNECT</small>
+  <small>با من در ارتباط باشید</small>
 
-  <h2>GET IN <span>TOUCH.</span></h2>
+  <h2>در <span>ارتباط باشیم.</span></h2>
 
   <p class="contact-description">
-    Have a project in mind? Let's create something great together.
+    ایده‌ای برای همکاری دارید؟ بیایید اثری ماندگار خلق کنیم.
   </p>
 
   <div class="contact-grid">
@@ -1342,7 +1344,7 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
        rel="noopener noreferrer">
 
       <div class="contact-icon">◎</div>
-      <strong>INSTAGRAM</strong>
+      <strong>اینستاگرام</strong>
       <span>@design__moradi</span>
 
     </a>
@@ -1351,7 +1353,7 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
        href="tel:09960683266">
 
       <div class="contact-icon">☎</div>
-      <strong>PHONE</strong>
+      <strong>تلفن</strong>
       <span>09960683266</span>
 
     </a>
@@ -1362,7 +1364,7 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
        rel="noopener noreferrer">
 
       <div class="contact-icon">➤</div>
-      <strong>TELEGRAM</strong>
+      <strong>تلگرام</strong>
       <span>@YYohoho</span>
 
     </a>
@@ -1374,17 +1376,17 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
 <!-- FOOTER -->
 
 <footer>
-  <span>YASIN © 2026</span>
-  <span>CREATIVE VISUAL DESIGN</span>
+  <span>یاسین © ۱۴۰۵</span>
+  <span>طراحی خلاقانه بصری</span>
 </footer>
 
 <!-- LIGHTBOX -->
 
 <div class="lightbox" id="lightbox" onclick="closeImage()">
 
-  <button class="close" aria-label="Close">×</button>
+  <button class="close" aria-label="بستن">×</button>
 
-  <img id="largeImage" src="" alt="Portfolio preview">
+  <img id="largeImage" src="" alt="پیش‌نمایش نمونه‌کار">
 
 </div>
 
@@ -1407,7 +1409,7 @@ fetch("images.json")
   const gallery=document.getElementById("gallery");
 
   document.getElementById("count").textContent=
-    String(images.length).padStart(2,"0")+" WORKS";
+    String(images.length).padStart(2,"0")+" اثر";
 
   images.forEach((filename,index)=>{
 
@@ -1420,7 +1422,7 @@ fetch("images.json")
     const img=document.createElement("img");
 
     img.src=filename;
-    img.alt="Graphic design project "+(index+1);
+    img.alt="نمونه طراحی گرافیک شماره "+(index+1);
     img.loading="lazy";
 
     img.onclick=()=>{
@@ -1437,10 +1439,10 @@ fetch("images.json")
     const title=document.createElement("strong");
 
     title.textContent=
-      "PROJECT / "+String(index+1).padStart(2,"0");
+      "طرح / "+String(index+1).padStart(2,"0");
 
     const label=document.createElement("span");
-    label.textContent="YASIN DESIGN";
+    label.textContent="طراحی یاسین";
 
     caption.append(title,label);
 
@@ -1480,7 +1482,7 @@ fetch("images.json")
 
 .catch(error=>{
 
-  document.getElementById("count").textContent="GALLERY UNAVAILABLE";
+  document.getElementById("count").textContent="نمایش آثار ممکن نیست";
 
   console.error(error);
 
