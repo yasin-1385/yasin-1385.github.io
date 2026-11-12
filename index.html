@@ -742,19 +742,19 @@ body>#silkFlow{z-index:90}
 .intro-inner{position:relative;z-index:1;width:min(92vw,760px);display:flex;flex-direction:column;align-items:center;text-align:center}
 .intro-kicker{font-size:9px;letter-spacing:5px;color:#a9c8ec;margin-bottom:8px;opacity:0;transform:translateY(12px);animation:introTextIn .7s .15s forwards}
 .intro-image-frame{position:relative;width:clamp(250px,38vw,390px);aspect-ratio:1;overflow:visible;background:transparent;transform:translateY(12px) scale(.98)}
-.intro-image-frame img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;filter:url(#inkCutout) drop-shadow(0 0 16px rgba(205,229,255,.16));opacity:0;clip-path:inset(100% 0 0 0);animation:characterBuild 2.15s .45s cubic-bezier(.18,.72,.22,1) forwards}
+.intro-image-frame img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;filter:url(#inkCutout) drop-shadow(0 0 16px rgba(205,229,255,.16));opacity:0;clip-path:inset(100% 0 0 0);animation:characterBuild 3.75s .25s cubic-bezier(.18,.72,.22,1) forwards}
 .intro-draw-lines{position:absolute;inset:-7%;width:114%;height:114%;overflow:visible;pointer-events:none;z-index:2}
-.intro-draw-lines path{fill:none;stroke:#d9eaff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1200;stroke-dashoffset:1200;opacity:.8;filter:drop-shadow(0 0 5px rgba(184,216,255,.6));animation:inkTrace 2.25s cubic-bezier(.55,.05,.25,1) forwards}
-.intro-draw-lines path:nth-child(2){animation-delay:.12s;stroke-width:1.5;opacity:.55}
-.intro-draw-lines path:nth-child(3){animation-delay:.25s;stroke-width:1.3;opacity:.65}
-.intro-draw-lines path:nth-child(4){animation-delay:.38s;stroke-width:1.6;opacity:.5}
-.intro-draw-lines path:nth-child(5){animation-delay:.5s;stroke-width:1.2;opacity:.55}
-.intro-name{margin-top:4px;font-size:clamp(35px,7vw,64px);line-height:1;font-weight:900;letter-spacing:-.075em;opacity:0;transform:translateY(15px);animation:introTextIn .7s 2.1s forwards}
+.intro-draw-lines path{fill:none;stroke:#d9eaff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1800;stroke-dashoffset:1800;opacity:.8;filter:drop-shadow(0 0 5px rgba(184,216,255,.6));animation:inkTrace 3.8s cubic-bezier(.55,.05,.25,1) forwards}
+.intro-draw-lines path:nth-child(2){animation-delay:.08s;stroke-width:1.5;opacity:.55}
+.intro-draw-lines path:nth-child(3){animation-delay:.16s;stroke-width:1.3;opacity:.65}
+.intro-draw-lines path:nth-child(4){animation-delay:.24s;stroke-width:1.6;opacity:.5}
+.intro-draw-lines path:nth-child(5){animation-delay:.32s;stroke-width:1.2;opacity:.55}
+.intro-name{margin-top:4px;font-size:clamp(35px,7vw,64px);line-height:1;font-weight:900;letter-spacing:-.075em;opacity:0;transform:translateY(15px);animation:introTextIn .7s 3.65s forwards}
 .intro-name span{color:#b8d8ff}
-.intro-subtitle{margin-top:12px;font-size:9px;letter-spacing:4px;color:#aebed2;opacity:0;transform:translateY(12px);animation:introTextIn .7s 2.28s forwards}
-.intro-progress{width:130px;height:1px;margin-top:24px;background:rgba(255,255,255,.15);overflow:hidden;opacity:0;animation:introTextIn .5s 2.25s forwards}
-.intro-progress:after{content:"";display:block;width:100%;height:100%;background:#c8e2ff;transform:scaleX(0);transform-origin:left;animation:introProgress 1.25s 2.3s cubic-bezier(.6,0,.3,1) forwards}
-@keyframes inkTrace{0%{stroke-dashoffset:1200;opacity:0}12%{opacity:.85}82%{opacity:.75}100%{stroke-dashoffset:0;opacity:0}}
+.intro-subtitle{margin-top:12px;font-size:9px;letter-spacing:4px;color:#aebed2;opacity:0;transform:translateY(12px);animation:introTextIn .7s 3.82s forwards}
+.intro-progress{width:130px;height:1px;margin-top:24px;background:rgba(255,255,255,.15);overflow:hidden;opacity:0;animation:introTextIn .5s 3.8s forwards}
+.intro-progress:after{content:"";display:block;width:100%;height:100%;background:#c8e2ff;transform:scaleX(0);transform-origin:left;animation:introProgress .9s 3.9s cubic-bezier(.6,0,.3,1) forwards}
+@keyframes inkTrace{0%{stroke-dashoffset:1800;opacity:0}8%{opacity:.9}88%{opacity:.8}100%{stroke-dashoffset:0;opacity:0}}
 @keyframes characterBuild{0%{opacity:0;clip-path:inset(100% 0 0 0);transform:scale(.94)}100%{opacity:1;clip-path:inset(0 0 0 0);transform:scale(1)}}
 @keyframes introTextIn{to{opacity:1;transform:translateY(0)}}
 @keyframes introProgress{to{transform:scaleX(1)}}
@@ -777,13 +777,20 @@ body.intro-active{overflow:hidden}
  <div class="intro-inner">
   <div class="intro-kicker">AN INTRODUCTION TO MY CREATIVE WORLD</div>
   <div class="intro-image-frame">
-   <img src="photo_2026-11-12_06-27-12.jpg" alt="Hand-drawn character illustration" fetchpriority="high">
+   <img src="photo_2026-11-12_06-27-12.png" alt="Hand-drawn character illustration" fetchpriority="high">
    <svg class="intro-draw-lines" viewBox="0 0 640 640" aria-hidden="true">
-    <path d="M-35 365 C45 340 60 205 165 125 S350 25 445 100 S585 230 675 170"/>
-    <path d="M-25 470 C75 520 110 410 145 330 C180 245 155 165 255 105 S430 45 510 135 S565 320 675 360"/>
-    <path d="M45 -25 C95 85 185 55 245 115 S330 235 410 220 S525 130 665 70"/>
-    <path d="M-30 570 C90 480 125 565 230 540 S385 455 445 500 S565 585 675 500"/>
-    <path d="M90 665 C125 550 185 495 235 420 S315 280 390 300 S510 405 560 330 S585 180 665 145"/>
+    <path d="M-50 -35 C70 20 85 115 175 165 S300 245 320 320"/>
+    <path d="M320 320 C390 250 475 195 535 125 S615 25 690 -40"/>
+    <path d="M-55 320 C55 280 115 305 185 320 S260 325 320 320"/>
+    <path d="M690 320 C590 285 535 305 465 320 S380 325 320 320"/>
+    <path d="M-45 680 C30 590 95 535 165 485 S265 380 320 320"/>
+    <path d="M685 680 C605 590 545 535 475 485 S375 380 320 320"/>
+    <path d="M320 -55 C280 50 295 125 320 190 S325 270 320 320"/>
+    <path d="M320 690 C365 585 345 510 320 450 S315 370 320 320"/>
+    <path d="M-55 100 C75 145 125 80 205 135 S270 250 320 320"/>
+    <path d="M690 100 C565 145 515 80 435 135 S370 250 320 320"/>
+    <path d="M-55 540 C70 480 130 565 205 505 S270 390 320 320"/>
+    <path d="M690 540 C565 480 510 565 435 505 S370 390 320 320"/>
    </svg>
   </div>
   <div class="intro-name">YASIN<span>.</span></div>
@@ -1227,7 +1234,7 @@ document.addEventListener("keydown",event=>{
  if(!intro)return;
  document.body.classList.add("intro-active");
  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
- const duration=reduced?350:3900;
+ const duration=reduced?350:4100;
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
   document.body.classList.remove("intro-active");
