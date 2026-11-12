@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101D35">
 <title>یاسین — طراح گرافیک</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 
 <style>
 :root{
@@ -1206,6 +1210,94 @@ footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
 }
 @media(max-width:650px){
   #orb{display:none!important}
+}
+</style>
+
+
+<style id="portfolio-visual-fixes">
+/* Persian typography and layout refinements */
+html,body,button,input,textarea,select{
+  font-family:"Vazirmatn",Tahoma,sans-serif!important;
+}
+body{direction:rtl}
+header .nav{
+  font-size:15px!important;
+  font-weight:600!important;
+  letter-spacing:0!important;
+  gap:30px!important;
+}
+header .nav a{white-space:nowrap}
+header .contact-link{font-size:14px!important;padding:11px 20px!important}
+header .logo{font-family:"Vazirmatn",Tahoma,sans-serif!important;font-size:26px!important;letter-spacing:0!important}
+.hero{
+  background:
+    radial-gradient(ellipse at 24% 48%,rgba(125,145,170,.13),transparent 42%),
+    radial-gradient(ellipse at 82% 85%,rgba(75,91,116,.10),transparent 42%),
+    #080d19!important;
+}
+.hero-content{
+  width:min(56%,760px)!important;
+  max-width:760px!important;
+  margin-right:0!important;
+  margin-left:auto!important;
+  text-align:right!important;
+  z-index:4!important;
+}
+.hero h1{
+  letter-spacing:-.035em!important;
+  line-height:1.16!important;
+}
+.hero h1 span{
+  background:none!important;
+  color:#d9e3ef!important;
+  -webkit-text-fill-color:#d9e3ef!important;
+}
+.hero-description{margin-right:0!important;margin-left:auto!important;line-height:2.15!important}
+.hero-bottom{justify-content:flex-start!important}
+#orb{
+  left:3%!important;
+  right:auto!important;
+  top:50%!important;
+  width:clamp(270px,39vw,520px)!important;
+  height:clamp(390px,59vw,700px)!important;
+}
+#siteIntro{background:#080d19!important}
+#siteIntro .rift-copy{
+  z-index:20!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+#siteIntro .rift-kicker,
+#siteIntro .rift-title,
+#siteIntro .rift-subtitle,
+#siteIntro .rift-counter{
+  opacity:1!important;
+  visibility:visible!important;
+  animation:none!important;
+  letter-spacing:0!important;
+  font-family:"Vazirmatn",Tahoma,sans-serif!important;
+}
+#siteIntro .rift-kicker{font-size:clamp(14px,1.5vw,19px)!important;color:#d1d9e5!important}
+#siteIntro .rift-title{font-size:clamp(76px,13vw,150px)!important;line-height:1.15!important;letter-spacing:0!important;margin-top:20px!important}
+#siteIntro .rift-title span{color:#c7d5e7!important}
+#siteIntro .rift-subtitle{font-size:clamp(13px,1.4vw,18px)!important;color:#b8c5d6!important;margin-top:20px!important}
+#siteIntro .rift-counter{font-size:12px!important;right:5vw!important;letter-spacing:0!important}
+@media(max-width:900px){
+  .hero-content{width:100%!important;max-width:100%!important}
+  #orb{display:none!important}
+  .hero{background:#080d19!important}
+  header .nav{gap:18px!important;font-size:14px!important}
+}
+@media(max-width:600px){
+  header{gap:12px!important}
+  header .nav{gap:10px!important;font-size:12px!important}
+  header .contact-link{font-size:12px!important;padding:8px 11px!important}
+  header .logo{font-size:21px!important}
+  .hero-content{width:100%!important}
+  .hero h1{font-size:clamp(48px,12vw,68px)!important}
+  #siteIntro .rift-kicker{font-size:13px!important}
+  #siteIntro .rift-title{font-size:clamp(66px,18vw,100px)!important}
+  #siteIntro .rift-subtitle{font-size:12px!important}
 }
 </style>
 
