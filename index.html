@@ -2379,6 +2379,14 @@ fetch("images.json")
 let categoryMotionDirection="next";
 function renderCategoryCarousel(){
   const stage=document.getElementById("categoryStage");
+  const previousCards=new Map();
+  stage.querySelectorAll(".category-card").forEach(card=>{
+    const rect=card.getBoundingClientRect();
+    previousCards.set(Number(card.dataset.categoryIndex),{
+      left:rect.left,top:rect.top,width:rect.width,height:rect.height,
+      opacity:getComputedStyle(card).opacity
+    });
+  });
   stage.classList.remove("category-enter");
   stage.dataset.direction=categoryMotionDirection;
   const total=portfolioCategories.length;
@@ -2396,6 +2404,7 @@ function renderCategoryCarousel(){
     const card=document.createElement("button");
     card.type="button";
     card.className="category-card "+entry.position;
+    card.dataset.categoryIndex=String(entry.index);
     card.setAttribute("aria-label",entry.position==="center"?"باز کردن دسته "+category.name:"رفتن به دسته "+category.name);
     const image=document.createElement("img");
     setPortfolioImage(image,category.works[0].src);
@@ -2420,7 +2429,28 @@ function renderCategoryCarousel(){
   });
   document.getElementById("categoryPosition").textContent=
     String(activeCategoryIndex+1).padStart(2,"0")+" / "+String(total).padStart(2,"0");
-  requestAnimationFrame(()=>stage.classList.add("category-enter"));
+  // FLIP: each existing image travels from its actual old position to its new slot.
+  const cards=[...stage.querySelectorAll(".category-card")];
+  cards.forEach(card=>{
+    const old=previousCards.get(Number(card.dataset.categoryIndex));
+    const rect=card.getBoundingClientRect();
+    const finalTransform=getComputedStyle(card).transform;
+    const finalOpacity=getComputedStyle(card).opacity;
+    let fromTransform=finalTransform,fromOpacity=0;
+    if(old){
+      const dx=old.left-rect.left,dy=old.top-rect.top;
+      const sx=old.width/Math.max(rect.width,1),sy=old.height/Math.max(rect.height,1);
+      fromTransform="translate("+dx+"px,"+dy+"px) scale("+sx+","+sy+") "+(finalTransform==="none"?"":finalTransform);
+      fromOpacity=old.opacity;
+    }else{
+      const direction=card.classList.contains("side-prev")?-1:1;
+      fromTransform="translateX("+(direction*42)+"px) scale(.94) "+(finalTransform==="none"?"":finalTransform);
+    }
+    card.animate([
+      {transform:fromTransform,opacity:fromOpacity},
+      {transform:finalTransform==="none"?"none":finalTransform,opacity:finalOpacity}
+    ],{duration:1450,easing:"cubic-bezier(.22,.72,.18,1)",fill:"none"});
+  });
 }
 document.getElementById("categoryPrev").addEventListener("click",()=>{
   categoryMotionDirection="prev";
@@ -2453,7 +2483,8 @@ function openCategory(index){
   close.textContent="بازگشت به دسته‌بندی‌ها";
   close.addEventListener("click",closeCategory);
   toolbar.append(heading,close);
-  gallery.appendChild(toolbar);
+  document.querySelector("header").appendChild(toolbar);
+  document.querySelector("header").classList.add("gallery-header-active");
 
   category.works.forEach(work=>{
     const item=document.createElement("article");
@@ -2513,6 +2544,10 @@ function openCategory(index){
   document.getElementById("works").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function closeCategory(){
+  const header=document.querySelector("header");
+  const activeToolbar=header.querySelector(".category-gallery-toolbar");
+  if(activeToolbar)activeToolbar.remove();
+  header.classList.remove("gallery-header-active");
   document.getElementById("gallery").classList.remove("is-expanded");
   document.getElementById("gallery").replaceChildren();
   document.getElementById("categoryShowcase").hidden=false;
@@ -2764,5 +2799,96 @@ document.addEventListener("keydown",event=>{
  .category-stage.category-enter .category-card{animation:none!important}
 }
 </style>
+
+<style id="floating-gallery-header-and-flip-motion">
+/* Keep the site header available while browsing a category */
+header{
+ position:fixed!important;
+ top:0;left:0;right:0;
+ min-height:66px;
+ padding:12px clamp(18px,5vw,70px)!important;
+ transition:background .35s ease,border-color .35s ease,padding .35s ease;
+}
+header.header-scrolled,header.gallery-header-active{
+ background:rgba(8,17,32,.88)!important;
+ border-bottom:1px solid rgba(244,197,66,.18);
+ -webkit-backdrop-filter:blur(16px);
+ backdrop-filter:blur(16px);
+}
+header.gallery-header-active{
+ gap:clamp(10px,2vw,28px);
+}
+header .category-gallery-toolbar{
+ flex:1 1 auto;
+ min-width:0;
+ width:auto;
+ margin:0!important;
+ padding:6px 12px!important;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ border:1px solid rgba(244,197,66,.22)!important;
+ border-radius:12px!important;
+ background:rgba(244,197,66,.055)!important;
+ box-shadow:none!important;
+ -webkit-backdrop-filter:none!important;
+ backdrop-filter:none!important;
+}
+header .category-gallery-toolbar>div{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ min-width:0;
+}
+header .category-gallery-toolbar small{
+ font-size:9px!important;
+ white-space:nowrap;
+ color:#d9b84e!important;
+}
+header .category-gallery-toolbar h3{
+ margin:0!important;
+ font-size:clamp(11px,1.25vw,14px)!important;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+header .category-back{
+ flex:0 0 auto;
+ padding:7px 11px!important;
+ font-size:10px!important;
+ border-color:rgba(244,197,66,.4)!important;
+ background:rgba(244,197,66,.1)!important;
+ color:#f7d66e!important;
+}
+header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
+/* The carousel uses position-to-position FLIP motion, not fade-only keyframes */
+.category-stage.category-enter .category-card,
+.category-stage .category-card{animation:none!important}
+.category-card{transition:none!important;will-change:transform,opacity}
+@media(max-width:700px){
+ header{min-height:58px;padding:9px 12px!important}
+ header.gallery-header-active{gap:7px}
+ header.gallery-header-active .logo{font-size:18px}
+ header.gallery-header-active .nav{display:none}
+ header .category-gallery-toolbar{padding:5px 8px!important;gap:7px}
+ header .category-gallery-toolbar>div{gap:5px}
+ header .category-gallery-toolbar small{display:none}
+ header .category-gallery-toolbar h3{font-size:11px!important;max-width:38vw}
+ header .category-back{padding:6px 8px!important;font-size:9px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ header,.category-card{transition:none!important}
+}
+</style>
+<script>
+(()=> {
+ const header=document.querySelector("header");
+ if(!header)return;
+ const update=()=>header.classList.toggle("header-scrolled",window.scrollY>24);
+ update();
+ window.addEventListener("scroll",update,{passive:true});
+})();
+</script>
 </body>
 </html>
