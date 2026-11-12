@@ -1754,6 +1754,140 @@ html{scroll-behavior:smooth}
   box-shadow:none!important;
 }
 </style>
+ 
+<style id="november-portfolio-polish">
+/* Cleaner typography: use the already-loaded Persian Vazirmatn family site-wide */
+html,body,button,input,textarea,select{
+  font-family:"Vazirmatn",Tahoma,Arial,sans-serif!important;
+}
+.logo,.hero h1,.section-heading h2,.end-section h2,.contact-section h2,
+.category-gallery-toolbar h3,.lightbox-info h3,.about-heading h2{
+  font-family:"Vazirmatn",Tahoma,sans-serif!important;
+  letter-spacing:-.035em!important;
+}
+.nav,.hero-description,.caption,.category-card-label,.category-hint,
+.category-position,.category-gallery-toolbar,.category-back,
+.lightbox-info,.about-content,.contact-description,footer{
+  font-family:"Vazirmatn",Tahoma,sans-serif!important;
+}
+.category-card-label strong{font-weight:700!important;letter-spacing:-.025em}
+.category-card-label small,.category-hint{letter-spacing:0!important}
+
+/* Open artwork: remove the heavy floating slab and give the artwork breathing room */
+.lightbox{padding:28px!important}
+.lightbox-panel{
+  width:min(100%,1120px)!important;
+  max-height:calc(100vh - 56px)!important;
+  gap:22px!important;
+  padding:18px 20px 22px!important;
+  overflow-y:auto!important;
+  border:1px solid rgba(126,164,211,.16)!important;
+  border-radius:22px!important;
+  background:rgba(7,17,34,.25)!important;
+  -webkit-backdrop-filter:blur(5px)!important;
+  backdrop-filter:blur(5px)!important;
+  box-shadow:none!important;
+}
+.lightbox-panel>img{
+  max-width:min(88%,980px)!important;
+  max-height:68vh!important;
+  width:auto!important;height:auto!important;
+  margin:10px auto 4px!important;
+  border-radius:10px!important;
+  background:transparent!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.28)!important;
+}
+.lightbox-info{
+  width:min(88%,850px)!important;
+  margin:0 auto!important;
+  padding:18px 22px!important;
+  border:1px solid rgba(112,151,201,.2)!important;
+  border-radius:16px!important;
+  background:rgba(10,25,48,.58)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  backdrop-filter:blur(14px)!important;
+}
+.lightbox-panel .close{
+  background:rgba(10,29,57,.76)!important;
+  color:#c9ddf7!important;
+  border:1px solid rgba(125,164,214,.42)!important;
+  box-shadow:inset 0 1px 0 rgba(220,237,255,.16),0 6px 20px rgba(0,0,0,.22)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  backdrop-filter:blur(14px)!important;
+}
+@media(max-width:650px){
+ .lightbox{padding:12px!important}
+ .lightbox-panel{max-height:calc(100vh - 24px)!important;padding:12px 10px 16px!important;gap:15px!important}
+ .lightbox-panel>img{max-width:94%!important;max-height:57vh!important;margin:8px auto 2px!important}
+ .lightbox-info{width:94%!important;padding:14px!important}
+}
+
+/* Category carousel: the selected card resolves into focus as the side card softens away */
+.category-card{will-change:transform,opacity,filter}
+.category-stage.category-enter .category-card.center{
+  animation:categoryFocusIn .48s cubic-bezier(.2,.75,.2,1) both;
+}
+.category-stage.category-enter .category-card.side-prev{
+  animation:categorySideLeft .48s cubic-bezier(.2,.75,.2,1) both;
+}
+.category-stage.category-enter .category-card.side-next{
+  animation:categorySideRight .48s cubic-bezier(.2,.75,.2,1) both;
+}
+@keyframes categoryFocusIn{
+  from{opacity:.42;filter:blur(5px) saturate(.65);transform:translateY(-50%) scale(.9)}
+  to{opacity:1;filter:blur(0) saturate(1);transform:translateY(-50%) scale(1)}
+}
+@keyframes categorySideLeft{
+  from{opacity:.9;filter:blur(0);transform:translateY(-50%) translateX(28%) scale(.98)}
+  to{opacity:.48;filter:blur(2.2px) saturate(.72);transform:translateY(-50%) translateX(0) scale(.88)}
+}
+@keyframes categorySideRight{
+  from{opacity:.9;filter:blur(0);transform:translateY(-50%) translateX(-28%) scale(.98)}
+  to{opacity:.48;filter:blur(2.2px) saturate(.72);transform:translateY(-50%) translateX(0) scale(.88)}
+}
+@media(max-width:700px){
+ .category-stage.category-enter .category-card.center{
+  animation:categoryFocusMobile .48s cubic-bezier(.2,.75,.2,1) both;
+ }
+ .category-stage.category-enter .category-card.side-prev{
+  animation:categoryLeftMobile .48s cubic-bezier(.2,.75,.2,1) both;
+ }
+ .category-stage.category-enter .category-card.side-next{
+  animation:categoryRightMobile .48s cubic-bezier(.2,.75,.2,1) both;
+ }
+}
+@keyframes categoryFocusMobile{
+ from{opacity:.35;filter:blur(5px);transform:translate(-50%,-50%) scale(.9)}
+ to{opacity:1;filter:none;transform:translate(-50%,-50%) scale(1)}
+}
+@keyframes categoryLeftMobile{
+ from{opacity:.8;filter:blur(0);transform:translate(28%,-50%) scale(.98)}
+ to{opacity:.42;filter:blur(2px) saturate(.65);transform:translateY(-50%) scale(.91)}
+}
+@keyframes categoryRightMobile{
+ from{opacity:.8;filter:blur(0);transform:translate(-28%,-50%) scale(.98)}
+ to{opacity:.42;filter:blur(2px) saturate(.65);transform:translateY(-50%) scale(.91)}
+}
+
+/* Navy glass cursor — translucent fill so the page remains visible beneath it */
+#navyDotCursor{
+  width:25px!important;height:25px!important;
+  border:1px solid rgba(139,177,224,.82)!important;
+  background:rgba(12,34,65,.48)!important;
+  -webkit-backdrop-filter:blur(5px) saturate(145%)!important;
+  backdrop-filter:blur(5px) saturate(145%)!important;
+  box-shadow:inset 0 1px 2px rgba(220,237,255,.18),0 3px 13px rgba(0,0,0,.22)!important;
+}
+#navyDotCursor.is-hover{
+  background:rgba(18,49,87,.64)!important;
+  border-color:rgba(169,202,241,.96)!important;
+  box-shadow:inset 0 1px 2px rgba(220,237,255,.24),0 0 0 4px rgba(65,105,158,.12),0 4px 16px rgba(0,0,0,.24)!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .category-stage.category-enter .category-card{animation:none!important}
+}
+</style>
+
 </head>
 
 
@@ -2007,6 +2141,7 @@ fetch("images.json")
 
 function renderCategoryCarousel(){
   const stage=document.getElementById("categoryStage");
+  stage.classList.remove("category-enter");
   const total=portfolioCategories.length;
   if(!total)return;
   const prev=(activeCategoryIndex-1+total)%total;
@@ -2045,6 +2180,7 @@ function renderCategoryCarousel(){
   });
   document.getElementById("categoryPosition").textContent=
     String(activeCategoryIndex+1).padStart(2,"0")+" / "+String(total).padStart(2,"0");
+  requestAnimationFrame(()=>stage.classList.add("category-enter"));
 }
 document.getElementById("categoryPrev").addEventListener("click",()=>{
   activeCategoryIndex=(activeCategoryIndex-1+portfolioCategories.length)%portfolioCategories.length;
