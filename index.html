@@ -1499,11 +1499,11 @@ body.lightbox-open{overflow:hidden}
 
 <style>
 /* MINIMAL GLASS CURSOR + ABOUT PROFILE */
-@media (hover:hover) and (pointer:fine){html,body,body *{cursor:none!important}#glassCursor{display:block}}
-#glassCursor{display:none;position:fixed;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:10001;pointer-events:none;border:1px solid rgba(235,245,255,.72);border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.23),rgba(190,220,255,.055));backdrop-filter:blur(9px) saturate(155%);-webkit-backdrop-filter:blur(9px) saturate(155%);box-shadow:inset 0 1px 2px rgba(255,255,255,.42),0 3px 18px rgba(0,0,0,.18);opacity:0;transform:none;transition:width .22s,height .22s,margin .22s,background .22s,opacity .2s}
+@media (hover:hover) and (pointer:fine){#glassCursor{display:block}}
+#glassCursor{display:none;position:fixed;left:0;top:0;width:30px;height:30px;margin:0;z-index:2147483647;pointer-events:none;border:1px solid rgba(235,245,255,.72);border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.23),rgba(190,220,255,.055));backdrop-filter:blur(9px) saturate(155%);-webkit-backdrop-filter:blur(9px) saturate(155%);box-shadow:inset 0 1px 2px rgba(255,255,255,.42),0 3px 18px rgba(0,0,0,.18);opacity:0;transform:translate(-50%,-50%);transition:width .22s,height .22s,margin .22s,background .22s,opacity .2s}
 #glassCursor:after{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.24);border-radius:50%}
 #glassCursor.cursor-visible{opacity:1}
-#glassCursor.cursor-hover{width:42px;height:42px;margin:-21px 0 0 -21px;background:linear-gradient(145deg,rgba(255,255,255,.3),rgba(190,220,255,.1));border-color:rgba(255,255,255,.9)}
+#glassCursor.cursor-hover{width:42px;height:42px;background:linear-gradient(145deg,rgba(255,255,255,.3),rgba(190,220,255,.1));border-color:rgba(255,255,255,.9)}
 .about-section{padding:105px 9%;text-align:right}
 .about-inner{width:min(100%,1120px);margin:auto;display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(35px,7vw,100px);align-items:center}
 .about-heading h2{font-size:clamp(45px,6vw,76px);line-height:1.18;letter-spacing:-3px;margin:24px 0 0}
@@ -2000,17 +2000,35 @@ document.addEventListener("keydown",event=>{
 
 
 <script>
-/* FOLLOWING MINIMAL GLASS CURSOR */
+/* RELIABLE GLASS CURSOR — native pointer remains as fallback */
 (()=>{
  const cursor=document.getElementById("glassCursor");
- if(!cursor||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
- let x=-100,y=-100,tx=-100,ty=-100,raf=0;
- const render=()=>{raf=0;x+=(tx-x)*.24;y+=(ty-y)*.24;cursor.style.left=x+"px";cursor.style.top=y+"px";if(Math.abs(tx-x)>.1||Math.abs(ty-y)>.1)raf=requestAnimationFrame(render)};
- addEventListener("pointermove",e=>{tx=e.clientX;ty=e.clientY;cursor.classList.add("cursor-visible");if(!raf)raf=requestAnimationFrame(render)},{passive:true});
+ if(!cursor)return;
+ if(!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+ document.documentElement.appendChild(cursor);
+ let x=0,y=0,tx=0,ty=0,raf=0,started=false;
+ const render=()=>{
+  raf=0;
+  x+=(tx-x)*.38;y+=(ty-y)*.38;
+  cursor.style.left=tx+"px";
+  cursor.style.top=ty+"px";
+  cursor.style.transform="translate(-50%,-50%)";
+  if(Math.abs(tx-x)>.2||Math.abs(ty-y)>.2)raf=requestAnimationFrame(render);
+ };
+ addEventListener("pointermove",e=>{
+  tx=e.clientX;ty=e.clientY;
+  if(!started){x=tx;y=ty;started=true;}
+  cursor.classList.add("cursor-visible");
+  if(!raf)raf=requestAnimationFrame(render);
+ },{passive:true});
  addEventListener("pointerdown",()=>cursor.classList.add("cursor-hover"),{passive:true});
  addEventListener("pointerup",()=>cursor.classList.remove("cursor-hover"),{passive:true});
- document.addEventListener("pointerover",e=>{if(e.target.closest("a,button,.item,[role='button']"))cursor.classList.add("cursor-hover")},{passive:true});
- document.addEventListener("pointerout",e=>{if(e.target.closest("a,button,.item,[role='button']")&&!e.relatedTarget?.closest("a,button,.item,[role='button']"))cursor.classList.remove("cursor-hover")},{passive:true});
+ document.addEventListener("pointerover",e=>{
+  if(e.target.closest("a,button,.item,[role='button']"))cursor.classList.add("cursor-hover");
+ },{passive:true});
+ document.addEventListener("pointerout",e=>{
+  if(e.target.closest("a,button,.item,[role='button']")&&!e.relatedTarget?.closest("a,button,.item,[role='button']"))cursor.classList.remove("cursor-hover");
+ },{passive:true});
  addEventListener("blur",()=>cursor.classList.remove("cursor-visible"));
 })();
 </script>
