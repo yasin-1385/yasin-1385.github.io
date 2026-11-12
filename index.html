@@ -1834,16 +1834,16 @@ html,body,button,input,textarea,select{
   animation:categorySideRight .48s cubic-bezier(.2,.75,.2,1) both;
 }
 @keyframes categoryFocusIn{
-  from{opacity:.42;filter:blur(5px) saturate(.65);transform:translateY(-50%) scale(.9)}
-  to{opacity:1;filter:blur(0) saturate(1);transform:translateY(-50%) scale(1)}
+  from{opacity:.42;filter:blur(5px) saturate(.65);transform:scale(.9)}
+  to{opacity:1;filter:blur(0) saturate(1);transform:scale(1)}
 }
 @keyframes categorySideLeft{
-  from{opacity:.9;filter:blur(0);transform:translateY(-50%) translateX(28%) scale(.98)}
-  to{opacity:.48;filter:blur(2.2px) saturate(.72);transform:translateY(-50%) translateX(0) scale(.88)}
+  from{opacity:.9;filter:blur(0);transform:translateX(28%) scale(.98)}
+  to{opacity:.48;filter:blur(2.2px) saturate(.72);transform:scale(.88)}
 }
 @keyframes categorySideRight{
-  from{opacity:.9;filter:blur(0);transform:translateY(-50%) translateX(-28%) scale(.98)}
-  to{opacity:.48;filter:blur(2.2px) saturate(.72);transform:translateY(-50%) translateX(0) scale(.88)}
+  from{opacity:.9;filter:blur(0);transform:translateX(-28%) scale(.98)}
+  to{opacity:.48;filter:blur(2.2px) saturate(.72);transform:scale(.88)}
 }
 @media(max-width:700px){
  .category-stage.category-enter .category-card.center{
