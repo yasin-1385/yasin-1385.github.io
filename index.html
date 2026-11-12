@@ -1142,8 +1142,9 @@ document.addEventListener("keydown",event=>{
   },{passive:true});
  }
  const gallery=document.getElementById("gallery");
- const cards=gallery.querySelectorAll(".item");
- cards.forEach((card,i)=>card.style.setProperty("--reveal-delay",Math.min(i%3,2)*95+"ms"));
+ const setRevealDelays=()=>gallery.querySelectorAll(".item:not([data-reveal-ready])").forEach((card)=>{const i=Array.prototype.indexOf.call(gallery.children,card);card.style.setProperty("--reveal-delay",Math.min(i%3,2)*95+"ms");card.dataset.revealReady="1";});
+ setRevealDelays();
+ new MutationObserver(setRevealDelays).observe(gallery,{childList:true});
  if(fine){
   gallery.addEventListener("pointermove",e=>{
    const card=e.target.closest(".item");
