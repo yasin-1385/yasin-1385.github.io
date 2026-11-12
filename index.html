@@ -1061,6 +1061,119 @@ body.intro-active{overflow:hidden}
 }
 </style>
 
+
+<style id="glass-studio-refinement">
+/* GLASS STUDIO — keep the surreal intro, give the website a distinct glass identity */
+:root{
+  --glass-edge:rgba(226,239,255,.2);
+  --glass-fill:rgba(188,213,242,.075);
+  --glass-highlight:rgba(244,249,255,.34);
+}
+body:before{
+  background:
+    radial-gradient(ellipse 48% 55% at 82% 28%,rgba(113,151,190,.12),transparent 72%),
+    radial-gradient(ellipse 40% 50% at 8% 72%,rgba(91,119,157,.1),transparent 72%),
+    linear-gradient(135deg,#080d17 0%,#101a29 48%,#080d18 100%);
+}
+body:after{opacity:.055}
+.hero{isolation:isolate;background:transparent}
+.hero:before{display:none}
+.hero:after{
+  content:"";position:absolute;z-index:0;right:5%;top:18%;width:min(48vw,620px);height:64%;
+  border:1px solid rgba(231,242,255,.12);border-radius:34px;
+  background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(175,207,239,.012) 48%,rgba(255,255,255,.035));
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.14),0 35px 90px rgba(0,0,0,.16);
+  transform:rotate(-7deg);pointer-events:none;
+}
+.hero-orb{
+  z-index:1!important;position:absolute!important;
+  width:min(37vw,470px)!important;height:min(48vw,570px)!important;
+  right:10%!important;top:48%!important;
+  border-radius:42% 12% 38% 16%!important;
+  border:1px solid rgba(239,247,255,.48)!important;
+  background:
+    linear-gradient(128deg,rgba(255,255,255,.52) 0%,rgba(204,225,247,.17) 17%,rgba(117,155,196,.055) 48%,rgba(245,250,255,.19) 74%,rgba(255,255,255,.035) 100%)!important;
+  box-shadow:inset 2px 2px 3px rgba(255,255,255,.46),inset -18px -22px 45px rgba(5,12,24,.26),0 35px 85px rgba(0,0,0,.25)!important;
+  backdrop-filter:blur(9px) saturate(125%);
+  -webkit-backdrop-filter:blur(9px) saturate(125%);
+  filter:none!important;opacity:.8;
+  transform:translate3d(0,-48%,0) rotate(-24deg) skewY(-5deg)!important;
+  border-radius:42% 12% 38% 16%!important;
+}
+.hero-orb:before,.hero-orb:after{content:"";position:absolute;pointer-events:none}
+.hero-orb:before{
+  inset:8% 13% 12% 25%;border:1px solid rgba(255,255,255,.48);
+  border-radius:12% 48% 15% 42%;
+  background:linear-gradient(145deg,rgba(255,255,255,.27),rgba(255,255,255,.015) 52%,rgba(185,216,247,.12));
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.38),0 12px 35px rgba(0,0,0,.12);
+  transform:rotate(19deg);
+}
+.hero-orb:after{
+  inset:22% -13% 20% 48%;border:1px solid rgba(255,255,255,.3);
+  border-radius:8px 45% 10px 38%;
+  background:linear-gradient(110deg,rgba(255,255,255,.2),rgba(255,255,255,.015) 62%,rgba(205,228,250,.16));
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.32);
+  transform:rotate(31deg);
+}
+.hero-content{z-index:3}
+.hero-description{color:#c1ccda}
+.hero-index{z-index:3}
+header{
+  background:rgba(20,30,45,.48);
+  border-color:rgba(231,241,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 50px rgba(0,0,0,.2);
+}
+.section{position:relative}
+.section-heading{
+  background:linear-gradient(125deg,rgba(224,238,255,.13),rgba(183,211,241,.045) 55%,rgba(255,255,255,.075));
+  border-color:rgba(227,240,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.23),0 24px 65px rgba(0,0,0,.2);
+}
+.work-count{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.gallery .image-wrap{
+  position:relative;
+  background:linear-gradient(145deg,rgba(230,241,255,.14),rgba(164,194,226,.035));
+  border-color:rgba(226,239,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(255,255,255,.04),0 20px 55px rgba(0,0,0,.24);
+}
+.gallery .image-wrap:before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(132deg,rgba(255,255,255,.13),transparent 24%,transparent 72%,rgba(255,255,255,.055));
+  border-radius:inherit;
+}
+.gallery .image-wrap img{position:relative;z-index:0}
+.gallery .caption{border-color:rgba(230,240,255,.18)}
+.end-section{
+  background:linear-gradient(125deg,rgba(229,241,255,.14),rgba(155,190,228,.035) 52%,rgba(255,255,255,.075));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 28px 85px rgba(0,0,0,.24);
+}
+.end-section:before{border-color:rgba(226,240,255,.15);box-shadow:0 0 0 35px rgba(215,234,255,.035),0 0 0 75px rgba(215,234,255,.02)}
+.contact-card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,rgba(226,239,255,.13),rgba(175,205,238,.035) 65%,rgba(255,255,255,.065));
+  border-color:rgba(230,241,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 18px 48px rgba(0,0,0,.2);
+}
+.contact-card:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(118deg,rgba(255,255,255,.12),transparent 38%);
+}
+.contact-card>*{position:relative}
+footer{background:rgba(8,13,23,.48);border-color:rgba(229,240,255,.14)}
+@media(max-width:750px){
+  .hero:after{right:-5%;top:26%;width:64vw;height:48%;border-radius:24px}
+  .hero-orb{width:48vw!important;height:62vw!important;right:3%!important;opacity:.52}
+}
+@media(max-width:480px){
+  .hero:after{right:-18%;top:30%;width:78vw;height:43%}
+  .hero-orb{width:58vw!important;height:70vw!important;right:-3%!important;opacity:.38}
+  .hero-content{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-orb{transform:translate3d(0,-48%,0) rotate(-24deg)!important}
+}
+</style>
+
 </head>
 
 
