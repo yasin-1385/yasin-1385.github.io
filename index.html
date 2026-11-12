@@ -830,25 +830,95 @@ body.intro-active{overflow:hidden}
  .intro-progress:after{animation:none;transform:scaleX(1)}
 }
 
+
+/* LIQUID IMPACT — THE RIPPLE REVEALS THE PORTRAIT */
+.intro-inner{grid-template-columns:1fr;gap:0;width:min(88vw,900px);min-height:0;justify-items:center;text-align:center}
+.intro-visual{width:min(54vw,490px);aspect-ratio:1;overflow:visible;isolation:isolate}
+.intro-visual:before{width:72%;background:rgba(160,195,235,.2);filter:blur(80px);animation:introGlow 4s 1.8s ease both}
+.intro-image-frame{position:absolute;inset:0;overflow:visible}
+.intro-image-frame img{
+ width:100%;height:100%;object-fit:contain;opacity:1;
+ clip-path:circle(0% at 50% 50%);
+ transform:scale(1.08);
+ filter:url(#liquidWarp) drop-shadow(0 28px 38px rgba(0,0,0,.5));
+ animation:waterReveal 2.7s 2.05s cubic-bezier(.16,.72,.22,1) both;
+}
+.water-drop{position:absolute;z-index:5;left:50%;top:-7%;width:13px;height:19px;border-radius:70% 70% 70% 10%;background:linear-gradient(145deg,#fff,#9fc8ef 55%,#5e87b5);box-shadow:0 0 22px #a9d5ff88;transform:translateX(-50%) rotate(-45deg);opacity:0;animation:dropFall 1.15s .55s cubic-bezier(.5,.02,.8,.45) forwards}
+.water-ripple{position:absolute;z-index:4;left:50%;top:53%;width:20px;height:20px;border:1px solid rgba(211,234,255,.85);border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 22px rgba(169,211,255,.18),inset 0 0 15px rgba(169,211,255,.12)}
+.ripple-one{animation:rippleExpand 2.2s 1.48s ease-out both}
+.ripple-two{animation:rippleExpand 2.4s 1.7s ease-out both}
+.ripple-three{animation:rippleExpand 2.6s 1.92s ease-out both}
+.intro-copy{align-items:center;text-align:center;min-height:0;padding:0;margin-top:-5px}
+.intro-kicker{margin:0 0 15px;animation:introTextIn .7s 4.35s both}
+.intro-story{min-height:54px;justify-content:center;margin:0}
+.story-line{left:50%;top:0;width:100%;text-align:center;font-size:clamp(19px,3vw,30px);letter-spacing:.13em;transform:translate(-50%,14px);animation:storyBeat 1.4s ease both}
+.story-one{animation-delay:1.2s}
+.story-two{animation-delay:3.35s}
+.intro-name{font-size:clamp(60px,8vw,100px);animation:introTextIn .85s 5.05s both}
+.intro-subtitle{animation:introTextIn .7s 5.4s both;margin-top:17px}
+.intro-rule{transform-origin:center;animation:introRule .6s 5.65s both;margin-top:23px}
+.intro-note{animation:introTextIn .6s 5.85s both}
+.intro-progress{opacity:1;animation:none}
+.intro-progress:after{animation:introProgress 6.7s .65s linear both}
+.intro-corner{animation:introTextIn .6s 6s both}
+@keyframes dropFall{
+ 0%{opacity:0;top:-8%;transform:translateX(-50%) rotate(-45deg) scale(.55)}
+ 15%{opacity:1}
+ 82%{opacity:1;top:49%;transform:translateX(-50%) rotate(-45deg) scale(1)}
+ 100%{opacity:0;top:53%;transform:translateX(-50%) rotate(-45deg) scale(.15)}
+}
+@keyframes rippleExpand{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.1);width:18px;height:18px}
+ 12%{opacity:.85}
+ 100%{opacity:0;transform:translate(-50%,-50%) scale(1);width:min(75vw,660px);height:min(75vw,660px)}
+}
+@keyframes waterReveal{
+ 0%{clip-path:circle(0% at 50% 50%);transform:scale(1.1);filter:url(#liquidWarp) blur(5px) drop-shadow(0 28px 38px rgba(0,0,0,.5))}
+ 45%{clip-path:circle(42% at 50% 50%);transform:scale(1.04);filter:url(#liquidWarp) blur(1px) drop-shadow(0 28px 38px rgba(0,0,0,.5))}
+ 100%{clip-path:circle(72% at 50% 50%);transform:scale(1);filter:drop-shadow(0 28px 38px rgba(0,0,0,.5))}
+}
+.intro-kicker,.intro-name,.intro-subtitle,.intro-rule,.intro-note{opacity:0}
+@media(max-width:650px){
+ .intro-inner{width:88vw;gap:0;padding:10px 0 35px}
+ .intro-visual{width:min(76vw,330px)}
+ .intro-copy{margin-top:-4px}
+ .intro-story{min-height:46px}
+ .story-line{font-size:clamp(16px,5vw,23px)}
+ .intro-name{font-size:clamp(58px,16vw,80px)}
+ .intro-subtitle{font-size:8px}
+ .intro-corner{right:22px;bottom:24px}
+}
+@media(prefers-reduced-motion:reduce){
+ .water-drop,.water-ripple{display:none}
+ .intro-image-frame img{animation:none;clip-path:none;opacity:1;filter:none}
+ .intro-kicker,.intro-name,.intro-subtitle,.intro-note,.intro-corner{opacity:1;animation:none}
+ .story-line{display:none}
+ .intro-rule{animation:none;transform:scaleX(1)}
+}
+
 </style>
 
 </head>
 
 
 <body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="liquidWarp" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".012 .025" numOctaves="2" seed="8" result="noise"><animate attributeName="baseFrequency" values=".012 .025;.025 .04;.012 .025" dur="2.7s" begin="2.05s" fill="freeze"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="38" xChannelSelector="R" yChannelSelector="G"><animate attributeName="scale" values="38;22;0" dur="2.7s" begin="2.05s" fill="freeze"/></feDisplacementMap></filter></svg>
 <div id="siteIntro" role="presentation" aria-label="Yasin portfolio introduction">
  <div class="intro-inner">
   <div class="intro-visual">
+   <div class="water-drop" aria-hidden="true"></div>
+   <div class="water-ripple ripple-one" aria-hidden="true"></div>
+   <div class="water-ripple ripple-two" aria-hidden="true"></div>
+   <div class="water-ripple ripple-three" aria-hidden="true"></div>
    <div class="intro-image-frame">
     <img src="Layer%200.png" alt="Yasin illustration" fetchpriority="high">
    </div>
   </div>
   <div class="intro-copy">
-   <div class="intro-kicker">A VISUAL STORY · 2026</div>
-   <div class="intro-story" aria-label="A thought takes shape and becomes visual design">
-    <span class="story-line story-one">IT BEGINS WITH<br> A THOUGHT.</span>
-    <span class="story-line story-two">THEN, IT TAKES<br> A SHAPE.</span>
-    <span class="story-line story-three">UNTIL AN IDEA<br> BECOMES VISUAL.</span>
+   <div class="intro-kicker">EVERYTHING STARTS SOMEWHERE</div>
+   <div class="intro-story" aria-label="A drop becomes a visual idea">
+    <span class="story-line story-one">A SINGLE DROP.</span>
+    <span class="story-line story-two">A RIPPLE OF IDEAS.</span>
    </div>
    <div class="intro-name">YASIN<span>.</span></div>
    <div class="intro-subtitle">GRAPHIC DESIGNER</div>
