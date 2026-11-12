@@ -2572,6 +2572,7 @@ function renderCategoryCarousel(){
     const rect=oldCenter.getBoundingClientRect();
     const stageRect=stage.getBoundingClientRect();
     outgoing=oldCenter.cloneNode(true);
+    outgoing.dataset.outgoing="1";
     outgoing.removeAttribute("aria-label");
     outgoing.tabIndex=-1;
     outgoing.style.setProperty("position","absolute","important");
