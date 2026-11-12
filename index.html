@@ -735,29 +735,50 @@ body>#silkFlow{z-index:90}
 }
 
 
-/* CINEMATIC INTRO — THE PORTRAIT REVEAL */
+/* EDITORIAL INTRO — PORTRAIT + TYPOGRAPHY */
 #siteIntro{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:#08090c;color:#f4f4f2;opacity:1;visibility:visible;transition:opacity .9s cubic-bezier(.7,0,.2,1),visibility .9s}
-#siteIntro:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 42% 48% at 50% 43%,rgba(190,199,214,.13),transparent 72%),linear-gradient(115deg,transparent 20%,rgba(255,255,255,.018) 50%,transparent 80%)}
-#siteIntro:after{content:"";position:absolute;inset:22px;border:1px solid rgba(255,255,255,.075);pointer-events:none}
+#siteIntro:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 38% 60% at 34% 48%,rgba(174,190,215,.16),transparent 72%),radial-gradient(ellipse at 78% 20%,rgba(255,255,255,.045),transparent 38%),linear-gradient(125deg,transparent 30%,rgba(255,255,255,.018) 50%,transparent 70%)}
+#siteIntro:after{content:"";position:absolute;inset:20px;border:1px solid rgba(255,255,255,.065);pointer-events:none}
 #siteIntro.intro-leaving{opacity:0;visibility:hidden;pointer-events:none}
-.intro-inner{position:relative;z-index:1;width:min(92vw,760px);display:flex;flex-direction:column;align-items:center;text-align:center}
-.intro-kicker{font-size:9px;letter-spacing:5px;color:#aeb4c0;margin-bottom:18px;opacity:0;transform:translateY(10px);animation:introTextIn .65s .18s forwards}
-.intro-image-frame{position:relative;width:clamp(250px,39vw,410px);aspect-ratio:1;display:grid;place-items:center;isolation:isolate}
-.intro-image-frame:before{content:"";position:absolute;inset:12%;z-index:-1;border-radius:50%;background:rgba(196,210,235,.15);filter:blur(55px);opacity:0;animation:introGlow 2.2s .25s ease forwards}
-.intro-image-frame img{display:block;width:100%;height:100%;object-fit:contain;opacity:0;transform:translateY(24px) scale(.88) rotate(-3deg);filter:drop-shadow(0 22px 35px rgba(0,0,0,.42));animation:portraitReveal 1.45s .28s cubic-bezier(.16,.76,.22,1) forwards}
-.intro-name{margin-top:4px;font-size:clamp(40px,7vw,68px);line-height:.95;font-weight:900;letter-spacing:-.075em;opacity:0;transform:translateY(18px);animation:introTextIn .8s 1.35s forwards}
+.intro-inner{position:relative;z-index:1;width:min(88vw,1050px);min-height:min(76vh,650px);display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:clamp(22px,5vw,76px)}
+.intro-visual{position:relative;display:grid;place-items:center;min-width:0;aspect-ratio:1}
+.intro-visual:before{content:"";position:absolute;width:66%;aspect-ratio:1;border-radius:50%;background:rgba(192,207,232,.15);filter:blur(70px);opacity:0;animation:introGlow 2.3s .25s ease forwards}
+.intro-image-frame{position:relative;width:100%;height:100%;display:grid;place-items:center}
+.intro-image-frame img{display:block;width:100%;height:100%;object-fit:contain;opacity:0;transform:translateY(28px) scale(.82) rotate(-5deg);filter:drop-shadow(0 28px 38px rgba(0,0,0,.5));animation:portraitReveal 1.55s .25s cubic-bezier(.16,.78,.2,1) forwards}
+.intro-copy{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:12px 0}
+.intro-kicker{font-size:9px;letter-spacing:4px;color:#aeb8c7;margin-bottom:28px;opacity:0;transform:translateY(12px);animation:introTextIn .65s .8s forwards}
+.intro-name{font-size:clamp(58px,9vw,112px);line-height:.78;font-weight:900;letter-spacing:-.095em;opacity:0;transform:translateY(22px);animation:introTextIn .85s 1.12s forwards}
 .intro-name span{color:#aeb9c9}
-.intro-subtitle{margin-top:14px;font-size:9px;letter-spacing:4px;color:#aeb4c0;opacity:0;transform:translateY(12px);animation:introTextIn .7s 1.62s forwards}
-.intro-progress{width:118px;height:1px;margin-top:30px;background:rgba(255,255,255,.16);overflow:hidden;opacity:0;animation:introTextIn .4s 1.85s forwards}
-.intro-progress:after{content:"";display:block;width:100%;height:100%;background:#e5e9ef;transform:scaleX(0);transform-origin:left;animation:introProgress 2.15s 1.95s cubic-bezier(.3,.05,.4,1) forwards}
-.intro-corner{position:absolute;bottom:42px;font-size:8px;letter-spacing:2px;color:#707783;opacity:0;animation:introTextIn .6s 1.9s forwards}
-@keyframes portraitReveal{0%{opacity:0;transform:translateY(24px) scale(.88) rotate(-3deg)}70%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
-@keyframes introGlow{0%{opacity:0;transform:scale(.7)}100%{opacity:.85;transform:scale(1.12)}}
+.intro-subtitle{margin-top:25px;font-size:10px;letter-spacing:3.5px;color:#b6bfcc;opacity:0;transform:translateY(12px);animation:introTextIn .7s 1.38s forwards}
+.intro-rule{width:42px;height:2px;background:#cbd3df;margin-top:30px;transform:scaleX(0);transform-origin:left;animation:introRule .65s 1.58s forwards}
+.intro-note{margin-top:18px;font-size:9px;letter-spacing:2px;color:#737d8a;opacity:0;animation:introTextIn .6s 1.78s forwards}
+.intro-progress{position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(255,255,255,.13);overflow:hidden;opacity:0;animation:introTextIn .4s 1.8s forwards}
+.intro-progress:after{content:"";display:block;width:100%;height:100%;background:#e5e9ef;transform:scaleX(0);transform-origin:left;animation:introProgress 2.15s 1.9s cubic-bezier(.3,.05,.4,1) forwards}
+.intro-corner{position:absolute;right:7vw;bottom:7vh;font-size:8px;letter-spacing:2px;color:#707783;opacity:0;animation:introTextIn .6s 1.9s forwards}
+@keyframes portraitReveal{0%{opacity:0;transform:translateY(28px) scale(.82) rotate(-5deg)}72%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+@keyframes introGlow{0%{opacity:0;transform:scale(.7)}100%{opacity:.9;transform:scale(1.12)}}
 @keyframes introTextIn{to{opacity:1;transform:translateY(0)}}
+@keyframes introRule{to{transform:scaleX(1)}}
 @keyframes introProgress{to{transform:scaleX(1)}}
 body.intro-active{overflow:hidden}
-@media(max-width:480px){#siteIntro:after{inset:12px}.intro-kicker{font-size:8px;letter-spacing:3px}.intro-image-frame{width:min(78vw,330px)}.intro-name{font-size:48px}.intro-subtitle{font-size:8px;letter-spacing:2.5px}.intro-corner{bottom:28px}}
-@media(prefers-reduced-motion:reduce){#siteIntro{transition:opacity .2s,visibility .2s}.intro-kicker,.intro-image-frame:before,.intro-image-frame img,.intro-name,.intro-subtitle,.intro-progress,.intro-corner{animation:none;opacity:1;transform:none}.intro-progress:after{animation:none;transform:scaleX(1)}}
+@media(max-width:650px){
+ #siteIntro:after{inset:12px}
+ .intro-inner{width:min(86vw,430px);min-height:0;grid-template-columns:1fr;gap:4px;text-align:center;padding:20px 0 35px}
+ .intro-visual{width:min(76vw,330px);justify-self:center}
+ .intro-copy{align-items:center;text-align:center;margin-top:-4px}
+ .intro-kicker{font-size:8px;letter-spacing:3px;margin-bottom:17px}
+ .intro-name{font-size:clamp(58px,17vw,82px)}
+ .intro-subtitle{font-size:8px;letter-spacing:2.5px;margin-top:17px}
+ .intro-rule{margin-top:20px}
+ .intro-note{font-size:8px;margin-top:13px}
+ .intro-corner{right:22px;bottom:24px}
+}
+@media(prefers-reduced-motion:reduce){
+ #siteIntro{transition:opacity .2s,visibility .2s}
+ .intro-kicker,.intro-image-frame img,.intro-name,.intro-subtitle,.intro-note,.intro-corner,.intro-visual:before{animation:none;opacity:1;transform:none}
+ .intro-rule{animation:none;transform:scaleX(1)}
+ .intro-progress{opacity:1}.intro-progress:after{animation:none;transform:scaleX(1)}
+}
 
 </style>
 
@@ -767,15 +788,21 @@ body.intro-active{overflow:hidden}
 <body>
 <div id="siteIntro" role="presentation" aria-label="Yasin portfolio introduction">
  <div class="intro-inner">
-  <div class="intro-kicker">A LITTLE INTRODUCTION</div>
-  <div class="intro-image-frame">
-   <img src="Layer%200.png" alt="Yasin illustration" fetchpriority="high">
+  <div class="intro-visual">
+   <div class="intro-image-frame">
+    <img src="Layer%200.png" alt="Yasin illustration" fetchpriority="high">
+   </div>
   </div>
-  <div class="intro-name">YASIN<span>.</span></div>
-  <div class="intro-subtitle">CREATIVE VISUAL DESIGNER</div>
-  <div class="intro-progress" aria-hidden="true"></div>
+  <div class="intro-copy">
+   <div class="intro-kicker">A LITTLE INTRODUCTION</div>
+   <div class="intro-name">YASIN<span>.</span></div>
+   <div class="intro-subtitle">CREATIVE VISUAL DESIGNER</div>
+   <div class="intro-rule"></div>
+   <div class="intro-note">INDEPENDENT DESIGNER / PORTFOLIO 2026</div>
+   <div class="intro-progress" aria-hidden="true"></div>
+  </div>
  </div>
- <div class="intro-corner">PORTFOLIO — 2026</div>
+ <div class="intro-corner">SELECTED WORKS — 01</div>
 </div>
 <div id="fabricAtmosphere" aria-hidden="true"></div>
 <canvas id="silkFlow" aria-hidden="true"></canvas>
