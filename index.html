@@ -836,17 +836,20 @@ body.intro-active{overflow:hidden}
 .intro-visual{position:relative;width:min(54vw,490px);aspect-ratio:1;overflow:visible;isolation:isolate}
 .intro-visual:before{width:72%;background:rgba(190,205,226,.13);filter:blur(85px);animation:introGlow 4s 2.1s ease both}
 .intro-image-frame{position:absolute;inset:0;overflow:visible}
-.intro-image-frame img{width:100%;height:100%;object-fit:contain;opacity:0;clip-path:inset(0 100% 0 0);transform:scale(1.035);filter:drop-shadow(0 28px 38px rgba(0,0,0,.48));animation:threadPortrait 2.1s 3.45s cubic-bezier(.2,.75,.18,1) both}
-.thread-art{position:absolute;z-index:4;inset:-13%;width:126%;height:126%;overflow:visible;pointer-events:none}
-.thread-art path{fill:none;stroke:rgba(229,237,248,.84);stroke-width:.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 3px rgba(205,224,248,.22));animation:threadDraw 2.65s cubic-bezier(.55,.05,.25,1) forwards}
-.thread-art path:nth-child(2){stroke:rgba(160,183,213,.7);stroke-width:.48;animation-delay:.16s}.thread-art path:nth-child(3){stroke:rgba(255,255,255,.52);stroke-width:.42;animation-delay:.32s}.thread-art path:nth-child(4){stroke:rgba(172,194,222,.55);stroke-width:.55;animation-delay:.48s}.thread-art path:nth-child(5){stroke:rgba(255,255,255,.35);stroke-width:.38;animation-delay:.62s}.thread-art path:nth-child(6){stroke:rgba(177,198,225,.5);stroke-width:.45;animation-delay:.78s}.thread-art path:nth-child(7){stroke:rgba(255,255,255,.32);stroke-width:.35;animation-delay:.92s}.thread-art path:nth-child(8){stroke:rgba(180,201,229,.42);stroke-width:.42;animation-delay:1.08s}
+.intro-image-frame{position:relative;width:100%;height:100%;display:grid;place-items:center}
+.intro-image-frame img{opacity:0!important}
+.intro-line-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;clip-path:inset(100% 0 0 0);filter:drop-shadow(0 24px 34px rgba(0,0,0,.5));animation:linePortraitBuild 3.05s 2.25s cubic-bezier(.18,.72,.2,1) forwards}
+@keyframes linePortraitBuild{0%{clip-path:inset(100% 0 0 0);filter:blur(3px) drop-shadow(0 24px 34px rgba(0,0,0,.5))}100%{clip-path:inset(0);filter:blur(0) drop-shadow(0 24px 34px rgba(0,0,0,.5))}}
+.thread-art{position:absolute;z-index:4;inset:-13%;width:126%;height:126%;overflow:visible;pointer-events:none;mix-blend-mode:screen;opacity:.8}
+.thread-art path{fill:none;stroke:rgba(235,242,252,.9);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 5px rgba(205,224,248,.28));animation:threadDraw 2.5s cubic-bezier(.55,.05,.25,1) forwards}
+.thread-art path:nth-child(2){stroke-width:1.8;animation-delay:.12s}.thread-art path:nth-child(3){stroke-width:2;animation-delay:.24s}.thread-art path:nth-child(4){stroke-width:1.7;animation-delay:.36s}.thread-art path:nth-child(5){stroke-width:2.2;animation-delay:.48s}.thread-art path:nth-child(6){stroke-width:1.8;animation-delay:.6s}.thread-art path:nth-child(7){stroke-width:2;animation-delay:.72s}.thread-art path:nth-child(8){stroke-width:1.7;animation-delay:.84s}
 .intro-copy{align-items:center;text-align:center;min-height:0;padding:0;margin-top:-5px}.intro-kicker{margin:0 0 15px;animation:introTextIn .7s 4.25s both}.intro-story{min-height:54px;justify-content:center;margin:0}.story-line{left:50%;top:0;width:100%;text-align:center;font-size:clamp(19px,3vw,30px);letter-spacing:.13em;transform:translate(-50%,14px);animation:storyBeat 1.4s ease both}.story-one{animation-delay:1.05s}.story-two{animation-delay:2.7s}
 .intro-name{font-size:clamp(60px,8vw,100px);animation:introTextIn .85s 5.05s both}.intro-subtitle{animation:introTextIn .7s 5.4s both;margin-top:17px}.intro-rule{transform-origin:center;animation:introRule .6s 5.65s both;margin-top:23px}.intro-note{animation:introTextIn .6s 5.85s both}.intro-progress{opacity:1;animation:none}.intro-progress:after{animation:introProgress 6.7s .65s linear both}.intro-corner{animation:introTextIn .6s 6s both}
 @keyframes threadDraw{0%{stroke-dashoffset:1;opacity:0}8%{opacity:.9}78%{opacity:.82}100%{stroke-dashoffset:0;opacity:.42}}
 @keyframes threadPortrait{0%{opacity:0;clip-path:inset(0 100% 0 0);transform:scale(1.035);filter:blur(5px) drop-shadow(0 28px 38px rgba(0,0,0,.48))}100%{opacity:1;clip-path:inset(0 0 0 0);transform:scale(1);filter:blur(0) drop-shadow(0 28px 38px rgba(0,0,0,.48))}}
 .intro-kicker,.intro-name,.intro-subtitle,.intro-rule,.intro-note{opacity:0}
 @media(max-width:650px){.intro-inner{width:88vw;gap:0;padding:10px 0 35px}.intro-visual{width:min(76vw,330px)}.intro-copy{margin-top:-4px}.intro-story{min-height:46px}.story-line{font-size:clamp(16px,5vw,23px)}.intro-name{font-size:clamp(58px,16vw,80px)}.intro-subtitle{font-size:8px}.intro-corner{right:22px;bottom:24px}}
-@media(prefers-reduced-motion:reduce){.thread-art{display:none}.intro-image-frame img{animation:none;clip-path:none;opacity:1;filter:none}.intro-kicker,.intro-name,.intro-subtitle,.intro-note,.intro-corner{opacity:1;animation:none}.story-line{display:none}.intro-rule{animation:none;transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.thread-art{display:none}.intro-image-frame img{display:none}.intro-line-art{animation:none;clip-path:none;filter:none}.intro-kicker,.intro-name,.intro-subtitle,.intro-note,.intro-corner{opacity:1;animation:none}.story-line{display:none}.intro-rule{animation:none;transform:scaleX(1)}}
 </style>
 
 </head>
@@ -1313,6 +1316,27 @@ document.addEventListener("keydown",event=>{
  if(!intro)return;
  document.body.classList.add("intro-active");
  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const portrait=intro.querySelector(".intro-image-frame img");
+ if(portrait){
+  const buildLinePortrait=()=>{
+   const frame=portrait.parentElement,size=480,source=document.createElement("canvas");
+   source.width=size;source.height=size;
+   const sc=source.getContext("2d",{willReadFrequently:true});
+   const ratio=Math.min(size/portrait.naturalWidth,size/portrait.naturalHeight),w=portrait.naturalWidth*ratio,h=portrait.naturalHeight*ratio,ox=(size-w)/2,oy=(size-h)/2;
+   sc.drawImage(portrait,ox,oy,w,h);
+   const pixels=sc.getImageData(0,0,size,size).data,art=document.createElement("canvas");
+   art.className="intro-line-art";art.width=size;art.height=size;
+   const ctx=art.getContext("2d");ctx.lineCap="round";ctx.lineJoin="round";
+   for(let y=4;y<size;y+=9)for(let x=3;x<size-5;x+=8){
+    const k=(y*size+x)*4,a=pixels[k+3]/255;if(a<.12)continue;
+    ctx.strokeStyle="rgba("+pixels[k]+","+pixels[k+1]+","+pixels[k+2]+","+Math.min(1,a*.98)+")";
+    ctx.lineWidth=6.5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+7,y);ctx.stroke();
+   }
+   frame.appendChild(art);portrait.style.display="none";
+  };
+  if(portrait.complete&&portrait.naturalWidth)buildLinePortrait();else portrait.addEventListener("load",buildLinePortrait,{once:true});
+ }
+
  const duration=reduced?350:8000;
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
