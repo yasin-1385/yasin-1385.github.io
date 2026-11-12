@@ -966,6 +966,49 @@ body.intro-active{overflow:hidden}
  .rift-backlight,.rift-vortex,.rift-ground,.rift-slab,.rift-shard,.rift-dust,.rift-flare,.rift-kicker,.rift-title,.rift-subtitle,.rift-counter{animation:none!important}
  .rift-slab{opacity:0!important}.rift-title,.rift-kicker,.rift-subtitle{opacity:1}
 }
+
+/* PORTAL TRAVEL — camera pushes through the opened rift into the live page */
+#siteIntro.intro-leaving{
+ opacity:1!important;visibility:visible!important;
+ animation:riftPortalExit 1.45s cubic-bezier(.72,0,.22,1) forwards!important;
+ transition:none!important;
+}
+#siteIntro.intro-leaving .rift-world{
+ transform:scale(1);
+ transform-origin:50% 50%;
+ animation:riftCameraDive 1.45s cubic-bezier(.48,0,.18,1) forwards;
+ will-change:transform,filter;
+}
+#siteIntro.intro-leaving .rift-copy,
+#siteIntro.intro-leaving .rift-counter{
+ animation:riftTypographyPull 0.42s ease-in forwards!important;
+}
+#siteIntro.intro-leaving:before{
+ animation:riftLightTunnel 1.45s ease-in forwards;
+}
+@keyframes riftCameraDive{
+ 0%{transform:scale(1) translateZ(0);filter:blur(0)}
+ 38%{transform:scale(1.22) translateZ(0);filter:blur(1px)}
+ 72%{transform:scale(2.8) translateZ(0);filter:blur(3px)}
+ 100%{transform:scale(5.2) translateZ(0);filter:blur(8px)}
+}
+@keyframes riftPortalExit{
+ 0%,48%{opacity:1}
+ 72%{opacity:.82}
+ 100%{opacity:0;visibility:hidden}
+}
+@keyframes riftTypographyPull{
+ to{opacity:0;filter:blur(12px);transform:translate(-50%,-50%) scale(1.18)}
+}
+@keyframes riftLightTunnel{
+ 0%{opacity:1}
+ 60%{opacity:.8}
+ 100%{opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+ #siteIntro.intro-leaving{animation:riftPortalExit .2s linear forwards!important}
+ #siteIntro.intro-leaving .rift-world{animation:none}
+}
 </style>
 
 </head>
@@ -1459,7 +1502,7 @@ document.addEventListener("keydown",event=>{
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
   document.body.classList.remove("intro-active");
-  window.setTimeout(()=>intro.remove(),900);
+  window.setTimeout(()=>intro.remove(),1500);
  },duration);
 })();
 </script>
