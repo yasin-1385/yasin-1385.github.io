@@ -1449,6 +1449,53 @@ body.intro-active>header{
 }
 </style>
 
+<style id="gallery-editorial-upgrade">
+.gallery{grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:28px 22px!important}
+.gallery .gallery-group{grid-column:1/-1!important;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:48px 0 4px;padding:0 0 16px;border-bottom:1px solid rgba(220,235,255,.18);opacity:0;transform:translateY(18px);transition:opacity .65s,transform .65s}
+.gallery .gallery-group.visible{opacity:1;transform:none}
+.gallery-group h3{margin:0;color:#f3f6fc;font-size:clamp(18px,2.5vw,27px);font-weight:700;letter-spacing:-.5px}
+.gallery-group span{color:#9eabc0;font-size:10px;white-space:nowrap}
+.gallery .item{grid-column:span 4!important;margin:0!important;min-width:0}
+.gallery .image-wrap{aspect-ratio:4/5;border:1px solid rgba(220,235,255,.13);border-radius:12px;background:linear-gradient(145deg,#182337,#0c1422);padding:10px;box-sizing:border-box}
+.gallery .image-wrap img{width:100%;height:100%;aspect-ratio:auto;object-fit:contain;border-radius:6px;cursor:zoom-in}
+.gallery .image-wrap:after{content:"مشاهده جزئیات ↗";font-family:Tahoma,Arial,sans-serif;letter-spacing:0;font-size:10px;border-radius:7px}
+.gallery .caption{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;border-top:1px solid rgba(220,235,255,.15);padding-top:13px;margin-top:12px;min-height:68px}
+.gallery .caption-copy{min-width:0;display:flex;flex-direction:column;gap:6px}
+.gallery .caption strong{font-size:13px;letter-spacing:0;color:#f2f5fb;line-height:1.7}
+.gallery .caption p{margin:0;color:#9eabc0;font-size:10px;line-height:1.9}
+.gallery .caption>span{color:#b8d9ff;font-size:9px;line-height:1.8;text-align:left;max-width:105px;flex-shrink:0}
+.lightbox{padding:24px!important;overflow-y:auto;align-items:center!important;justify-content:center!important}
+.lightbox-panel{position:relative;width:min(100%,1050px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:18px;overflow-y:auto;padding:20px;border:1px solid rgba(220,235,255,.18);border-radius:18px;background:rgba(13,22,38,.96);box-shadow:0 25px 90px #0009}
+.lightbox-panel>img{display:block;max-width:100%;max-height:66vh;width:auto;height:auto;object-fit:contain;border-radius:8px}
+.lightbox-info{width:100%;max-width:760px;padding:0 8px 8px;box-sizing:border-box;text-align:right}
+.lightbox-info small{display:block;color:#b8d9ff;font-size:10px;margin-bottom:8px}
+.lightbox-info h3{margin:0 0 10px;color:#f4f7fc;font-size:clamp(18px,3vw,25px)}
+.lightbox-info p{margin:0;color:#b8c4d7;font-size:13px;line-height:2.1}
+.lightbox-panel .close{position:sticky;top:0;align-self:flex-end;margin-bottom:-58px;z-index:3;flex-shrink:0}
+body.lightbox-open{overflow:hidden}
+@media(max-width:850px){
+ .gallery .item{grid-column:span 6!important}
+ .gallery{gap:24px 15px!important}
+ .lightbox-panel{padding:16px}
+ .lightbox-panel>img{max-height:58vh}
+}
+@media(max-width:480px){
+ .gallery{padding-left:5%!important;padding-right:5%!important;gap:22px 10px!important}
+ .gallery .item{grid-column:span 6!important}
+ .gallery .image-wrap{padding:6px;border-radius:9px}
+ .gallery .caption{display:block;min-height:90px}
+ .gallery .caption strong{font-size:11px}
+ .gallery .caption p{font-size:9px;line-height:1.7}
+ .gallery .caption>span{display:block;text-align:right;max-width:none;margin-top:5px}
+ .gallery .gallery-group{margin-top:32px}
+ .gallery-group h3{font-size:17px}
+ .lightbox{padding:10px!important}
+ .lightbox-panel{max-height:calc(100vh - 20px);padding:12px;gap:13px}
+ .lightbox-panel>img{max-height:52vh}
+ .lightbox-info p{font-size:11px}
+ .lightbox-panel .close{width:38px;height:38px;margin-bottom:-50px}
+}
+</style>
 </head>
 
 
@@ -1622,132 +1669,103 @@ body.intro-active>header{
 
 <!-- LIGHTBOX -->
 
-<div class="lightbox" id="lightbox" onclick="closeImage()">
-
-  <button class="close" aria-label="بستن">×</button>
-
-  <img id="largeImage" src="" alt="پیش‌نمایش نمونه‌کار">
-
+<div class="lightbox" id="lightbox" onclick="closeImage(event)" aria-label="نمایش جزئیات نمونه‌کار">
+  <div class="lightbox-panel" onclick="event.stopPropagation()">
+    <button class="close" aria-label="بستن" onclick="closeImage()">×</button>
+    <img id="largeImage" src="" alt="پیش‌نمایش نمونه‌کار">
+    <div class="lightbox-info" dir="rtl">
+      <small id="lightboxCategory"></small>
+      <h3 id="lightboxTitle"></h3>
+      <p id="lightboxDescription"></p>
+    </div>
+  </div>
 </div>
 
 <script>
 
-/* AUTOMATIC GALLERY */
-
+/* EDITORIAL GALLERY + PROJECT DETAILS */
 fetch("images.json")
-
 .then(response=>{
-
   if(!response.ok) throw new Error("گالری پیدا نشد");
-
   return response.json();
-
 })
-
 .then(images=>{
-
   const gallery=document.getElementById("gallery");
-
-  document.getElementById("count").textContent=
-    String(images.length).padStart(2,"0")+" اثر";
-
-  images.forEach((filename,index)=>{
-
-    const item=document.createElement("div");
+  document.getElementById("count").textContent=String(images.length).padStart(2,"0")+" اثر";
+  let currentCategory="";
+  images.forEach((work,index)=>{
+    if(work.category!==currentCategory){
+      currentCategory=work.category;
+      const heading=document.createElement("div");
+      heading.className="gallery-group";
+      const title=document.createElement("h3");
+      title.textContent=currentCategory;
+      const count=document.createElement("span");
+      count.textContent=String(images.filter(x=>x.category===currentCategory).length).padStart(2,"0")+" اثر";
+      heading.append(title,count);
+      gallery.appendChild(heading);
+    }
+    const item=document.createElement("article");
     item.className="item";
-
     const wrap=document.createElement("div");
     wrap.className="image-wrap";
-
     const img=document.createElement("img");
-
-    img.src=filename;
-    img.alt="نمونه طراحی گرافیک شماره "+(index+1);
+    img.src=work.src;
+    img.alt=work.title+" — "+work.kind;
     img.loading="lazy";
-
-    img.onclick=()=>{
-
-      document.getElementById("largeImage").src=filename;
-
-      document.getElementById("lightbox").style.display="flex";
-
-    };
-
+    img.decoding="async";
+    img.addEventListener("click",()=>openImage(work));
     const caption=document.createElement("div");
     caption.className="caption";
-
+    const info=document.createElement("div");
+    info.className="caption-copy";
     const title=document.createElement("strong");
-
-    title.textContent=
-      "طرح / "+String(index+1).padStart(2,"0");
-
-    const label=document.createElement("span");
-    label.textContent="طراحی یاسین";
-
-    caption.append(title,label);
-
+    title.textContent=work.title;
+    const summary=document.createElement("p");
+    summary.textContent=work.summary;
+    const kind=document.createElement("span");
+    kind.textContent=work.kind;
+    info.append(title,summary);
+    caption.append(info,kind);
     wrap.appendChild(img);
-
     item.append(wrap,caption);
-
+    item.addEventListener("click",()=>openImage(work));
     gallery.appendChild(item);
-
   });
-
-  /* SCROLL REVEAL */
-
   const observer=new IntersectionObserver(entries=>{
-
     entries.forEach(entry=>{
-
       if(entry.isIntersecting){
-
         entry.target.classList.add("visible");
-
         observer.unobserve(entry.target);
-
       }
-
     });
-
-  },{threshold:.08});
-
-  document.querySelectorAll(".item").forEach(item=>{
-
-    observer.observe(item);
-
-  });
-
+  },{threshold:.06});
+  gallery.querySelectorAll(".item,.gallery-group").forEach(item=>observer.observe(item));
 })
-
 .catch(error=>{
-
   document.getElementById("count").textContent="نمایش آثار ممکن نیست";
-
   console.error(error);
-
 });
-
-
-/* LIGHTBOX */
-
-function closeImage(){
-
-  document.getElementById("lightbox").style.display="none";
-
-  document.getElementById("largeImage").src="";
-
+/* PROJECT LIGHTBOX */
+function openImage(work){
+  const lightbox=document.getElementById("lightbox");
+  document.getElementById("largeImage").src=work.src;
+  document.getElementById("largeImage").alt=work.title;
+  document.getElementById("lightboxCategory").textContent=work.kind;
+  document.getElementById("lightboxTitle").textContent=work.title;
+  document.getElementById("lightboxDescription").textContent=work.description;
+  lightbox.style.display="flex";
+  document.body.classList.add("lightbox-open");
 }
-
+function closeImage(event){
+  if(event && event.target!==event.currentTarget && !event.target.classList.contains("close")) return;
+  document.getElementById("lightbox").style.display="none";
+  document.getElementById("largeImage").src="";
+  document.body.classList.remove("lightbox-open");
+}
 document.addEventListener("keydown",event=>{
-
   if(event.key==="Escape") closeImage();
-
 });
-
-
-
-
 
 
 /* SILK FLOW — MULTI TRAIL + ELASTIC SCROLL */
