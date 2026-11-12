@@ -2225,6 +2225,45 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 @media(prefers-reduced-motion:reduce){.faq-item,.faq-item summary i{transition:none}}
 </style>
 
+
+<style id="category-carousel-motion-and-hero-art">
+/* One clean vertical hand-off: the old selection exits upward, the new one rises into focus. */
+#categoryStage{position:relative;isolation:isolate;overflow:visible}
+#categoryStage>.category-card{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#categoryStage>.category-card.center{filter:none!important;opacity:1!important}
+#categoryStage>.category-card.side{filter:blur(2.2px) saturate(.72)!important}
+#categoryStage>.category-card.side:hover{filter:blur(1px) saturate(.9)!important}
+#categoryStage>.category-card:not(.center){z-index:1}
+#categoryStage>.category-card.center{z-index:3}
+#categoryStage>.category-card[data-outgoing]{pointer-events:none}
+@media(max-width:700px){
+ #categoryStage>.category-card.side{filter:blur(2.4px) saturate(.68)!important}
+ #categoryStage>.category-card.center{filter:none!important}
+}
+/* A more dimensional, layered glass sculpture in the hero. */
+#orb{
+ background:
+  radial-gradient(ellipse at 34% 18%,rgba(255,255,255,.95) 0%,rgba(219,237,255,.66) 3%,transparent 18%),
+  radial-gradient(ellipse at 28% 28%,#dcecff 0%,#9dbde2 12%,#5f7fa8 31%,#263e60 53%,#101d35 72%,transparent 74%)!important;
+ box-shadow:inset -28px -35px 65px rgba(1,8,20,.58),inset 12px 10px 30px rgba(240,248,255,.28),0 0 75px rgba(150,190,235,.2)!important;
+}
+#orb:before{
+ content:"";position:absolute;inset:-13%;border-radius:50%;pointer-events:none;
+ background:conic-gradient(from 30deg,transparent 0 18%,rgba(206,229,255,.0) 22%,rgba(206,229,255,.72) 26%,rgba(206,229,255,.05) 31%,transparent 48%,rgba(173,207,245,.38) 66%,transparent 78%);
+ -webkit-mask:radial-gradient(ellipse,transparent 57%,#000 58% 59%,transparent 60%);
+ mask:radial-gradient(ellipse,transparent 57%,#000 58% 59%,transparent 60%);
+ filter:drop-shadow(0 0 9px rgba(177,211,249,.45));
+ animation:orbOrbit 18s linear infinite;
+}
+#orb:after{
+ inset:-5%!important;border:1px solid rgba(216,235,255,.38)!important;
+ box-shadow:0 0 0 13px rgba(194,220,250,.035),0 0 0 34px rgba(194,220,250,.025),inset 0 0 24px rgba(195,222,255,.12);
+ animation:orbTilt 11s ease-in-out infinite;
+}
+@keyframes orbOrbit{to{transform:rotate(360deg)}}
+@keyframes orbTilt{0%,100%{transform:rotateX(65deg) rotate(-25deg) scale(1)}50%{transform:rotateX(58deg) rotate(12deg) scale(1.04)}}
+@media(prefers-reduced-motion:reduce){#orb:before,#orb:after{animation:none!important}}
+</style>
 </head>
 
 
@@ -2527,16 +2566,28 @@ fetch("images.json")
 let categoryMotionDirection="next";
 function renderCategoryCarousel(){
   const stage=document.getElementById("categoryStage");
-  const previousCards=new Map();
-  stage.querySelectorAll(".category-card").forEach(card=>{
-    const rect=card.getBoundingClientRect();
-    previousCards.set(Number(card.dataset.categoryIndex),{
-      left:rect.left,top:rect.top,width:rect.width,height:rect.height,
-      opacity:getComputedStyle(card).opacity
-    });
-  });
-  stage.classList.remove("category-enter");
-  stage.dataset.direction=categoryMotionDirection;
+  const oldCenter=stage.querySelector(".category-card.center");
+  let outgoing=null;
+  if(oldCenter){
+    const rect=oldCenter.getBoundingClientRect();
+    const stageRect=stage.getBoundingClientRect();
+    outgoing=oldCenter.cloneNode(true);
+    outgoing.removeAttribute("aria-label");
+    outgoing.tabIndex=-1;
+    outgoing.style.setProperty("position","absolute","important");
+    outgoing.style.setProperty("left",(rect.left-stageRect.left)+"px","important");
+    outgoing.style.setProperty("top",(rect.top-stageRect.top)+"px","important");
+    outgoing.style.setProperty("right","auto","important");
+    outgoing.style.setProperty("bottom","auto","important");
+    outgoing.style.setProperty("width",rect.width+"px","important");
+    outgoing.style.setProperty("height",rect.height+"px","important");
+    outgoing.style.setProperty("margin","0","important");
+    outgoing.style.setProperty("transform","none","important");
+    outgoing.style.setProperty("z-index","12","important");
+    outgoing.style.setProperty("pointer-events","none","important");
+    outgoing.style.setProperty("filter","none","important");
+    stage.appendChild(outgoing);
+  }
   const total=portfolioCategories.length;
   if(!total)return;
   const prev=(activeCategoryIndex-1+total)%total;
@@ -2546,7 +2597,8 @@ function renderCategoryCarousel(){
     {index:activeCategoryIndex,position:"center"},
     {index:next,position:"side side-next"}
   ];
-  stage.replaceChildren();
+  stage.querySelectorAll(".category-card:not([data-outgoing])").forEach(card=>card.remove());
+  stage.dataset.direction=categoryMotionDirection;
   entries.forEach(entry=>{
     const category=portfolioCategories[entry.index];
     const card=document.createElement("button");
@@ -2577,28 +2629,28 @@ function renderCategoryCarousel(){
   });
   document.getElementById("categoryPosition").textContent=
     String(activeCategoryIndex+1).padStart(2,"0")+" / "+String(total).padStart(2,"0");
-  // FLIP: each existing image travels from its actual old position to its new slot.
-  const cards=[...stage.querySelectorAll(".category-card")];
-  cards.forEach(card=>{
-    const old=previousCards.get(Number(card.dataset.categoryIndex));
-    const rect=card.getBoundingClientRect();
-    const finalTransform=getComputedStyle(card).transform;
-    const finalOpacity=getComputedStyle(card).opacity;
-    let fromTransform=finalTransform,fromOpacity=0;
-    if(old){
-      const dx=old.left-rect.left,dy=old.top-rect.top;
-      const sx=old.width/Math.max(rect.width,1),sy=old.height/Math.max(rect.height,1);
-      fromTransform="translate("+dx+"px,"+dy+"px) scale("+sx+","+sy+") "+(finalTransform==="none"?"":finalTransform);
-      fromOpacity=old.opacity;
-    }else{
-      const direction=card.classList.contains("side-prev")?-1:1;
-      fromTransform="translateX("+(direction*42)+"px) scale(.94) "+(finalTransform==="none"?"":finalTransform);
-    }
-    card.animate([
-      {transform:fromTransform,opacity:fromOpacity},
-      {transform:finalTransform==="none"?"none":finalTransform,opacity:finalOpacity}
-    ],{duration:1450,easing:"cubic-bezier(.22,.72,.18,1)",fill:"none"});
-  });
+
+  const center=stage.querySelector(".category-card.center");
+  const sides=[...stage.querySelectorAll(".category-card.side")];
+  if(outgoing){
+    outgoing.animate(
+      [{translate:"0 0",opacity:1,filter:"blur(0px)"},
+       {translate:"0 -86px",opacity:0,filter:"blur(13px)"}],
+      {duration:680,easing:"cubic-bezier(.55,0,.85,.35)",fill:"forwards"}
+    ).finished.finally(()=>outgoing.remove());
+    center.animate(
+      [{translate:"0 78px",opacity:0,filter:"blur(14px)",scale:".94"},
+       {translate:"0 0",opacity:1,filter:"blur(0px)",scale:"1"}],
+      {duration:1050,easing:"cubic-bezier(.16,1,.3,1)",fill:"both"}
+    );
+    sides.forEach((card,i)=>{
+      card.animate(
+        [{opacity:0,filter:"blur(12px)",translate:"0 -28px"},
+         {opacity:getComputedStyle(card).opacity,filter:getComputedStyle(card).filter,translate:"0 0"}],
+        {duration:900,delay:90+i*70,easing:"cubic-bezier(.22,1,.36,1)",fill:"both"}
+      );
+    });
+  }
 }
 document.getElementById("categoryPrev").addEventListener("click",()=>{
   categoryMotionDirection="prev";
