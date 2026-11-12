@@ -1654,25 +1654,51 @@ html{scroll-behavior:smooth}
 }
 #gallery.is-expanded .category-gallery-toolbar{grid-column:1/-1}
 
-/* On phones show one full category card, not three squeezed cards */
+/* Mobile category carousel: center card with two blurred side previews */
 @media(max-width:700px){
   .category-showcase{width:calc(100% - 28px)!important}
   .category-stage{
-    min-height:0!important;
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr)!important;
-    gap:0!important;
-    padding:0 8px;
+    position:relative!important;
+    display:block!important;
+    min-height:clamp(285px,84vw,350px)!important;
+    height:clamp(285px,84vw,350px)!important;
+    padding:0!important;
+    overflow:visible!important;
+    direction:ltr!important;
   }
-  .category-card.side{display:none!important}
+  .category-card{
+    position:absolute!important;
+    top:50%!important;
+    margin:0!important;
+    transform:translateY(-50%)!important;
+    height:clamp(245px,72vw,315px)!important;
+    border-radius:17px!important;
+  }
   .category-card.center{
     display:block!important;
-    width:100%!important;
-    height:clamp(270px,78vw,390px)!important;
+    left:50%!important;
+    right:auto!important;
+    width:76%!important;
+    height:clamp(265px,77vw,330px)!important;
     opacity:1!important;
     filter:none!important;
-    transform:none!important;
+    transform:translate(-50%,-50%)!important;
+    z-index:3!important;
   }
+  .category-card.side{
+    display:block!important;
+    width:47%!important;
+    height:clamp(225px,66vw,290px)!important;
+    opacity:.42!important;
+    filter:blur(2px) saturate(.65)!important;
+    transform:translateY(-50%) scale(.91)!important;
+    z-index:1!important;
+  }
+  .category-card.side-prev{left:-3%!important;right:auto!important}
+  .category-card.side-next{right:-3%!important;left:auto!important}
+  .category-card.side .category-card-label{opacity:.7}
+  .category-card.side .category-card-label strong{font-size:10px!important}
+  .category-card.side .category-card-label small{font-size:8px!important}
   .category-card.center img{object-fit:contain!important}
   #gallery.is-expanded{
     width:calc(100% - 26px)!important;
@@ -1717,7 +1743,7 @@ html{scroll-behavior:smooth}
   pointer-events:none!important;
   border-radius:50%!important;
   background:transparent!important;
-  border:1.5px solid #dcecff!important;
+  border:3px solid #dcecff!important;
   box-shadow:none!important;
   transform:translate(-50%,-50%)!important;
   will-change:left,top;
