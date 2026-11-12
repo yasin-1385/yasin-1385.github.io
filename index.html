@@ -1494,31 +1494,7 @@ body.lightbox-open{overflow:hidden}
 }
 </style>
 
-<style>
-/* MINIMAL GLASS CURSOR + ABOUT PROFILE */
-@media (hover:hover) and (pointer:fine){#glassCursor{display:block}}
-#glassCursor{display:none;position:fixed;left:0;top:0;width:30px;height:30px;margin:0;z-index:2147483647;pointer-events:none;border:1px solid rgba(235,245,255,.72);border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.23),rgba(190,220,255,.055));backdrop-filter:blur(9px) saturate(155%);-webkit-backdrop-filter:blur(9px) saturate(155%);box-shadow:inset 0 1px 2px rgba(255,255,255,.42),0 3px 18px rgba(0,0,0,.18);opacity:0;transform:translate(-50%,-50%);transition:width .22s,height .22s,margin .22s,background .22s,opacity .2s}
-#glassCursor:after{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.24);border-radius:50%}
-#glassCursor.cursor-visible{opacity:1}
-#glassCursor.cursor-hover{width:42px;height:42px;background:linear-gradient(145deg,rgba(255,255,255,.3),rgba(190,220,255,.1));border-color:rgba(255,255,255,.9)}
-.about-section{padding:105px 9%;text-align:right}
-.about-inner{width:min(100%,1120px);margin:auto;display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(35px,7vw,100px);align-items:center}
-.about-heading h2{font-size:clamp(45px,6vw,76px);line-height:1.18;letter-spacing:-3px;margin:24px 0 0}
-.about-heading h2 span{color:#b8d8ff}
-.about-content{padding:30px;border:1px solid rgba(255,255,255,.16);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025));backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 60px rgba(0,0,0,.2)}
-.about-name{font-size:19px;font-weight:800;color:#f5f8ff;margin-bottom:15px}
-.about-name span{font-size:12px;font-weight:400;color:#aebdd1}
-.about-bio{font-size:13px;line-height:2.5;color:#bdc9d9;letter-spacing:0!important}
-.about-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:25px}
-.about-fact{padding:15px 10px;border:1px solid rgba(255,255,255,.12);border-radius:13px;background:rgba(255,255,255,.045);display:flex;flex-direction:column;gap:7px}
-.about-fact strong{font-size:22px;color:#dcecff;direction:ltr;text-align:right}
-.about-fact span{font-size:10px;color:#9eabc0}
-.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.about-tags span{padding:8px 11px;border:1px solid rgba(190,220,255,.2);border-radius:999px;color:#c9d9ec;font-size:10px;background:rgba(190,220,255,.06)}
-@media(max-width:750px){.about-section{padding:80px 6%}.about-inner{grid-template-columns:1fr;gap:25px}.about-heading h2{font-size:54px;margin-top:15px}.about-content{padding:22px}}
-@media(max-width:420px){.about-facts{gap:6px}.about-fact{padding:12px 8px}.about-fact strong{font-size:18px}.about-fact span{font-size:9px}}
-@media(prefers-reduced-motion:reduce){#glassCursor{transition:none}}
-</style>
+
 
 <style id="category-carousel-refresh">
 /* Compact centered category selector */
@@ -1593,6 +1569,29 @@ body.lightbox-open{overflow:hidden}
 html{scroll-behavior:smooth}
 </style>
 
+
+<style id="navy-dot-cursor">
+@media (hover:hover) and (pointer:fine){
+ html,body,body *{cursor:none!important}
+ #navyDotCursor{display:block}
+}
+#navyDotCursor{
+ display:none;position:fixed;left:0;top:0;width:17px;height:17px;
+ border-radius:50%;pointer-events:none;z-index:2147483647;
+ background:radial-gradient(circle at 35% 30%,#9bc8ff 0%,#548fd5 35%,#244d83 72%,#142d50 100%);
+ border:1px solid rgba(220,237,255,.95);
+ box-shadow:0 0 0 3px rgba(120,174,235,.15),0 3px 12px rgba(0,0,0,.35);
+ transform:translate(-50%,-50%);opacity:0;
+ transition:opacity .14s ease,box-shadow .18s ease,filter .18s ease;
+ will-change:left,top;
+}
+#navyDotCursor.is-visible{opacity:1}
+#navyDotCursor.is-hover{
+ box-shadow:0 0 0 5px rgba(120,174,235,.2),0 0 20px rgba(95,157,231,.45),0 3px 12px rgba(0,0,0,.35);
+ filter:brightness(1.12)
+}
+@media(prefers-reduced-motion:reduce){#navyDotCursor{transition:none}}
+</style>
 </head>
 
 
@@ -1779,7 +1778,7 @@ html{scroll-behavior:smooth}
   <span>طراحی خلاقانه بصری</span>
 </footer>
 
-<div id="glassCursor" aria-hidden="true"></div>
+
 
 <!-- LIGHTBOX -->
 
@@ -2051,89 +2050,28 @@ document.addEventListener("keydown",event=>{
 </script>
 
 
+
+
+
+
+<div id="navyDotCursor" aria-hidden="true"></div>
 <script>
-/* RELIABLE GLASS CURSOR — native pointer remains as fallback */
+/* Simple solid navy cursor dot; no trail or canvas effect */
 (()=>{
- const cursor=document.getElementById("glassCursor");
- if(!cursor)return;
- if(!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
- document.documentElement.appendChild(cursor);
- let x=0,y=0,tx=0,ty=0,raf=0,started=false;
- const render=()=>{
-  raf=0;
-  x+=(tx-x)*.38;y+=(ty-y)*.38;
-  cursor.style.left=tx+"px";
-  cursor.style.top=ty+"px";
-  cursor.style.transform="translate(-50%,-50%)";
-  if(Math.abs(tx-x)>.2||Math.abs(ty-y)>.2)raf=requestAnimationFrame(render);
- };
+ const dot=document.getElementById("navyDotCursor");
+ if(!dot||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
  addEventListener("pointermove",e=>{
-  tx=e.clientX;ty=e.clientY;
-  if(!started){x=tx;y=ty;started=true;}
-  cursor.classList.add("cursor-visible");
-  if(!raf)raf=requestAnimationFrame(render);
+  dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";
+  dot.classList.add("is-visible");
  },{passive:true});
- addEventListener("pointerdown",()=>cursor.classList.add("cursor-hover"),{passive:true});
- addEventListener("pointerup",()=>cursor.classList.remove("cursor-hover"),{passive:true});
  document.addEventListener("pointerover",e=>{
-  if(e.target.closest("a,button,.item,[role='button']"))cursor.classList.add("cursor-hover");
+  if(e.target.closest("a,button,.item,[role='button']"))dot.classList.add("is-hover");
+  else dot.classList.remove("is-hover");
  },{passive:true});
- document.addEventListener("pointerout",e=>{
-  if(e.target.closest("a,button,.item,[role='button']")&&!e.relatedTarget?.closest("a,button,.item,[role='button']"))cursor.classList.remove("cursor-hover");
- },{passive:true});
- addEventListener("blur",()=>cursor.classList.remove("cursor-visible"));
+ addEventListener("blur",()=>dot.classList.remove("is-visible","is-hover"));
+ addEventListener("pointerdown",()=>dot.classList.add("is-hover"),{passive:true});
+ addEventListener("pointerup",()=>dot.classList.remove("is-hover"),{passive:true});
 })();
 </script>
-
-<script>
-/* Lightweight silk pointer trail — no scroll listener */
-(()=>{
- const canvas=document.getElementById("silkFlow");
- if(!canvas||!matchMedia("(hover:hover) and (pointer:fine)").matches||matchMedia("(prefers-reduced-motion:reduce)").matches)return;
- const ctx=canvas.getContext("2d",{alpha:true});
- if(!ctx)return;
- let width=0,height=0,dpr=1,frame=0;
- const points=[];
- function resize(){
-  dpr=Math.min(window.devicePixelRatio||1,1.25);
-  width=innerWidth;height=innerHeight;
-  canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
-  canvas.style.width=width+"px";canvas.style.height=height+"px";
-  ctx.setTransform(dpr,0,0,dpr,0,0);
- }
- function draw(){
-  if(frame)return;
-  frame=requestAnimationFrame(render);
- }
- function render(){
-  frame=0;ctx.clearRect(0,0,width,height);
-  const now=performance.now();
-  while(points.length&&now-points[0].t>520)points.shift();
-  if(points.length>1){
-   for(let strand=0;strand<3;strand++){
-    ctx.beginPath();
-    points.forEach((p,i)=>{
-     const offset=(strand-1)*4+Math.sin(i*.45+now*.002-strand)*2;
-     const x=p.x,y=p.y+offset;
-     if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-    });
-    const life=Math.max(0,1-(now-points[points.length-1].t)/520);
-    ctx.strokeStyle="rgba(220,236,255,"+(0.045+strand*.018)*life+")";
-    ctx.lineWidth=strand===1?1.8:1;
-    ctx.lineCap="round";ctx.lineJoin="round";ctx.stroke();
-   }
-  }
-  if(points.length>1)draw();
- }
- addEventListener("resize",resize,{passive:true});
- addEventListener("pointermove",e=>{
-  points.push({x:e.clientX,y:e.clientY,t:performance.now()});
-  while(points.length>24)points.shift();
-  draw();
- },{passive:true});
- resize();
-})();
-</script>
-
 </body>
 </html>
