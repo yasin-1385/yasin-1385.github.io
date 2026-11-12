@@ -966,6 +966,66 @@ body.intro-active{overflow:hidden}
  .rift-backlight,.rift-vortex,.rift-ground,.rift-slab,.rift-shard,.rift-dust,.rift-flare,.rift-kicker,.rift-title,.rift-subtitle,.rift-counter{animation:none!important}
  .rift-slab{opacity:0!important}.rift-title,.rift-kicker,.rift-subtitle{opacity:1}
 }
+
+/* RESPONSIVE PORTAL + CONNECTED DESKTOP REVEAL */
+#siteIntro{
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  transition:opacity 1.45s cubic-bezier(.72,0,.22,1),visibility 1.45s,transform 1.45s cubic-bezier(.18,.72,.18,1)!important;
+  will-change:opacity,transform;
+}
+#siteIntro.intro-leaving{
+  opacity:0!important;
+  visibility:hidden!important;
+  transform:scale(1.18) translateZ(0);
+}
+.rift-world{
+  transform:translateZ(0);
+  transform-origin:50% 50%;
+  transition:transform 1.45s cubic-bezier(.18,.72,.18,1);
+  backface-visibility:hidden;
+}
+#siteIntro.intro-leaving .rift-world{transform:scale(2.15) translateZ(0)}
+#siteIntro.intro-leaving .rift-copy,
+#siteIntro.intro-leaving .rift-counter{opacity:0;transition:opacity .28s ease}
+.rift-vortex{
+  z-index:1;
+  width:min(46vw,620px);
+  background:radial-gradient(ellipse at 50% 48%,#02040a 0 34%,rgba(5,9,17,.98) 43%,rgba(110,145,190,.2) 51%,rgba(225,237,255,.65) 52%,rgba(75,105,145,.22) 54%,transparent 67%);
+  box-shadow:0 0 34px rgba(158,190,232,.2),0 0 110px rgba(102,145,205,.13),inset 0 0 42px rgba(210,225,245,.22);
+  border-color:rgba(230,240,255,.4);
+}
+.rift-vortex:before,.rift-vortex:after{border-color:rgba(230,240,255,.28);box-shadow:0 0 24px rgba(180,210,245,.12)}
+/* Keep desktop rendering light enough for older graphics hardware */
+@media(min-width:651px){
+  .rift-world{perspective:900px}
+  .rift-backlight{filter:blur(8px)}
+  .rift-ground{filter:blur(16px)}
+  .rift-slab{box-shadow:inset 0 1px 1px rgba(255,255,255,.12),inset 0 -22px 42px rgba(0,0,0,.38),0 18px 42px rgba(0,0,0,.48)}
+  .rift-shard{box-shadow:inset 0 1px 1px #ffffff30,0 14px 35px #0009}
+  .rift-dust{opacity:.42}
+}
+/* Mobile: keep a clearly open central portal instead of overlapping slabs */
+@media(max-width:650px){
+  .rift-vortex{
+    width:min(76vw,390px);
+    top:48%;
+    background:radial-gradient(ellipse at center,#010208 0 36%,rgba(3,7,14,.98) 47%,rgba(124,159,204,.28) 54%,rgba(230,240,255,.82) 56%,rgba(84,119,164,.35) 59%,transparent 72%);
+    box-shadow:0 0 26px rgba(174,205,245,.3),0 0 75px rgba(103,148,210,.2),inset 0 0 35px rgba(220,235,255,.3);
+  }
+  .slab-left{left:-8%;width:53%;clip-path:polygon(0 0,100% 0,83% 18%,92% 34%,76% 50%,91% 66%,80% 83%,100% 100%,0 100%)}
+  .slab-right{right:-8%;width:53%;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,20% 83%,9% 66%,24% 50%,8% 34%,17% 18%)}
+  .slab-top{height:48%;clip-path:polygon(0 0,100% 0,100% 100%,78% 84%,60% 100%,42% 84%,22% 100%,0 84%)}
+  .slab-bottom{height:43%;clip-path:polygon(0 0,22% 16%,42% 0,60% 16%,80% 0,100% 16%,100% 100%,0 100%)}
+  .rift-shard{filter:none!important}
+  .rift-backlight{filter:blur(8px)}
+  .rift-ground{filter:blur(12px)}
+  #siteIntro.intro-leaving{transform:scale(1.12) translateZ(0)}
+  #siteIntro.intro-leaving .rift-world{transform:scale(2.45) translateZ(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  #siteIntro.intro-leaving .rift-world{transform:none}
+}
 </style>
 
 </head>
@@ -1455,11 +1515,11 @@ document.addEventListener("keydown",event=>{
   if(portrait.complete&&portrait.naturalWidth)buildLinePortrait();else portrait.addEventListener("load",buildLinePortrait,{once:true});
  }
 
- const duration=reduced?350:8000;
+ const duration=reduced?350:7800;
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
   document.body.classList.remove("intro-active");
-  window.setTimeout(()=>intro.remove(),900);
+  window.setTimeout(()=>intro.remove(),1550);
  },duration);
 })();
 </script>
