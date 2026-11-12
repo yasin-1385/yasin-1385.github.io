@@ -15,33 +15,51 @@
   --cream:#F4F1E8;
   --muted:#AAB5C7;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 html{scroll-behavior:smooth}
+
 body{
   background:var(--navy);
   color:white;
   font-family:Arial,sans-serif;
   overflow-x:hidden;
 }
-a{color:inherit;text-decoration:none}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
 button{font:inherit}
 
 /* HEADER */
+
 header{
   position:absolute;
-  top:0;left:0;width:100%;
+  top:0;
+  left:0;
+  width:100%;
   z-index:10;
   padding:28px 7%;
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
+
 .logo{
   font-size:25px;
   font-weight:900;
   letter-spacing:-2px;
 }
+
 .logo span{color:var(--yellow)}
+
 .nav{
   display:flex;
   align-items:center;
@@ -50,7 +68,9 @@ header{
   letter-spacing:2px;
   color:var(--muted);
 }
+
 .nav a:hover{color:var(--yellow)}
+
 .contact-link{
   border:1px solid rgba(244,197,66,.7);
   padding:12px 18px;
@@ -58,6 +78,7 @@ header{
 }
 
 /* HERO */
+
 .hero{
   min-height:760px;
   height:100svh;
@@ -73,6 +94,7 @@ header{
     radial-gradient(ellipse at 10% 90%,#1B2C4B 0%,transparent 45%),
     var(--navy);
 }
+
 .hero:before{
   content:"";
   position:absolute;
@@ -84,26 +106,29 @@ header{
   background-size:65px 65px;
   mask-image:linear-gradient(to bottom,black,transparent);
 }
+
 .hero-content{
   position:relative;
   z-index:2;
   max-width:900px;
 }
+
 .eyebrow{
   color:var(--yellow);
   font-size:11px;
   letter-spacing:5px;
   margin-bottom:30px;
 }
+
 .hero h1{
   font-size:clamp(58px,10vw,135px);
   line-height:.88;
   letter-spacing:-.075em;
   font-weight:900;
 }
-.hero h1 span{
-  color:var(--yellow);
-}
+
+.hero h1 span{color:var(--yellow)}
+
 .hero-description{
   margin-top:35px;
   max-width:390px;
@@ -111,12 +136,14 @@ header{
   font-size:14px;
   line-height:2;
 }
+
 .hero-bottom{
   margin-top:50px;
   display:flex;
   align-items:center;
   gap:20px;
 }
+
 .hero-button{
   background:var(--yellow);
   color:var(--deep);
@@ -127,15 +154,18 @@ header{
   display:inline-block;
   transition:.3s;
 }
+
 .hero-button:hover{
   transform:translateY(-5px);
   box-shadow:0 10px 35px #F4C54244;
 }
+
 .hero-note{
   color:var(--muted);
   font-size:10px;
   letter-spacing:2px;
 }
+
 .hero-orb{
   position:absolute;
   width:390px;
@@ -149,6 +179,7 @@ header{
   animation:float 8s ease-in-out infinite;
   opacity:.8;
 }
+
 .hero-orb:after{
   content:"";
   position:absolute;
@@ -157,10 +188,12 @@ header{
   border-radius:50%;
   transform:rotateX(65deg) rotate(-25deg);
 }
+
 @keyframes float{
   0%,100%{transform:translateY(0) rotate(0deg)}
   50%{transform:translateY(-25px) rotate(12deg)}
 }
+
 .hero-index{
   position:absolute;
   bottom:45px;
@@ -171,27 +204,32 @@ header{
 }
 
 /* SECTION */
+
 .section{
   padding:115px 8% 45px;
   background:var(--cream);
   color:var(--navy);
 }
+
 .section-heading{
   display:flex;
   justify-content:space-between;
   align-items:end;
   margin-bottom:55px;
 }
+
 .section-heading small{
   color:#A17B1A;
   font-size:10px;
   letter-spacing:4px;
 }
+
 .section-heading h2{
   font-size:clamp(38px,7vw,75px);
   letter-spacing:-5px;
   margin-top:12px;
 }
+
 .work-count{
   font-size:11px;
   background:var(--yellow);
@@ -200,6 +238,7 @@ header{
 }
 
 /* GALLERY */
+
 .gallery{
   background:var(--cream);
   color:var(--navy);
@@ -208,6 +247,7 @@ header{
   grid-template-columns:repeat(12,minmax(0,1fr));
   gap:75px 25px;
 }
+
 .item{
   cursor:pointer;
   min-width:0;
@@ -215,10 +255,12 @@ header{
   transform:translateY(35px);
   transition:opacity .8s,transform .8s;
 }
+
 .item.visible{
   opacity:1;
   transform:translateY(0);
 }
+
 .item:nth-child(6n+1){grid-column:span 7}
 .item:nth-child(6n+2){grid-column:span 5;margin-top:100px}
 .item:nth-child(6n+3){grid-column:span 5}
@@ -231,6 +273,7 @@ header{
   overflow:hidden;
   position:relative;
 }
+
 .image-wrap img{
   width:100%;
   aspect-ratio:4/5;
@@ -238,9 +281,11 @@ header{
   display:block;
   transition:transform .8s cubic-bezier(.2,.7,.2,1);
 }
+
 .item:hover .image-wrap img{
   transform:scale(1.045);
 }
+
 .image-wrap:after{
   content:"VIEW PROJECT ↗";
   position:absolute;
@@ -256,10 +301,12 @@ header{
   transform:translateY(10px);
   transition:.35s;
 }
+
 .item:hover .image-wrap:after{
   opacity:1;
   transform:translateY(0);
 }
+
 .caption{
   display:flex;
   justify-content:space-between;
@@ -268,16 +315,19 @@ header{
   padding-top:15px;
   margin-top:15px;
 }
+
 .caption strong{
   font-size:11px;
   letter-spacing:1px;
 }
+
 .caption span{
   font-size:10px;
   color:#A17B1A;
 }
 
-/* END SECTION */
+/* ABOUT */
+
 .end-section{
   padding:100px 8%;
   background:
@@ -285,25 +335,101 @@ header{
     var(--deep);
   text-align:center;
 }
+
 .end-section small{
   color:var(--yellow);
   font-size:10px;
   letter-spacing:4px;
 }
+
 .end-section h2{
   font-size:clamp(40px,8vw,90px);
   letter-spacing:-5px;
   line-height:1;
   margin:25px 0 35px;
 }
+
 .end-section h2 span{color:var(--yellow)}
+
 .end-section p{
   color:var(--muted);
   font-size:12px;
   letter-spacing:2px;
 }
 
+/* CONTACT */
+
+.contact-section{
+  padding:100px 8%;
+  background:var(--deep);
+  color:white;
+  text-align:center;
+  border-top:1px solid #ffffff18;
+}
+
+.contact-section small{
+  color:var(--yellow);
+  font-size:10px;
+  letter-spacing:4px;
+}
+
+.contact-section h2{
+  font-size:clamp(40px,7vw,75px);
+  letter-spacing:-4px;
+  margin:20px 0 15px;
+}
+
+.contact-section h2 span{color:var(--yellow)}
+
+.contact-description{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:50px;
+  line-height:1.8;
+}
+
+.contact-grid{
+  max-width:850px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.contact-card{
+  border:1px solid #ffffff22;
+  padding:35px 15px;
+  transition:.3s;
+  display:block;
+}
+
+.contact-card:hover{
+  border-color:var(--yellow);
+  transform:translateY(-7px);
+  background:#ffffff08;
+}
+
+.contact-icon{
+  font-size:27px;
+  color:var(--yellow);
+  margin-bottom:18px;
+}
+
+.contact-card strong{
+  display:block;
+  font-size:12px;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+.contact-card span{
+  color:var(--muted);
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+
 /* FOOTER */
+
 footer{
   padding:25px 8%;
   background:var(--deep);
@@ -316,6 +442,7 @@ footer{
 }
 
 /* LIGHTBOX */
+
 .lightbox{
   display:none;
   position:fixed;
@@ -326,16 +453,19 @@ footer{
   align-items:center;
   padding:30px;
 }
+
 .lightbox img{
   max-width:95%;
   max-height:88vh;
   object-fit:contain;
 }
+
 .close{
   position:absolute;
   top:20px;
   right:25px;
-  width:45px;height:45px;
+  width:45px;
+  height:45px;
   border:0;
   border-radius:50%;
   background:var(--yellow);
@@ -345,78 +475,147 @@ footer{
 }
 
 /* RESPONSIVE */
+
 @media(max-width:750px){
+
   .hero{min-height:720px}
+
   .hero-orb{
-    width:250px;height:250px;
-    right:-40px;top:18%;
+    width:250px;
+    height:250px;
+    right:-40px;
+    top:18%;
     opacity:.55;
   }
+
   .hero h1{font-size:clamp(55px,12vw,90px)}
+
   .nav{gap:15px}
+
   .section{padding:80px 6% 35px}
+
   .gallery{
     padding:0 6% 85px;
     gap:45px 15px;
   }
+
   .item:nth-child(n){
     grid-column:span 6;
     margin-top:0;
   }
+
   .item:nth-child(4n+2),
   .item:nth-child(4n+4){
     transform:translateY(30px);
   }
 }
+
+@media(max-width:600px){
+
+  .contact-grid{
+    grid-template-columns:1fr;
+  }
+
+  .contact-section{
+    padding:75px 7%;
+  }
+}
+
 @media(max-width:480px){
+
   header{padding:22px 6%}
+
   .logo{font-size:22px}
-  .nav{font-size:8px;gap:12px}
+
+  .nav{
+    font-size:8px;
+    gap:12px;
+  }
+
   .contact-link{padding:9px}
+
   .hero{
     min-height:700px;
     padding:100px 7% 60px;
   }
+
   .hero h1{font-size:58px}
+
   .hero-description{font-size:12px}
-  .hero-orb{width:190px;height:190px;top:17%;right:-55px}
+
+  .hero-orb{
+    width:190px;
+    height:190px;
+    top:17%;
+    right:-55px;
+  }
+
   .hero-index{bottom:25px}
-  .section-heading h2{font-size:42px;letter-spacing:-3px}
-  .work-count{padding:10px;font-size:9px}
+
+  .section-heading h2{
+    font-size:42px;
+    letter-spacing:-3px;
+  }
+
+  .work-count{
+    padding:10px;
+    font-size:9px;
+  }
+
   .gallery{gap:38px 11px}
+
   .caption strong{font-size:9px}
+
   .caption span{font-size:8px}
+
   .end-section h2{letter-spacing:-3px}
-  footer{font-size:8px;padding:22px 6%}
+
+  footer{
+    font-size:8px;
+    padding:22px 6%;
+  }
 }
+
 @media(prefers-reduced-motion:reduce){
+
   *,*:before,*:after{
     animation:none!important;
     scroll-behavior:auto!important;
     transition:none!important;
   }
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <header>
   <a class="logo" href="#">YASIN<span>.</span></a>
+
   <nav class="nav">
     <a href="#works">WORKS</a>
     <a href="#about">ABOUT</a>
-    <a class="contact-link" href="mailto:">CONTACT ↗</a>
+    <a class="contact-link" href="#contact">CONTACT ↗</a>
   </nav>
 </header>
 
+<!-- HERO -->
+
 <section class="hero">
+
   <div class="hero-orb" id="orb"></div>
 
   <div class="hero-content">
+
     <div class="eyebrow">INDEPENDENT GRAPHIC DESIGNER</div>
 
-    <h1>IDEAS INTO<br><span>VISUALS.</span></h1>
+    <h1>
+      IDEAS INTO<br>
+      <span>VISUALS.</span>
+    </h1>
 
     <p class="hero-description">
       I create visual experiences through graphic design,
@@ -427,53 +626,136 @@ footer{
       <a href="#works" class="hero-button">EXPLORE MY WORKS ↗</a>
       <span class="hero-note">PORTFOLIO / 2026</span>
     </div>
+
   </div>
 
   <div class="hero-index">01 — 03 / SCROLL TO EXPLORE</div>
+
 </section>
 
+<!-- WORKS -->
+
 <section class="section" id="works">
+
   <div class="section-heading">
+
     <div>
       <small>SELECTED CREATIONS</small>
       <h2>My Works.</h2>
     </div>
+
     <div class="work-count" id="count">LOADING...</div>
+
   </div>
+
 </section>
 
 <main class="gallery" id="gallery"></main>
 
+<!-- ABOUT -->
+
 <section class="end-section" id="about">
+
   <small>THANKS FOR VISITING</small>
-  <h2>MAKE IT<br><span>MEMORABLE.</span></h2>
+
+  <h2>
+    MAKE IT<br>
+    <span>MEMORABLE.</span>
+  </h2>
+
   <p>YASIN — GRAPHIC DESIGNER · 2026</p>
+
 </section>
+
+<!-- CONTACT -->
+
+<section class="contact-section" id="contact">
+
+  <small>LET'S CONNECT</small>
+
+  <h2>GET IN <span>TOUCH.</span></h2>
+
+  <p class="contact-description">
+    Have a project in mind? Let's create something great together.
+  </p>
+
+  <div class="contact-grid">
+
+    <a class="contact-card"
+       href="https://instagram.com/design__moradi"
+       target="_blank"
+       rel="noopener noreferrer">
+
+      <div class="contact-icon">◎</div>
+      <strong>INSTAGRAM</strong>
+      <span>@design__moradi</span>
+
+    </a>
+
+    <a class="contact-card"
+       href="tel:09960683266">
+
+      <div class="contact-icon">☎</div>
+      <strong>PHONE</strong>
+      <span>09960683266</span>
+
+    </a>
+
+    <a class="contact-card"
+       href="https://t.me/YYohoho"
+       target="_blank"
+       rel="noopener noreferrer">
+
+      <div class="contact-icon">➤</div>
+      <strong>TELEGRAM</strong>
+      <span>@YYohoho</span>
+
+    </a>
+
+  </div>
+
+</section>
+
+<!-- FOOTER -->
 
 <footer>
   <span>YASIN © 2026</span>
   <span>CREATIVE VISUAL DESIGN</span>
 </footer>
 
+<!-- LIGHTBOX -->
+
 <div class="lightbox" id="lightbox" onclick="closeImage()">
+
   <button class="close" aria-label="Close">×</button>
+
   <img id="largeImage" src="" alt="Portfolio preview">
+
 </div>
 
 <script>
+
 /* AUTOMATIC GALLERY */
+
 fetch("images.json")
+
 .then(response=>{
+
   if(!response.ok) throw new Error("Gallery not found");
+
   return response.json();
+
 })
+
 .then(images=>{
+
   const gallery=document.getElementById("gallery");
 
   document.getElementById("count").textContent=
     String(images.length).padStart(2,"0")+" WORKS";
 
   images.forEach((filename,index)=>{
+
     const item=document.createElement("div");
     item.className="item";
 
@@ -481,70 +763,112 @@ fetch("images.json")
     wrap.className="image-wrap";
 
     const img=document.createElement("img");
+
     img.src=filename;
     img.alt="Graphic design project "+(index+1);
     img.loading="lazy";
 
     img.onclick=()=>{
+
       document.getElementById("largeImage").src=filename;
+
       document.getElementById("lightbox").style.display="flex";
+
     };
 
     const caption=document.createElement("div");
     caption.className="caption";
 
     const title=document.createElement("strong");
-    title.textContent="PROJECT / "+String(index+1).padStart(2,"0");
+
+    title.textContent=
+      "PROJECT / "+String(index+1).padStart(2,"0");
 
     const label=document.createElement("span");
     label.textContent="YASIN DESIGN";
 
     caption.append(title,label);
+
     wrap.appendChild(img);
+
     item.append(wrap,caption);
+
     gallery.appendChild(item);
+
   });
 
   /* SCROLL REVEAL */
+
   const observer=new IntersectionObserver(entries=>{
+
     entries.forEach(entry=>{
+
       if(entry.isIntersecting){
+
         entry.target.classList.add("visible");
+
         observer.unobserve(entry.target);
+
       }
+
     });
+
   },{threshold:.08});
 
   document.querySelectorAll(".item").forEach(item=>{
+
     observer.observe(item);
+
   });
+
 })
+
 .catch(error=>{
+
   document.getElementById("count").textContent="GALLERY UNAVAILABLE";
+
   console.error(error);
+
 });
 
+
 /* LIGHTBOX */
+
 function closeImage(){
+
   document.getElementById("lightbox").style.display="none";
+
   document.getElementById("largeImage").src="";
+
 }
 
 document.addEventListener("keydown",event=>{
+
   if(event.key==="Escape") closeImage();
+
 });
 
+
 /* LIGHTWEIGHT MOUSE EFFECT */
+
 if(window.matchMedia("(hover:hover) and (pointer:fine)").matches){
+
   const orb=document.getElementById("orb");
 
   document.addEventListener("mousemove",event=>{
+
     const x=(event.clientX/window.innerWidth-.5)*18;
+
     const y=(event.clientY/window.innerHeight-.5)*18;
+
     orb.style.marginLeft=x+"px";
+
     orb.style.marginTop=y+"px";
+
   });
+
 }
+
 </script>
 
 </body>
