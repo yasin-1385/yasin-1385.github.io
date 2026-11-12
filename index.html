@@ -1026,6 +1026,39 @@ body.intro-active{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   #siteIntro.intro-leaving .rift-world{transform:none}
 }
+
+/* DESKTOP: REVEAL THE ACTUAL PAGE IN SYNC WITH THE PORTAL EXIT */
+@media(min-width:651px){
+  body.intro-active>header,
+  body.intro-active>.hero,
+  body.intro-active>#works,
+  body.intro-active>.gallery,
+  body.intro-active>.end-section,
+  body.intro-active>.contact-section,
+  body.intro-active>footer{
+    opacity:0;
+    transform:translate3d(0,24px,0) scale(.992);
+  }
+  body.site-revealing>header,
+  body.site-revealing>.hero,
+  body.site-revealing>#works,
+  body.site-revealing>.gallery,
+  body.site-revealing>.end-section,
+  body.site-revealing>.contact-section,
+  body.site-revealing>footer{
+    animation:desktopPageArrival 1.75s cubic-bezier(.2,.72,.2,1) both;
+  }
+  body.site-revealing>.hero{animation-delay:.06s}
+  body.site-revealing>#works{animation-delay:.12s}
+  body.site-revealing>.gallery{animation-delay:.18s}
+  body.site-revealing>.end-section{animation-delay:.24s}
+  body.site-revealing>.contact-section{animation-delay:.3s}
+  body.site-revealing>footer{animation-delay:.36s}
+}
+@keyframes desktopPageArrival{
+  0%{opacity:0;transform:translate3d(0,24px,0) scale(.992)}
+  100%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
 </style>
 
 </head>
@@ -1519,6 +1552,7 @@ document.addEventListener("keydown",event=>{
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
   document.body.classList.remove("intro-active");
+  document.body.classList.add("site-revealing");
   window.setTimeout(()=>intro.remove(),1550);
  },duration);
 })();
