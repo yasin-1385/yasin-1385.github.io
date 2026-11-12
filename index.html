@@ -166,34 +166,40 @@ header{
   letter-spacing:2px;
 }
 
-.hero-orb{
+
+.hero-art{
   position:absolute;
-  width:390px;
-  height:390px;
-  right:10%;
-  top:28%;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 30% 25%,#F9DB78 0%,#F4C542 9%,#D69C22 24%,#465C7B 48%,#172A48 67%,transparent 72%);
-  filter:drop-shadow(0 0 70px #F4C54220);
-  animation:float 8s ease-in-out infinite;
-  opacity:.8;
+  z-index:1;
+  width:min(53vw,690px);
+  aspect-ratio:1;
+  right:3.5%;
+  top:50%;
+  transform:translateY(-48%);
+  perspective:1100px;
+  isolation:isolate;
+  filter:drop-shadow(0 35px 65px rgba(0,0,0,.35));
 }
-
-.hero-orb:after{
-  content:"";
-  position:absolute;
-  inset:-30px;
-  border:1px solid #F4C54255;
-  border-radius:50%;
-  transform:rotateX(65deg) rotate(-25deg);
+.art-underlay,.art-shade,.art-reveal{
+  position:absolute;inset:0;width:100%;height:100%;
 }
-
-@keyframes float{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  50%{transform:translateY(-25px) rotate(12deg)}
+.art-underlay{transform:rotateY(-13deg) rotateX(5deg);animation:artFloat 9s ease-in-out infinite}
+.art-underlay svg{width:100%;height:100%;overflow:visible}
+.art-shade{
+  z-index:2;
+  background:linear-gradient(135deg,rgba(7,17,35,.88),rgba(11,26,49,.72));
+  mix-blend-mode:multiply;
+  pointer-events:none;
 }
-
+.art-reveal{z-index:3;pointer-events:none}
+.art-hint{
+  position:absolute;z-index:4;right:12%;bottom:13%;
+  color:#c4d0e2;font-size:9px;letter-spacing:4px;
+  opacity:.72;pointer-events:none;
+}
+@keyframes artFloat{
+  0%,100%{transform:rotateY(-13deg) rotateX(5deg) translateY(0)}
+  50%{transform:rotateY(-7deg) rotateX(1deg) translateY(-15px)}
+}
 .hero-index{
   position:absolute;
   bottom:45px;
@@ -609,7 +615,7 @@ footer{
 
 <body>
 
-<canvas id="silk-canvas" aria-hidden="true"></canvas>
+
 
 
 <!-- HEADER -->
@@ -628,7 +634,52 @@ footer{
 
 <section class="hero">
 
-  <div class="hero-orb" id="orb"></div>
+  
+  <div class="hero-art" id="heroArt" aria-label="Interactive 3D abstract artwork">
+    <div class="art-underlay">
+      <svg viewBox="0 0 700 700" role="img" aria-hidden="true">
+        <defs>
+          <linearGradient id="ribbonA" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff4d1"/><stop offset=".2" stop-color="#f4c542"/>
+            <stop offset=".48" stop-color="#ff7eae"/><stop offset=".72" stop-color="#8c7cff"/>
+            <stop offset="1" stop-color="#5de5e0"/>
+          </linearGradient>
+          <linearGradient id="ribbonB" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#16375d"/><stop offset=".28" stop-color="#4de0df"/>
+            <stop offset=".55" stop-color="#b7a2ff"/><stop offset=".8" stop-color="#ff9ac8"/>
+            <stop offset="1" stop-color="#fff0bc"/>
+          </linearGradient>
+          <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+            <stop offset=".5" stop-color="#ffffff" stop-opacity=".08"/>
+            <stop offset="1" stop-color="#071329" stop-opacity=".7"/>
+          </linearGradient>
+          <filter id="softGlow"><feGaussianBlur stdDeviation="18"/></filter>
+        </defs>
+        <ellipse cx="355" cy="365" rx="230" ry="205" fill="#5b8cff" opacity=".18" filter="url(#softGlow)"/>
+        <g transform="translate(350 350) rotate(-24)">
+          <path d="M-235 -40 C-180 -220 30 -260 180 -140 C300 -45 250 100 95 130 C-30 155 -140 80 -120 5 C-100 -75 30 -90 115 -35 C185 10 140 95 55 92"
+            fill="none" stroke="#08152b" stroke-width="92" stroke-linecap="round" opacity=".7" transform="translate(14 24)"/>
+          <path d="M-235 -40 C-180 -220 30 -260 180 -140 C300 -45 250 100 95 130 C-30 155 -140 80 -120 5 C-100 -75 30 -90 115 -35 C185 10 140 95 55 92"
+            fill="none" stroke="url(#ribbonA)" stroke-width="76" stroke-linecap="round"/>
+          <path d="M-235 -40 C-180 -220 30 -260 180 -140 C300 -45 250 100 95 130 C-30 155 -140 80 -120 5 C-100 -75 30 -90 115 -35 C185 10 140 95 55 92"
+            fill="none" stroke="url(#edge)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M-190 95 C-80 210 90 205 180 90 C270 -25 200 -155 70 -160 C-50 -165 -100 -70 -35 -10 C25 45 105 5 95 -45"
+            fill="none" stroke="#0a1830" stroke-width="58" stroke-linecap="round" opacity=".65" transform="translate(9 15)"/>
+          <path d="M-190 95 C-80 210 90 205 180 90 C270 -25 200 -155 70 -160 C-50 -165 -100 -70 -35 -10 C25 45 105 5 95 -45"
+            fill="none" stroke="url(#ribbonB)" stroke-width="49" stroke-linecap="round"/>
+          <path d="M-190 95 C-80 210 90 205 180 90 C270 -25 200 -155 70 -160 C-50 -165 -100 -70 -35 -10 C25 45 105 5 95 -45"
+            fill="none" stroke="url(#edge)" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <circle cx="350" cy="350" r="270" fill="none" stroke="#a9c5ff" stroke-opacity=".18"/>
+        <circle cx="350" cy="350" r="292" fill="none" stroke="#f4c542" stroke-opacity=".25" stroke-dasharray="2 12"/>
+      </svg>
+    </div>
+    <div class="art-shade"></div>
+    <canvas class="art-reveal" id="artReveal" aria-hidden="true"></canvas>
+    <div class="art-hint">MOVE TO REVEAL</div>
+  </div>
+
 
   <div class="hero-content">
 
@@ -871,227 +922,65 @@ document.addEventListener("keydown",event=>{
 });
 
 
-/* LIGHTWEIGHT MOUSE EFFECT */
 
-if(window.matchMedia("(hover:hover) and (pointer:fine)").matches){
-
-  const orb=document.getElementById("orb");
-
-  document.addEventListener("mousemove",event=>{
-
-    const x=(event.clientX/window.innerWidth-.5)*18;
-
-    const y=(event.clientY/window.innerHeight-.5)*18;
-
-    orb.style.marginLeft=x+"px";
-
-    orb.style.marginTop=y+"px";
-
-  });
-
-}
-
-
-/* IRIDESCENT SILK — CURVED POINTER TRAILS + SCROLL WAVES */
+/* CURSOR-REVEALED 3D ARTWORK */
 (()=>{
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  const canvas=document.getElementById("silk-canvas");
-  if(!canvas) return;
-  const ctx=canvas.getContext("2d",{alpha:true});
+  const stage=document.getElementById("heroArt");
+  const canvas=document.getElementById("artReveal");
+  if(!stage||!canvas) return;
+  const ctx=canvas.getContext("2d");
   if(!ctx) return;
-
-  const finePointer=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
-  const palette=[
-    {h:190,s:100,l:72},
-    {h:218,s:100,l:75},
-    {h:265,s:100,l:78},
-    {h:315,s:100,l:76},
-    {h:42,s:100,l:72}
-  ];
-
-  let w=0,h=0,dpr=1,raf=0,lastFrame=0;
-  let pointer={x:-500,y:-500,px:-500,py:-500};
-  let points=[];
-  let scrollWave=0,scrollDirection=1,scrollPosition=.5;
-  let time=0;
-
-  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-  const hsla=(c,a)=>'hsla('+c.h+','+c.s+'%,'+c.l+'%,'+a+')';
-
+  const fine=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+  if(!fine) return;
+  let w=0,h=0,dpr=1,points=[],raf=0;
   function resize(){
-    dpr=Math.min(window.devicePixelRatio||1,1.25);
-    w=window.innerWidth;
-    h=window.innerHeight;
-    canvas.width=Math.round(w*dpr);
-    canvas.height=Math.round(h*dpr);
+    const r=stage.getBoundingClientRect();
+    dpr=Math.min(window.devicePixelRatio||1,1.5);
+    w=r.width;h=r.height;
+    canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   resize();
   window.addEventListener("resize",resize,{passive:true});
-
-  function wake(){
-    if(!raf) raf=requestAnimationFrame(render);
+  function move(e){
+    const r=stage.getBoundingClientRect();
+    const x=e.clientX-r.left,y=e.clientY-r.top;
+    if(x<0||y<0||x>w||y>h)return;
+    points.push({x,y,life:1});
+    if(points.length>45)points.shift();
+    if(!raf)raf=requestAnimationFrame(draw);
   }
-
-  function addPoint(x,y,force){
-    const prev=points[points.length-1];
-    if(prev && Math.hypot(x-prev.x,y-prev.y)<(force?2:4)) return;
-    points.push({x,y,life:1,seed:Math.random()*Math.PI*2});
-    if(points.length>34) points.shift();
-    wake();
-  }
-
-  function onPointer(e){
-    if(!finePointer) return;
-    pointer.px=pointer.x;
-    pointer.py=pointer.y;
-    pointer.x=e.clientX;
-    pointer.y=e.clientY;
-    addPoint(pointer.x,pointer.y,false);
-  }
-
-  let lastScroll=window.scrollY;
-  let scrollTimer=0;
-  function onScroll(){
-    const current=window.scrollY;
-    const delta=current-lastScroll;
-    lastScroll=current;
-    scrollDirection=delta>=0?1:-1;
-    scrollPosition=clamp((window.innerHeight*.5)/Math.max(h,1),.2,.8);
-    scrollWave=Math.min(1,scrollWave+Math.min(Math.abs(delta)/180,.42));
-    if(!scrollTimer){
-      scrollTimer=1;
-      wake();
-    }
-  }
-
-  window.addEventListener("pointermove",onPointer,{passive:true});
-  window.addEventListener("scroll",onScroll,{passive:true});
-
-  function strokeFlow(list,age,phase,colorIndex,width,alpha){
-    if(list.length<2) return;
-    const grad=ctx.createLinearGradient(
-      list[0].x,list[0].y,list[list.length-1].x,list[list.length-1].y
-    );
-    grad.addColorStop(0,hsla(palette[colorIndex%palette.length],0));
-    grad.addColorStop(.22,hsla(palette[colorIndex%palette.length],alpha));
-    grad.addColorStop(.62,hsla(palette[(colorIndex+2)%palette.length],alpha*.85));
-    grad.addColorStop(1,hsla(palette[(colorIndex+4)%palette.length],0));
-
-    ctx.beginPath();
-    ctx.moveTo(list[0].x,list[0].y);
-    for(let i=1;i<list.length-1;i++){
-      const mx=(list[i].x+list[i+1].x)*.5;
-      const my=(list[i].y+list[i+1].y)*.5;
-      ctx.quadraticCurveTo(list[i].x,list[i].y,mx,my);
-    }
-    const last=list[list.length-1];
-    ctx.lineTo(last.x,last.y);
-    ctx.strokeStyle=grad;
-    ctx.lineWidth=width;
-    ctx.lineCap="round";
-    ctx.lineJoin="round";
-    ctx.stroke();
-  }
-
-  function drawPointerSilk(){
-    if(points.length<2) return;
-    const live=points.filter(p=>p.life>.025);
-    if(live.length<2) return;
-
-    const path=live.map((p,i)=>{
-      const prev=live[Math.max(0,i-1)];
-      const next=live[Math.min(live.length-1,i+1)];
-      const dx=next.x-prev.x,dy=next.y-prev.y;
-      const len=Math.hypot(dx,dy)||1;
-      const nx=-dy/len,ny=dx/len;
-      const t=i/Math.max(1,live.length-1);
-      const curl=Math.sin(t* Math.PI*3.1 + time*.0018)* (7+18*(1-t));
-      const flutter=Math.sin(t* Math.PI*6.2-time*.0024)*5;
-      return {
-        x:p.x+nx*(curl+flutter),
-        y:p.y+ny*(curl+flutter),
-        life:p.life
-      };
-    });
-
-    for(let strand=0;strand<5;strand++){
-      const offset=(strand-2)*3.8;
-      const shifted=path.map((p,i)=>{
-        const prev=path[Math.max(0,i-1)];
-        const next=path[Math.min(path.length-1,i+1)];
-        const dx=next.x-prev.x,dy=next.y-prev.y;
-        const len=Math.hypot(dx,dy)||1;
-        const wave=Math.sin(i*.48+time*.002+strand*1.3)*offset;
-        return {x:p.x-(dy/len)*wave,y:p.y+(dx/len)*wave};
-      });
-      strokeFlow(shifted,0,strand,strand, strand===2?2.2:1.05,
-        strand===2?.72:.42);
-    }
-
-    const head=path[path.length-1];
-    const glow=ctx.createRadialGradient(head.x,head.y,0,head.x,head.y,32);
-    glow.addColorStop(0,"rgba(130,225,255,.24)");
-    glow.addColorStop(1,"rgba(130,225,255,0)");
-    ctx.fillStyle=glow;
-    ctx.beginPath();
-    ctx.arc(head.x,head.y,32,0,Math.PI*2);
-    ctx.fill();
-  }
-
-  function drawScrollSilk(){
-    if(scrollWave<.015) return;
-    const strength=scrollWave;
-    const baseY=h*scrollPosition;
-    const span=w*1.18;
-    const startX=-w*.09;
-    for(let strand=0;strand<6;strand++){
-      const pts=[];
-      const phase=strand*.72+time*.0015;
-      const amplitude=(13+strand*4)*strength;
-      for(let i=0;i<=24;i++){
-        const t=i/24;
-        const x=startX+span*t;
-        const envelope=Math.sin(Math.PI*t);
-        const wave=Math.sin(t*Math.PI*2.6+phase)*amplitude*envelope;
-        const curl=Math.sin(t*Math.PI*5.2-phase*1.7)*amplitude*.32*envelope;
-        const y=baseY+wave+curl+(strand-2.5)*5*strength;
-        pts.push({x,y});
-      }
-      strokeFlow(pts,0,strand+1,strand+1,strand===2?2.6:1.15,
-        (.18+strength*.38)*(strand===2?1:.7));
-    }
-  }
-
-  function render(now){
+  function draw(){
     raf=0;
-    if(now-lastFrame<28){
-      raf=requestAnimationFrame(render);
-      return;
-    }
-    const dt=Math.min(40,now-(lastFrame||now));
-    lastFrame=now;
-    time+=dt;
     ctx.clearRect(0,0,w,h);
-
-    drawScrollSilk();
-    drawPointerSilk();
-
-    points.forEach(p=>p.life*=.955);
-    points=points.filter(p=>p.life>.025);
-    scrollWave*=.94;
-
-    if(points.length>1 || scrollWave>.015){
-      raf=requestAnimationFrame(render);
-    }else{
-      lastFrame=0;
-      scrollTimer=0;
-      ctx.clearRect(0,0,w,h);
+    ctx.save();
+    ctx.globalCompositeOperation="source-over";
+    for(let i=0;i<points.length;i++){
+      const p=points[i],prev=points[Math.max(0,i-1)];
+      const dx=p.x-prev.x,dy=p.y-prev.y;
+      const angle=Math.atan2(dy,dx);
+      const radius=18+22*p.life;
+      const glow=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius*2.1);
+      glow.addColorStop(0,"rgba(255,255,255,"+(p.life*.26)+")");
+      glow.addColorStop(.35,"rgba(100,220,255,"+(p.life*.19)+")");
+      glow.addColorStop(1,"rgba(100,220,255,0)");
+      ctx.fillStyle=glow;
+      ctx.beginPath();ctx.arc(p.x,p.y,radius*2.1,0,Math.PI*2);ctx.fill();
+      ctx.globalCompositeOperation="destination-out";
+      ctx.beginPath();
+      ctx.ellipse(p.x,p.y,radius*1.3,radius*.8,angle,0,Math.PI*2);
+      ctx.fill();
+      ctx.globalCompositeOperation="source-over";
     }
+    ctx.restore();
+    points.forEach(p=>p.life*=.91);
+    points=points.filter(p=>p.life>.035);
+    if(points.length)raf=requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,w,h);
   }
+  stage.addEventListener("pointermove",move,{passive:true});
+  stage.addEventListener("pointerleave",()=>{points=[];if(raf)cancelAnimationFrame(raf);raf=0;ctx.clearRect(0,0,w,h)});
 })();
-
 </script>
 
 </body>
