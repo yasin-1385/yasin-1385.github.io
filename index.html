@@ -692,11 +692,54 @@ body> .hero,body> .section,body> .gallery,body> .end-section,body> .contact-sect
 .hero-orb{animation:none!important;transform:translate3d(var(--orb-x,0px),var(--orb-y,0px),0);transition:transform .18s ease-out,filter .3s;will-change:transform}
 @media(hover:hover) and (pointer:fine){.hero-orb{filter:drop-shadow(0 0 85px rgba(180,210,245,.28))}.gallery .image-wrap{transition:transform .35s cubic-bezier(.2,.75,.25,1),border-color .35s}}
 @media(prefers-reduced-motion:reduce){#silkFlow{display:none}body> .hero,body> .section,body> .gallery,body> .end-section,body> .contact-section,body>footer{scale:none}}
+
+/* THREE LIGHTWEIGHT INTERACTIONS: FABRIC ATMOSPHERE, CINEMATIC REVEAL, 3D TILT */
+#fabricAtmosphere{
+ position:fixed;inset:-12%;z-index:0;pointer-events:none;opacity:.72;
+ background:
+  radial-gradient(ellipse 34% 27% at var(--fabric-x,52%) var(--fabric-y,38%),rgba(154,196,239,.17),transparent 72%),
+  radial-gradient(ellipse 28% 35% at calc(var(--fabric-x,52%) + 24%) calc(var(--fabric-y,38%) + 28%),rgba(112,151,204,.12),transparent 75%);
+ filter:blur(34px);transform:translate3d(0,0,0);will-change:background;
+}
+body>#fabricAtmosphere{z-index:0}
+body>header,body>section,body>main,body>footer{position:relative;z-index:1}
+body>#silkFlow{z-index:90}
+.gallery .item{
+ opacity:0;clip-path:inset(9% 0 0 0);
+ transform:translate3d(0,42px,0) scale(.975);
+ transition:opacity .85s ease,transform .9s cubic-bezier(.16,.72,.22,1),clip-path .9s cubic-bezier(.16,.72,.22,1);
+ transition-delay:var(--reveal-delay,0ms);
+ perspective:900px;
+}
+.gallery .item.visible{
+ opacity:1;clip-path:inset(0 0 0 0);
+ transform:translate3d(0,0,0) scale(1);
+}
+.gallery .image-wrap{
+ transform:perspective(900px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) translateZ(0);
+ transform-style:preserve-3d;
+ transition:transform .22s ease-out,border-color .3s,box-shadow .3s;
+ will-change:transform;
+}
+.gallery .image-wrap img{transform:translateZ(12px);transition:transform .45s ease}
+.gallery .item:hover .image-wrap{border-color:rgba(205,230,255,.4);box-shadow:inset 0 1px 0 #ffffff45,0 28px 65px #0006}
+.gallery .item:hover .image-wrap img{transform:translateZ(18px) scale(1.025)}
+@media(hover:none),(pointer:coarse){
+ #fabricAtmosphere{opacity:.38;filter:blur(42px)}
+ .gallery .image-wrap{transform:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #fabricAtmosphere{display:none}
+ .gallery .item{opacity:1;clip-path:none;transform:none;transition:none}
+ .gallery .image-wrap{transform:none!important}
+}
+
 </style>
 
 </head>
 
 <body>
+<div id="fabricAtmosphere" aria-hidden="true"></div>
 <canvas id="silkFlow" aria-hidden="true"></canvas>
 
 
@@ -1075,6 +1118,53 @@ document.addEventListener("keydown",event=>{
   addEventListener("scroll",scroll,{passive:true});
  }
 })();</script>
+
+
+<script>
+/* LIGHTWEIGHT FABRIC PARALLAX + CINEMATIC REVEAL + CARD TILT */
+(()=>{
+ const fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+ const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+ if(reduced)return;
+ const atmosphere=document.getElementById("fabricAtmosphere");
+ let mx=52,my=38,tx=52,ty=38,frame=0;
+ function animateAtmosphere(){
+  frame=0;mx+=(tx-mx)*.075;my+=(ty-my)*.075;
+  atmosphere.style.setProperty("--fabric-x",mx.toFixed(2)+"%");
+  atmosphere.style.setProperty("--fabric-y",my.toFixed(2)+"%");
+  if(Math.abs(tx-mx)>.08||Math.abs(ty-my)>.08)frame=requestAnimationFrame(animateAtmosphere);
+ }
+ if(fine){
+  addEventListener("pointermove",e=>{
+   tx=18+(e.clientX/innerWidth)*64;
+   ty=12+(e.clientY/innerHeight)*68;
+   if(!frame)frame=requestAnimationFrame(animateAtmosphere);
+  },{passive:true});
+ }
+ const gallery=document.getElementById("gallery");
+ const cards=gallery.querySelectorAll(".item");
+ cards.forEach((card,i)=>card.style.setProperty("--reveal-delay",Math.min(i%3,2)*95+"ms"));
+ if(fine){
+  gallery.addEventListener("pointermove",e=>{
+   const card=e.target.closest(".item");
+   if(!card)return;
+   const wrap=card.querySelector(".image-wrap");
+   if(!wrap)return;
+   const r=wrap.getBoundingClientRect();
+   const px=(e.clientX-r.left)/r.width;
+   const py=(e.clientY-r.top)/r.height;
+   wrap.style.setProperty("--tilt-y",((px-.5)*7).toFixed(2)+"deg");
+   wrap.style.setProperty("--tilt-x",((.5-py)*6).toFixed(2)+"deg");
+  },{passive:true});
+  gallery.addEventListener("pointerout",e=>{
+   const card=e.target.closest(".item");
+   if(!card||card.contains(e.relatedTarget))return;
+   const wrap=card.querySelector(".image-wrap");
+   if(wrap){wrap.style.setProperty("--tilt-x","0deg");wrap.style.setProperty("--tilt-y","0deg");}
+  },{passive:true});
+ }
+})();
+</script>
 
 </body>
 </html>
