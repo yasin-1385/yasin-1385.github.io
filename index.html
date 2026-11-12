@@ -2081,5 +2081,56 @@ document.addEventListener("keydown",event=>{
  addEventListener("blur",()=>cursor.classList.remove("cursor-visible"));
 })();
 </script>
+
+<script>
+/* Lightweight silk pointer trail — no scroll listener */
+(()=>{
+ const canvas=document.getElementById("silkFlow");
+ if(!canvas||!matchMedia("(hover:hover) and (pointer:fine)").matches||matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+ const ctx=canvas.getContext("2d",{alpha:true});
+ if(!ctx)return;
+ let width=0,height=0,dpr=1,frame=0;
+ const points=[];
+ function resize(){
+  dpr=Math.min(window.devicePixelRatio||1,1.25);
+  width=innerWidth;height=innerHeight;
+  canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+  canvas.style.width=width+"px";canvas.style.height=height+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+ }
+ function draw(){
+  if(frame)return;
+  frame=requestAnimationFrame(render);
+ }
+ function render(){
+  frame=0;ctx.clearRect(0,0,width,height);
+  const now=performance.now();
+  while(points.length&&now-points[0].t>520)points.shift();
+  if(points.length>1){
+   for(let strand=0;strand<3;strand++){
+    ctx.beginPath();
+    points.forEach((p,i)=>{
+     const offset=(strand-1)*4+Math.sin(i*.45+now*.002-strand)*2;
+     const x=p.x,y=p.y+offset;
+     if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    });
+    const life=Math.max(0,1-(now-points[points.length-1].t)/520);
+    ctx.strokeStyle="rgba(220,236,255,"+(0.045+strand*.018)*life+")";
+    ctx.lineWidth=strand===1?1.8:1;
+    ctx.lineCap="round";ctx.lineJoin="round";ctx.stroke();
+   }
+  }
+  if(points.length>1)draw();
+ }
+ addEventListener("resize",resize,{passive:true});
+ addEventListener("pointermove",e=>{
+  points.push({x:e.clientX,y:e.clientY,t:performance.now()});
+  while(points.length>24)points.shift();
+  draw();
+ },{passive:true});
+ resize();
+})();
+</script>
+
 </body>
 </html>
