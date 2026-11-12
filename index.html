@@ -586,19 +586,22 @@ footer{
 }
 
 
-/* SILK FABRIC DISTORTION */
-.silk-surface{
-  transform-origin:center;
-}
-.silk-surface.silk-active{
-  filter:url(#silk-fabric-warp);
-  will-change:filter;
+/* LIGHTWEIGHT IRIDESCENT SILK TRAILS */
+#silk-canvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:8;
+  pointer-events:none;
+  opacity:.94;
+  mix-blend-mode:screen;
 }
 @media(max-width:750px){
-  .silk-surface.silk-active{filter:url(#silk-fabric-warp)}
+  #silk-canvas{opacity:.72}
 }
 @media(prefers-reduced-motion:reduce){
-  .silk-surface{filter:none!important}
+  #silk-canvas{display:none}
 }
 
 </style>
@@ -606,13 +609,7 @@ footer{
 
 <body>
 
-<!-- SVG FILTER: ORGANIC SILK / FABRIC WARP -->
-<svg aria-hidden="true" width="0" height="0" style="position:absolute;left:-100%;top:-100%;overflow:hidden">
-  <filter id="silk-fabric-warp" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
-    <feTurbulence id="silk-noise" type="fractalNoise" baseFrequency="0.0025 0.014" numOctaves="1" seed="7" result="fabricNoise"/>
-    <feDisplacementMap id="silk-displace" in="SourceGraphic" in2="fabricNoise" scale="0" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
+<canvas id="silk-canvas" aria-hidden="true"></canvas>
 
 
 <!-- HEADER -->
@@ -895,102 +892,204 @@ if(window.matchMedia("(hover:hover) and (pointer:fine)").matches){
 }
 
 
-/* SILK FABRIC: POINTER DRAG + SCROLL TENSION */
+/* IRIDESCENT SILK — CURVED POINTER TRAILS + SCROLL WAVES */
 (()=>{
-  const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(reduceMotion) return;
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const filter=document.getElementById("silk-displace");
-  const noise=document.getElementById("silk-noise");
-  if(!filter || !noise) return;
+  const canvas=document.getElementById("silk-canvas");
+  if(!canvas) return;
+  const ctx=canvas.getContext("2d",{alpha:true});
+  if(!ctx) return;
 
-  const surfaces=[...document.querySelectorAll(
-    ".hero, .section, .gallery, .end-section, .contact-section, footer"
-  )];
+  const finePointer=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+  const palette=[
+    {h:190,s:100,l:72},
+    {h:218,s:100,l:75},
+    {h:265,s:100,l:78},
+    {h:315,s:100,l:76},
+    {h:42,s:100,l:72}
+  ];
 
-  surfaces.forEach(surface=>surface.classList.add("silk-surface"));
+  let w=0,h=0,dpr=1,raf=0,lastFrame=0;
+  let pointer={x:-500,y:-500,px:-500,py:-500};
+  let points=[];
+  let scrollWave=0,scrollDirection=1,scrollPosition=.5;
+  let time=0;
 
-  let active=null;
-  let pointerX=0, pointerY=0;
-  let lastX=0, lastY=0, lastTime=0;
-  let energy=0, targetEnergy=0;
-  let scrollEnergy=0, lastScroll=window.scrollY;
-  let raf=0;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const hsla=(c,a)=>'hsla('+c.h+','+c.s+'%,'+c.l+'%,'+a+')';
 
-  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-
-  function setActive(surface){
-    if(active===surface) return;
-    if(active) active.classList.remove("silk-active");
-    active=surface;
-    if(active) active.classList.add("silk-active");
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,1.25);
+    w=window.innerWidth;
+    h=window.innerHeight;
+    canvas.width=Math.round(w*dpr);
+    canvas.height=Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
+  resize();
+  window.addEventListener("resize",resize,{passive:true});
 
-  function surfaceAt(x,y){
-    const el=document.elementFromPoint(x,y);
-    return el && el.closest(".silk-surface");
-  }
-
-  function pointerMove(event){
-    pointerX=event.clientX;
-    pointerY=event.clientY;
-    const now=performance.now();
-    if(lastTime){
-      const dt=Math.max(8,now-lastTime);
-      const speed=Math.hypot(pointerX-lastX,pointerY-lastY)/dt;
-      targetEnergy=Math.max(targetEnergy,clamp(speed*1.5,0,1));
-    }
-    lastX=pointerX;
-    lastY=pointerY;
-    lastTime=now;
-    setActive(surfaceAt(pointerX,pointerY));
-    requestFrame();
-  }
-
-  function onScroll(){
-    const now=window.scrollY;
-    const delta=Math.abs(now-lastScroll);
-    lastScroll=now;
-    scrollEnergy=Math.max(scrollEnergy,clamp(delta/32,0,1));
-    const y=clamp(window.innerHeight*.52,0,window.innerHeight-1);
-    setActive(surfaceAt(window.innerWidth*.5,y));
-    requestFrame();
-  }
-
-  function requestFrame(){
+  function wake(){
     if(!raf) raf=requestAnimationFrame(render);
   }
 
-  function render(){
-    raf=0;
-    targetEnergy=Math.max(targetEnergy*.88,scrollEnergy*.92);
-    energy+=(targetEnergy-energy)*.22;
-    scrollEnergy*=.84;
+  function addPoint(x,y,force){
+    const prev=points[points.length-1];
+    if(prev && Math.hypot(x-prev.x,y-prev.y)<(force?2:4)) return;
+    points.push({x,y,life:1,seed:Math.random()*Math.PI*2});
+    if(points.length>34) points.shift();
+    wake();
+  }
 
-    const scale=energy*34;
-    filter.setAttribute("scale",scale.toFixed(2));
+  function onPointer(e){
+    if(!finePointer) return;
+    pointer.px=pointer.x;
+    pointer.py=pointer.y;
+    pointer.x=e.clientX;
+    pointer.y=e.clientY;
+    addPoint(pointer.x,pointer.y,false);
+  }
 
-    const fx=.0025+energy*.0018;
-    const fy=.014+energy*.006;
-    noise.setAttribute("baseFrequency",fx.toFixed(4)+" "+fy.toFixed(4));
-
-    if(energy>.012 || targetEnergy>.012 || scrollEnergy>.012){
-      requestFrame();
-    }else{
-      filter.setAttribute("scale","0");
-      if(active) active.classList.remove("silk-active");
-      active=null;
-      energy=0;
-      targetEnergy=0;
+  let lastScroll=window.scrollY;
+  let scrollTimer=0;
+  function onScroll(){
+    const current=window.scrollY;
+    const delta=current-lastScroll;
+    lastScroll=current;
+    scrollDirection=delta>=0?1:-1;
+    scrollPosition=clamp((window.innerHeight*.5)/Math.max(h,1),.2,.8);
+    scrollWave=Math.min(1,scrollWave+Math.min(Math.abs(delta)/180,.42));
+    if(!scrollTimer){
+      scrollTimer=1;
+      wake();
     }
   }
 
-  window.addEventListener("pointermove",pointerMove,{passive:true});
+  window.addEventListener("pointermove",onPointer,{passive:true});
   window.addEventListener("scroll",onScroll,{passive:true});
-  window.addEventListener("pointerleave",()=>{
-    targetEnergy=0;
-    requestFrame();
-  });
+
+  function strokeFlow(list,age,phase,colorIndex,width,alpha){
+    if(list.length<2) return;
+    const grad=ctx.createLinearGradient(
+      list[0].x,list[0].y,list[list.length-1].x,list[list.length-1].y
+    );
+    grad.addColorStop(0,hsla(palette[colorIndex%palette.length],0));
+    grad.addColorStop(.22,hsla(palette[colorIndex%palette.length],alpha));
+    grad.addColorStop(.62,hsla(palette[(colorIndex+2)%palette.length],alpha*.85));
+    grad.addColorStop(1,hsla(palette[(colorIndex+4)%palette.length],0));
+
+    ctx.beginPath();
+    ctx.moveTo(list[0].x,list[0].y);
+    for(let i=1;i<list.length-1;i++){
+      const mx=(list[i].x+list[i+1].x)*.5;
+      const my=(list[i].y+list[i+1].y)*.5;
+      ctx.quadraticCurveTo(list[i].x,list[i].y,mx,my);
+    }
+    const last=list[list.length-1];
+    ctx.lineTo(last.x,last.y);
+    ctx.strokeStyle=grad;
+    ctx.lineWidth=width;
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+    ctx.stroke();
+  }
+
+  function drawPointerSilk(){
+    if(points.length<2) return;
+    const live=points.filter(p=>p.life>.025);
+    if(live.length<2) return;
+
+    const path=live.map((p,i)=>{
+      const prev=live[Math.max(0,i-1)];
+      const next=live[Math.min(live.length-1,i+1)];
+      const dx=next.x-prev.x,dy=next.y-prev.y;
+      const len=Math.hypot(dx,dy)||1;
+      const nx=-dy/len,ny=dx/len;
+      const t=i/Math.max(1,live.length-1);
+      const curl=Math.sin(t* Math.PI*3.1 + time*.0018)* (7+18*(1-t));
+      const flutter=Math.sin(t* Math.PI*6.2-time*.0024)*5;
+      return {
+        x:p.x+nx*(curl+flutter),
+        y:p.y+ny*(curl+flutter),
+        life:p.life
+      };
+    });
+
+    for(let strand=0;strand<5;strand++){
+      const offset=(strand-2)*3.8;
+      const shifted=path.map((p,i)=>{
+        const prev=path[Math.max(0,i-1)];
+        const next=path[Math.min(path.length-1,i+1)];
+        const dx=next.x-prev.x,dy=next.y-prev.y;
+        const len=Math.hypot(dx,dy)||1;
+        const wave=Math.sin(i*.48+time*.002+strand*1.3)*offset;
+        return {x:p.x-(dy/len)*wave,y:p.y+(dx/len)*wave};
+      });
+      strokeFlow(shifted,0,strand,strand, strand===2?2.2:1.05,
+        strand===2?.72:.42);
+    }
+
+    const head=path[path.length-1];
+    const glow=ctx.createRadialGradient(head.x,head.y,0,head.x,head.y,32);
+    glow.addColorStop(0,"rgba(130,225,255,.24)");
+    glow.addColorStop(1,"rgba(130,225,255,0)");
+    ctx.fillStyle=glow;
+    ctx.beginPath();
+    ctx.arc(head.x,head.y,32,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  function drawScrollSilk(){
+    if(scrollWave<.015) return;
+    const strength=scrollWave;
+    const baseY=h*scrollPosition;
+    const span=w*1.18;
+    const startX=-w*.09;
+    for(let strand=0;strand<6;strand++){
+      const pts=[];
+      const phase=strand*.72+time*.0015;
+      const amplitude=(13+strand*4)*strength;
+      for(let i=0;i<=24;i++){
+        const t=i/24;
+        const x=startX+span*t;
+        const envelope=Math.sin(Math.PI*t);
+        const wave=Math.sin(t*Math.PI*2.6+phase)*amplitude*envelope;
+        const curl=Math.sin(t*Math.PI*5.2-phase*1.7)*amplitude*.32*envelope;
+        const y=baseY+wave+curl+(strand-2.5)*5*strength;
+        pts.push({x,y});
+      }
+      strokeFlow(pts,0,strand+1,strand+1,strand===2?2.6:1.15,
+        (.18+strength*.38)*(strand===2?1:.7));
+    }
+  }
+
+  function render(now){
+    raf=0;
+    if(now-lastFrame<28){
+      raf=requestAnimationFrame(render);
+      return;
+    }
+    const dt=Math.min(40,now-(lastFrame||now));
+    lastFrame=now;
+    time+=dt;
+    ctx.clearRect(0,0,w,h);
+
+    drawScrollSilk();
+    drawPointerSilk();
+
+    points.forEach(p=>p.life*=.955);
+    points=points.filter(p=>p.life>.025);
+    scrollWave*=.94;
+
+    if(points.length>1 || scrollWave>.015){
+      raf=requestAnimationFrame(render);
+    }else{
+      lastFrame=0;
+      scrollTimer=0;
+      ctx.clearRect(0,0,w,h);
+    }
+  }
 })();
 
 </script>
