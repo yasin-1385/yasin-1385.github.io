@@ -2093,7 +2093,7 @@ html,body,body *{
  #orb{
    display:block!important;
    z-index:3!important;
-   opacity:.88!important;
+   opacity:1!important;
    width:clamp(225px,69vw,330px)!important;
    height:clamp(320px,98vw,455px)!important;
    right:-7%!important;
@@ -2101,6 +2101,7 @@ html,body,body *{
    top:60%!important;
    transform:translateY(-30%) rotate(-4deg) scaleX(-1)!important;
    filter:drop-shadow(0 15px 28px rgba(0,0,0,.34))!important;
+   -webkit-mask-image:none!important;mask-image:none!important;
  }
  .hero-content{z-index:5!important}
  .hero h1,.hero-description,.hero-bottom,.eyebrow{position:relative;z-index:6!important}
@@ -2122,6 +2123,9 @@ html::-webkit-scrollbar{width:11px}
 html::-webkit-scrollbar-track{background:#101d35}
 html::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#a9c8ec,#557eae);border:2px solid #101d35;border-radius:20px}
 html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
+/* Balance the two remaining contact methods */
+.contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:650px!important}
+@media(max-width:600px){.contact-grid{grid-template-columns:1fr!important}}
 /* Make the custom cursor ring more substantial */
 #navyDotCursor{
  width:27px!important;height:27px!important;
