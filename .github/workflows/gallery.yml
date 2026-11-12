@@ -1,18 +1,18 @@
 
-name: Update Portfolio Gallery
+name: Update Image Gallery
 
 on:
   push:
     branches:
       - main
     paths:
-      - '*.png'
+      - '*.webp'
+      - '*.WEBP'
       - '*.jpg'
       - '*.jpeg'
-      - '*.PNG'
-      - '*.JPG'
-      - '*.JPEG'
+      - '*.png'
       - '.github/workflows/gallery.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -25,28 +25,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate image list
+      - name: Generate images.json
         run: |
           python3 - <<'PY'
+          import os
           import json
-          from pathlib import Path
 
-          extensions = {".png", ".jpg", ".jpeg"}
-          images = sorted(
-              [p.name for p in Path(".").iterdir()
-               if p.is_file() and p.suffix.lower() in extensions],
-              key=str.lower
-          )
+          images = []
 
-          Path("images.json").write_text(
-              json.dumps(images, ensure_ascii=False, indent=2),
-              encoding="utf-8"
-          )
+          for filename in os.listdir("."):
+              if filename.lower().endswith(".webp"):
+                  if os.path.isfile(filename):
+                      images.append(filename)
+
+          images.sort(key=str.lower)
+
+          with open("images.json", "w", encoding="utf-8") as file:
+              json.dump(images, file, ensure_ascii=False, indent=2)
+
+          print(f"Found {len(images)} WebP images")
           PY
 
-      - name: Save image list
+      - name: Commit gallery
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add images.json
-          git diff --cached --quiet || (git commit -m "Update portfolio gallery" && git push)
+          git diff --cached --quiet || (
+            git commit -m "Update WebP image gallery" &&
+            git push
+          )
