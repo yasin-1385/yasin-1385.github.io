@@ -8,9 +8,6 @@ on:
     paths:
       - '*.webp'
       - '*.WEBP'
-      - '*.jpg'
-      - '*.jpeg'
-      - '*.png'
       - '.github/workflows/gallery.yml'
   workflow_dispatch:
 
