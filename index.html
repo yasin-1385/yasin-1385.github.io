@@ -582,9 +582,93 @@ footer{
 
 
 </style>
+
+<style>
+/* GLASSMORPHISM REDESIGN */
+:root{--ink:#080d19;--glass:rgba(255,255,255,.075);--glass-strong:rgba(255,255,255,.12);--line:rgba(255,255,255,.17);--soft:#b9c4d7;--accent:#b8d9ff;--cream:#101827;--navy:#0b1220;--deep:#080d19;--yellow:#c9e2ff;--muted:#aab8cc}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{background:#080d19;color:#f4f7fc;font-family:Arial,sans-serif}
+body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 12% 15%,rgba(75,119,177,.24),transparent 34%),radial-gradient(ellipse at 88% 42%,rgba(111,157,196,.17),transparent 33%),radial-gradient(ellipse at 45% 100%,rgba(93,105,160,.14),transparent 38%),#080d19}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
+#scrollProgress{position:fixed;z-index:120;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#8bbcff,#f4f8ff,#9dc9ff);box-shadow:0 0 14px #a6ceff;pointer-events:none}
+#glassTrail{position:fixed;inset:0;width:100%;height:100%;z-index:110;pointer-events:none}
+header{position:fixed;top:18px;left:5%;width:90%;padding:13px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(13,22,38,.55);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%);box-shadow:0 12px 40px #0003}
+.logo{font-size:23px;letter-spacing:-1.8px}.logo span{color:#b9d9ff}
+.nav{gap:30px;color:#c0ccdc}.nav a{transition:color .25s}.nav a:hover{color:white}
+.contact-link{border:1px solid #c3ddfa66;border-radius:999px;padding:10px 17px;color:#e4f1ff;background:linear-gradient(135deg,#ffffff18,#ffffff05)}
+.hero{min-height:850px;height:100svh;max-height:1100px;padding:140px 9% 80px;background:transparent}
+.hero:before{opacity:.16;background-size:78px 78px;mask-image:radial-gradient(ellipse at 50% 45%,black,transparent 78%)}
+.hero-content{max-width:800px;z-index:4}
+.eyebrow,.section-heading small,.end-section small,.contact-section small{color:#b8d8ff;letter-spacing:4px}
+.hero h1{font-size:clamp(62px,10vw,138px);text-shadow:0 10px 55px #0006}
+.hero h1 span{background:linear-gradient(110deg,#fff 8%,#a8cfff 48%,#e6f3ff 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-description{color:#b4c1d4;max-width:410px}
+.hero-button{border:1px solid #d4e8ff77;border-radius:999px;background:linear-gradient(135deg,rgba(225,240,255,.24),rgba(111,158,207,.13));color:#f4f8ff;backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 #ffffff55,0 12px 32px #0003;padding:17px 25px}
+.hero-button:hover{background:linear-gradient(135deg,#d8eaff55,#91b8e833);box-shadow:0 12px 38px #8dbdff33}
+.hero-note,.hero-index{color:#aabbd0}
+.hero-art{width:min(51vw,660px);right:1%;opacity:.88;filter:drop-shadow(0 30px 65px #0008)}
+.art-underlay svg{filter:saturate(.72) brightness(1.08)}
+.art-shade{background:linear-gradient(135deg,rgba(9,18,32,.44),rgba(15,31,52,.28));mix-blend-mode:multiply}
+.art-hint{color:#e3efff;letter-spacing:3px}
+.section{padding:125px 8% 48px;background:transparent;color:#f2f6fc}
+.section-heading{padding:28px 32px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025));backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 #ffffff18,0 20px 60px #0002;margin-bottom:42px}
+.section-heading h2{color:#f3f7ff;letter-spacing:-4px}
+.work-count{border:1px solid #d7eaff55;border-radius:999px;background:rgba(211,232,255,.12);color:#e7f2ff;padding:12px 17px}
+.gallery{padding:0 8% 130px;background:transparent;color:#f4f7fc;gap:70px 25px}
+.item{transition:opacity .8s,transform .9s cubic-bezier(.2,.75,.2,1);cursor:pointer}
+.image-wrap{padding:12px;border:1px solid rgba(255,255,255,.17);border-radius:19px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.035));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 #ffffff35,0 22px 55px #0004}
+.image-wrap img{border-radius:10px;background:rgba(255,255,255,.04)}
+.image-wrap:after{right:22px;bottom:22px;border:1px solid #ffffff55;border-radius:999px;background:rgba(224,239,255,.22);color:white;backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 #ffffff66}
+.caption{border-top:1px solid #ffffff24;padding:17px 4px 0;margin-top:14px}
+.caption strong{color:#edf4ff}.caption span{color:#9ebfe5}
+.end-section{position:relative;overflow:hidden;margin:25px 8% 30px;padding:100px 8%;border:1px solid var(--line);border-radius:30px;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.025));backdrop-filter:blur(24px);box-shadow:inset 0 1px 0 #ffffff25,0 25px 80px #0004}
+.end-section:before{content:"";position:absolute;width:360px;height:360px;right:-110px;top:-180px;border-radius:50%;border:1px solid #d7eaff22;box-shadow:0 0 0 35px #d7eaff08,0 0 0 75px #d7eaff05}
+.end-section h2{position:relative;color:#f4f8ff}.end-section h2 span{color:#b8d8ff}.end-section p{color:#b5c5d9}
+.contact-section{padding:105px 8%;background:transparent;border-top:1px solid #ffffff16}
+.contact-section h2 span{color:#b8d8ff}
+.contact-grid{gap:16px}
+.contact-card{border:1px solid var(--line);border-radius:20px;padding:32px 15px;background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.025));backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 #ffffff22,0 15px 40px #0002}
+.contact-card:hover{border-color:#c9e2ff88;background:linear-gradient(145deg,rgba(190,220,255,.18),rgba(255,255,255,.04));box-shadow:0 18px 45px #8dbdff1c}
+.contact-icon{color:#c7e1ff}
+.contact-card span{color:#b4c2d5}
+footer{background:rgba(5,10,19,.55);border-top:1px solid #ffffff1c;color:#aebdd1;backdrop-filter:blur(18px)}
+.lightbox{background:rgba(4,9,17,.88);backdrop-filter:blur(24px)}
+.close{border:1px solid #ffffff77;background:rgba(225,240,255,.2);color:white;backdrop-filter:blur(18px)}
+.item.visible .image-wrap{animation:glassIn .8s both}
+@keyframes glassIn{from{box-shadow:inset 0 1px 0 #ffffff00,0 0 0 #0000}to{box-shadow:inset 0 1px 0 #ffffff35,0 22px 55px #0004}}
+/* scroll reveals */
+.section-heading,.end-section,.contact-section>small,.contact-section>h2,.contact-section>.contact-description,.contact-card{will-change:transform,opacity}
+.reveal-on-scroll{opacity:0;transform:translateY(32px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal-on-scroll.in-view{opacity:1;transform:translateY(0)}
+@media(max-width:750px){
+ header{top:10px;left:3%;width:94%;padding:12px 15px}
+ .hero{min-height:760px;padding:135px 7% 65px}
+ .hero-art{width:min(65vw,500px);right:-10%;top:48%;opacity:.62}
+ .section{padding:95px 6% 35px}
+ .section-heading{padding:23px 20px;border-radius:19px}
+ .gallery{padding:0 6% 90px;gap:48px 15px}
+ .end-section{margin:20px 5%;padding:80px 7%;border-radius:24px}
+}
+@media(max-width:480px){
+ header{padding:11px 12px}
+ .logo{font-size:20px}
+ .nav{gap:10px;font-size:8px}
+ .contact-link{padding:8px 10px}
+ .hero{min-height:720px;padding:120px 7% 55px}
+ .hero h1{font-size:58px}
+ .hero-art{width:78vw;right:-25%;top:43%;opacity:.48}
+ .section-heading h2{font-size:40px;letter-spacing:-3px}
+ .image-wrap{padding:7px;border-radius:13px}
+ .image-wrap img{border-radius:7px}
+ .contact-grid{grid-template-columns:1fr}
+}
+@media(hover:none){#glassTrail{display:none}}
+@media(prefers-reduced-motion:reduce){.reveal-on-scroll{opacity:1;transform:none}#glassTrail{display:none}}
+</style>
 </head>
 
 <body>
+<div id="scrollProgress"></div><canvas id="glassTrail" aria-hidden="true"></canvas>
 
 
 
@@ -893,65 +977,52 @@ document.addEventListener("keydown",event=>{
 
 
 
-/* CURSOR-REVEALED 3D ARTWORK */
+
+/* GLASS CURSOR TRAIL + SCROLL MOTION */
 (()=>{
-  const stage=document.getElementById("heroArt");
-  const canvas=document.getElementById("artReveal");
-  if(!stage||!canvas) return;
-  const ctx=canvas.getContext("2d");
-  if(!ctx) return;
-  const fine=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
-  if(!fine) return;
-  let w=0,h=0,dpr=1,points=[],raf=0;
-  function resize(){
-    const r=stage.getBoundingClientRect();
-    dpr=Math.min(window.devicePixelRatio||1,1.5);
-    w=r.width;h=r.height;
-    canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+ const canvas=document.getElementById("glassTrail"),bar=document.getElementById("scrollProgress");
+ if(!canvas||!bar)return;
+ const ctx=canvas.getContext("2d");if(!ctx)return;
+ let w=0,h=0,dpr=1,trail=[],raf=0,lastScroll=window.scrollY;
+ const fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+ function resize(){dpr=Math.min(devicePixelRatio||1,1.5);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+ resize();addEventListener("resize",resize,{passive:true});
+ function addPoint(x,y,force=1){trail.push({x,y,life:1,force});if(trail.length>42)trail.shift();if(!raf)raf=requestAnimationFrame(draw)}
+ if(fine){
+  addEventListener("pointermove",e=>addPoint(e.clientX,e.clientY,1),{passive:true});
+  addEventListener("pointerdown",e=>addPoint(e.clientX,e.clientY,1.7),{passive:true});
+ }
+ addEventListener("scroll",()=>{
+  const max=document.documentElement.scrollHeight-innerHeight;
+  bar.style.width=(max>0?scrollY/max*100:0)+"%";
+  const delta=Math.abs(scrollY-lastScroll);
+  if(fine&&delta>3){addPoint(innerWidth*.5,innerHeight*.52,Math.min(1.5,delta/35));}
+  lastScroll=scrollY;
+ },{passive:true});
+ function draw(){
+  raf=0;ctx.clearRect(0,0,w,h);
+  for(let i=1;i<trail.length;i++){
+   const a=trail[i-1],b=trail[i],alpha=Math.min(a.life,b.life)*.22;
+   const dx=b.x-a.x,dy=b.y-a.y,angle=Math.atan2(dy,dx);
+   ctx.save();ctx.lineCap="round";
+   ctx.shadowBlur=18;ctx.shadowColor="rgba(164,207,255,.55)";
+   const grad=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
+   grad.addColorStop(0,"rgba(157,199,245,0)");
+   grad.addColorStop(.45,"rgba(222,240,255,"+alpha+")");
+   grad.addColorStop(1,"rgba(133,184,239,"+(alpha*.35)+")");
+   ctx.strokeStyle=grad;ctx.lineWidth=2.5*b.life;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+   ctx.translate(b.x,b.y);ctx.rotate(angle);
+   ctx.fillStyle="rgba(220,239,255,"+(alpha*.22)+")";
+   ctx.filter="blur(7px)";ctx.beginPath();ctx.ellipse(0,0,15*b.life,5*b.life,0,0,Math.PI*2);ctx.fill();
+   ctx.restore();
   }
-  resize();
-  window.addEventListener("resize",resize,{passive:true});
-  function move(e){
-    const r=stage.getBoundingClientRect();
-    const x=e.clientX-r.left,y=e.clientY-r.top;
-    if(x<0||y<0||x>w||y>h)return;
-    points.push({x,y,life:1});
-    if(points.length>45)points.shift();
-    if(!raf)raf=requestAnimationFrame(draw);
-  }
-  function draw(){
-    raf=0;
-    ctx.clearRect(0,0,w,h);
-    ctx.fillStyle="rgba(7,17,35,.82)";
-    ctx.fillRect(0,0,w,h);
-    ctx.save();
-    ctx.globalCompositeOperation="source-over";
-    for(let i=0;i<points.length;i++){
-      const p=points[i],prev=points[Math.max(0,i-1)];
-      const dx=p.x-prev.x,dy=p.y-prev.y;
-      const angle=Math.atan2(dy,dx);
-      const radius=18+22*p.life;
-      const glow=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius*2.1);
-      glow.addColorStop(0,"rgba(255,255,255,"+(p.life*.26)+")");
-      glow.addColorStop(.35,"rgba(100,220,255,"+(p.life*.19)+")");
-      glow.addColorStop(1,"rgba(100,220,255,0)");
-      ctx.fillStyle=glow;
-      ctx.beginPath();ctx.arc(p.x,p.y,radius*2.1,0,Math.PI*2);ctx.fill();
-      ctx.globalCompositeOperation="destination-out";
-      ctx.beginPath();
-      ctx.ellipse(p.x,p.y,radius*1.3,radius*.8,angle,0,Math.PI*2);
-      ctx.fill();
-      ctx.globalCompositeOperation="source-over";
-    }
-    ctx.restore();
-    points.forEach(p=>p.life*=.91);
-    points=points.filter(p=>p.life>.035);
-    if(points.length)raf=requestAnimationFrame(draw);
-    else {ctx.clearRect(0,0,w,h);ctx.fillStyle="rgba(7,17,35,.82)";ctx.fillRect(0,0,w,h);}
-  }
-  stage.addEventListener("pointermove",move,{passive:true});
-  stage.addEventListener("pointerleave",()=>{points=[];if(raf)cancelAnimationFrame(raf);raf=0;ctx.clearRect(0,0,w,h)});
+  trail.forEach(p=>p.life*=.91);trail=trail.filter(p=>p.life>.035);
+  if(trail.length)raf=requestAnimationFrame(draw);
+ }
+ const targets=document.querySelectorAll(".section-heading,.end-section,.contact-section>small,.contact-section>h2,.contact-section>.contact-description,.contact-card");
+ targets.forEach(el=>el.classList.add("reveal-on-scroll"));
+ const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("in-view");observer.unobserve(entry.target)}}),{threshold:.12});
+ targets.forEach(el=>observer.observe(el));
 })();
 </script>
 
