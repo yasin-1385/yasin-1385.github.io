@@ -1801,6 +1801,27 @@ let portfolioImages=[];
 let portfolioCategories=[];
 let activeCategoryIndex=0;
 
+/* Reliable image loading for GitHub Pages gallery */
+function setPortfolioImage(img, source){
+  let file=String(source||"");
+  if(file.startsWith("./")) file=file.slice(2);
+  while(file.startsWith("/")) file=file.slice(1);
+  if(!file){img.classList.add("image-unavailable");return;}
+  img.dataset.originalSource=file;
+  img.onerror=()=>{
+    if(img.dataset.fallbackTried!=="1"){
+      img.dataset.fallbackTried="1";
+      img.src="https://raw.githubusercontent.com/yasin-1385/yasin-1385.github.io/main/"+file;
+    }else{
+      img.classList.add("image-unavailable");
+      img.removeAttribute("src");
+    }
+  };
+  img.loading="eager";
+  img.decoding="async";
+  img.src="/"+file;
+}
+
 fetch("images.json")
 .then(response=>{
   if(!response.ok) throw new Error("گالری پیدا نشد");
@@ -1841,10 +1862,8 @@ function renderCategoryCarousel(){
     card.className="category-card "+entry.position;
     card.setAttribute("aria-label",entry.position==="center"?"باز کردن دسته "+category.name:"رفتن به دسته "+category.name);
     const image=document.createElement("img");
-    image.src=category.works[0].src;
-    image.alt="";
-    image.loading="eager";
-    image.decoding="async";
+    setPortfolioImage(image,category.works[0].src);
+    image.alt=category.name;
     const shade=document.createElement("span");
     shade.className="category-card-shade";
     const label=document.createElement("span");
@@ -1902,10 +1921,8 @@ function openCategory(index){
     const wrap=document.createElement("div");
     wrap.className="image-wrap";
     const img=document.createElement("img");
-    img.src=work.src;
+    setPortfolioImage(img,work.src);
     img.alt=work.title+" — "+work.kind;
-    img.loading="lazy";
-    img.decoding="async";
     const caption=document.createElement("div");
     caption.className="caption";
     const info=document.createElement("div");
@@ -1936,7 +1953,7 @@ function closeCategory(){
 /* PROJECT LIGHTBOX */
 function openImage(work){
   const lightbox=document.getElementById("lightbox");
-  document.getElementById("largeImage").src=work.src;
+  setPortfolioImage(document.getElementById("largeImage"),work.src);
   document.getElementById("largeImage").alt=work.title;
   document.getElementById("lightboxCategory").textContent=work.kind;
   document.getElementById("lightboxTitle").textContent=work.title;
