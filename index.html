@@ -1374,6 +1374,81 @@ header .nav .contact-link{
 }
 </style>
 
+
+
+
+<style id="navigation-intro-recovery">
+/* Restore the floating glass navigation and keep it behind the intro. */
+header{
+  position:fixed!important;
+  top:18px!important;
+  left:5%!important;
+  right:auto!important;
+  width:90%!important;
+  z-index:1000!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:13px 22px!important;
+  min-height:68px!important;
+  border:1px solid rgba(231,241,255,.22)!important;
+  border-radius:18px!important;
+  background:rgba(13,22,38,.58)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(145%)!important;
+  backdrop-filter:blur(22px) saturate(145%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 12px 40px rgba(0,0,0,.28)!important;
+}
+body.intro-active>header{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+#siteIntro{z-index:99999!important}
+#siteIntro .rift-copy{
+  z-index:20!important;
+  opacity:1!important;
+  visibility:visible!important;
+  clip-path:inset(0 0 100% 0);
+  animation:riftCopyUncover 1.15s 2.45s cubic-bezier(.2,.75,.2,1) forwards!important;
+}
+#siteIntro .rift-kicker,
+#siteIntro .rift-title,
+#siteIntro .rift-subtitle,
+#siteIntro .rift-counter{
+  opacity:1!important;
+  visibility:visible!important;
+  font-family:"Vazirmatn",Tahoma,sans-serif!important;
+  filter:blur(12px);
+  transform:translateY(16px);
+}
+#siteIntro .rift-kicker{animation:riftTextMotion .85s 2.75s ease-out forwards!important}
+#siteIntro .rift-title{animation:riftTextMotion 1s 3.35s ease-out forwards!important}
+#siteIntro .rift-subtitle{animation:riftTextMotion .85s 3.9s ease-out forwards!important}
+#siteIntro .rift-counter{animation:riftTextMotion .75s 4.1s ease-out forwards!important}
+@keyframes riftCopyUncover{
+  from{clip-path:inset(0 0 100% 0)}
+  to{clip-path:inset(0 0 0 0)}
+}
+@keyframes riftTextMotion{
+  from{filter:blur(12px);transform:translateY(16px)}
+  to{filter:blur(0);transform:translateY(0)}
+}
+@media(max-width:750px){
+  header{top:10px!important;left:3%!important;width:94%!important;padding:11px 15px!important;min-height:56px!important}
+}
+@media(max-width:600px){
+  header{gap:10px!important;padding:10px 12px!important}
+  header .nav{gap:clamp(8px,2.2vw,14px)!important}
+  header .nav a{font-size:12px!important;min-height:34px}
+  header .nav .contact-link{padding:7px 10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #siteIntro .rift-copy{clip-path:none;animation:none!important}
+  #siteIntro .rift-kicker,#siteIntro .rift-title,#siteIntro .rift-subtitle,#siteIntro .rift-counter{filter:none;transform:none;animation:none!important}
+}
+</style>
+
 </head>
 
 
