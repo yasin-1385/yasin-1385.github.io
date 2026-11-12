@@ -2197,6 +2197,34 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 }
 </style>
 
+
+<style id="faq-interactive-styling">
+.faq-list{max-width:900px;margin:0 auto;display:grid;gap:12px}
+.faq-item{
+ border:1px solid rgba(220,235,255,.15);border-radius:15px;
+ background:linear-gradient(120deg,rgba(220,235,255,.065),rgba(220,235,255,.018));
+ overflow:hidden;transition:border-color .25s ease,background .25s ease
+}
+.faq-item[open]{border-color:rgba(184,216,255,.42);background:linear-gradient(120deg,rgba(184,216,255,.09),rgba(220,235,255,.025))}
+.faq-item summary{
+ list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+ gap:18px;padding:21px 24px;color:#edf4ff;font-size:15px;font-weight:650
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary i{
+ flex:0 0 27px;width:27px;height:27px;border:1px solid rgba(184,216,255,.35);
+ border-radius:50%;display:grid;place-items:center;color:#b8d8ff;font-style:normal;
+ font-size:19px;font-weight:400;transition:transform .25s ease,background .25s ease
+}
+.faq-item[open] summary i{transform:rotate(45deg);background:rgba(184,216,255,.1)}
+.faq-item>p{margin:0;padding:0 24px 23px;color:#b5c3d6;font-size:13px;line-height:2.25}
+@media(max-width:600px){
+ .faq-item summary{padding:18px 16px;font-size:13px}
+ .faq-item>p{padding:0 16px 19px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.faq-item,.faq-item summary i{transition:none}}
+</style>
+
 </head>
 
 
@@ -2386,11 +2414,41 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
   <div class="new-section-heading">
     <small>FREQUENTLY ASKED QUESTIONS</small>
     <h2>سوالات <span>پرتکرار.</span></h2>
-    <p>پاسخ‌ها پس از تکمیل اطلاعات کاری و روند همکاری، به این بخش اضافه می‌شوند.</p>
+    <p>پاسخ پرسش‌های رایج درباره خدمات طراحی و روند همکاری</p>
   </div>
-  <div class="faq-pending">
-    <span>FAQ</span>
-    <p>در حال آماده‌سازی پاسخ‌های دقیق درباره خدمات، زمان‌بندی و نحوه همکاری</p>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary><span>چه خدماتی ارائه می‌دهم؟</span><i>+</i></summary>
+      <p>در زمینه طراحی تبلیغاتی، هویت بصری و برندینگ، طراحی اقلام چاپی و تولید محتوای بصری برای شبکه‌های اجتماعی فعالیت می‌کنم. هدفم خلق طرح‌هایی است که علاوه بر ظاهر حرفه‌ای، پیام کسب‌وکار را به‌درستی منتقل کنند.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>برای چه نوع همکاری‌هایی آمادگی دارم؟</span><i>+</i></summary>
+      <p>علاقه‌مندم با کسب‌وکارها و مجموعه‌هایی همکاری کنم که به طراحی به‌عنوان بخشی مستمر از فعالیت خود نگاه می‌کنند. همکاری بلندمدت به شناخت بهتر برند و ارائه طراحی‌های هماهنگ‌تر کمک می‌کند.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>برای شروع سفارش چه اطلاعاتی لازم است؟</span><i>+</i></summary>
+      <p>پیش از شروع، یک فایل بریف در اختیارتان قرار می‌دهم. در این فایل، پرسش‌ها و موارد لازم درباره هدف سفارش، نیازها، سلیقه بصری و جزئیات موردنیاز توضیح داده شده تا مسیر طراحی از ابتدا روشن باشد.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>مدت زمان آماده‌سازی سفارش چقدر است؟</span><i>+</i></summary>
+      <p>زمان معمول آماده‌سازی حدود یک روز است؛ با این حال، زمان دقیق به نوع طراحی، حجم سفارش و جزئیات آن بستگی دارد و ممکن است کمتر یا بیشتر شود.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>برای اصلاح و تغییرات طرح محدودیتی وجود دارد؟</span><i>+</i></summary>
+      <p>برای اصلاحات محدودیت مشخصی در نظر نمی‌گیرم و تلاش می‌کنم طرح با نیاز و انتظار شما هماهنگ شود.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>پرداخت هزینه سفارش به چه صورت است؟</span><i>+</i></summary>
+      <p>ترجیح من دریافت بیعانه پیش از شروع کار است؛ با این حال، شرایط هر سفارش و وضعیت مشتری را در نظر می‌گیرم و درباره شیوه پرداخت به توافق می‌رسیم.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>فایل نهایی با چه فرمت‌هایی تحویل داده می‌شود؟</span><i>+</i></summary>
+      <p>خروجی نهایی معمولاً با فرمت PDF یا PNG تحویل داده می‌شود. در صورت نیاز، فایل لایه‌باز پروژه با فرمت PSD یا AI نیز قابل ارائه است.</p>
+    </details>
+    <details class="faq-item">
+      <summary><span>امکان همکاری حضوری و غیرحضوری وجود دارد؟</span><i>+</i></summary>
+      <p>تمرکز اصلی من بر همکاری غیرحضوری و دورکاری است؛ اما اگر محل شما در فاصله مناسبی قرار داشته باشد، برای همکاری حضوری هم آمادگی دارم.</p>
+    </details>
   </div>
 </section>
 
