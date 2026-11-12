@@ -966,46 +966,6 @@ body.intro-active{overflow:hidden}
  .rift-backlight,.rift-vortex,.rift-ground,.rift-slab,.rift-shard,.rift-dust,.rift-flare,.rift-kicker,.rift-title,.rift-subtitle,.rift-counter{animation:none!important}
  .rift-slab{opacity:0!important}.rift-title,.rift-kicker,.rift-subtitle{opacity:1}
 }
-
-/* PORTAL TRAVEL — synchronized, GPU-friendly camera move */
-#siteIntro.intro-leaving{
- opacity:1!important;visibility:visible!important;pointer-events:none;
- animation:portalFade 1.85s cubic-bezier(.65,0,.25,1) forwards!important;
- transition:none!important;
-}
-#siteIntro.intro-leaving .rift-world{
- transform-origin:50% 50%;
- animation:portalCamera 1.85s cubic-bezier(.48,0,.18,1) forwards;
- will-change:transform;
-}
-#siteIntro.intro-leaving .rift-copy{
- animation:portalTitleOut .42s ease-in forwards!important;
-}
-#siteIntro.intro-leaving .rift-counter{
- animation:portalCounterOut .25s ease-in forwards!important;
-}
-#siteIntro.intro-leaving:before{
- animation:portalAtmosphereOut 1.85s ease-out forwards;
-}
-@keyframes portalCamera{
- 0%{transform:translate3d(0,0,0) scale(1)}
- 24%{transform:translate3d(0,0,0) scale(1.12)}
- 68%{transform:translate3d(0,0,0) scale(2.65)}
- 100%{transform:translate3d(0,0,0) scale(4.6)}
-}
-@keyframes portalFade{
- 0%,66%{opacity:1;visibility:visible}
- 100%{opacity:0;visibility:hidden}
-}
-@keyframes portalTitleOut{
- to{opacity:0;filter:blur(5px);transform:translate(-50%,-50%) scale(1.12)}
-}
-@keyframes portalCounterOut{to{opacity:0}}
-@keyframes portalAtmosphereOut{to{opacity:0}}
-@media(prefers-reduced-motion:reduce){
- #siteIntro.intro-leaving{animation:portalFade .2s linear forwards!important}
- #siteIntro.intro-leaving .rift-world{animation:none}
-}
 </style>
 
 </head>
@@ -1495,11 +1455,11 @@ document.addEventListener("keydown",event=>{
   if(portrait.complete&&portrait.naturalWidth)buildLinePortrait();else portrait.addEventListener("load",buildLinePortrait,{once:true});
  }
 
- const duration=reduced?350:6100;
+ const duration=reduced?350:8000;
  window.setTimeout(()=>{
   intro.classList.add("intro-leaving");
   document.body.classList.remove("intro-active");
-  window.setTimeout(()=>intro.remove(),1900);
+  window.setTimeout(()=>intro.remove(),900);
  },duration);
 })();
 </script>
