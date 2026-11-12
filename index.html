@@ -2134,6 +2134,69 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 }
 </style>
 
+
+<style id="portfolio-next-sections-and-mobile-fixes">
+/* Hero: keep the artwork below the copy on small screens */
+.hero-content{position:relative;z-index:5!important}
+.hero-content:before{
+  content:"";position:absolute;z-index:-1;inset:-26px -30px -22px;
+  border-radius:26px;pointer-events:none;opacity:.72;
+  background:
+    radial-gradient(ellipse at 18% 12%,rgba(165,198,232,.13),transparent 58%),
+    repeating-linear-gradient(135deg,rgba(210,229,250,.035) 0 1px,transparent 1px 15px),
+    linear-gradient(125deg,rgba(18,32,52,.58),rgba(8,13,25,.08) 78%);
+  border:1px solid rgba(207,226,248,.09);
+  mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.82) 72%,transparent 100%);
+}
+.hero-button{color:#101d35!important;font-weight:800!important}
+.hero-button:hover{color:#101d35!important}
+@media(max-width:900px){
+  #orb{
+    display:block!important;left:50%!important;right:auto!important;
+    top:auto!important;bottom:-8%!important;
+    width:clamp(230px,62vw,390px)!important;
+    height:clamp(330px,86vw,540px)!important;
+    opacity:.34!important;
+    transform:translate3d(-50%,0,0) scaleX(-1)!important;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.8) 58%,transparent 100%)!important;
+    mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.8) 58%,transparent 100%)!important;
+  }
+  .hero{isolation:isolate}
+  .hero-content{z-index:6!important}
+}
+@media(max-width:600px){
+  .hero{min-height:760px!important;padding-bottom:72px!important}
+  #orb{bottom:-5%!important;opacity:.29!important}
+  .hero-content:before{inset:-18px -12px -18px;opacity:.82}
+}
+/* New sections */
+.testimonials-section,.faq-section{
+  position:relative;padding:105px 8%;color:#edf4ff;
+  background:linear-gradient(145deg,rgba(17,29,48,.96),rgba(8,13,25,.98));
+  border-top:1px solid rgba(220,235,255,.12);
+}
+.new-section-heading{max-width:900px;margin:0 auto 42px;text-align:center}
+.new-section-heading small{color:#b8d8ff;font-size:10px;letter-spacing:3px}
+.new-section-heading h2{font-size:clamp(38px,6vw,68px);letter-spacing:-3px;margin:15px 0}
+.new-section-heading h2 span{color:#b8d8ff}
+.new-section-heading p{color:#aebdd1;font-size:13px;line-height:2}
+.testimonial-empty,.faq-pending{
+  max-width:850px;margin:auto;padding:38px 28px;text-align:center;
+  border:1px solid rgba(220,235,255,.17);border-radius:20px;
+  background:linear-gradient(135deg,rgba(220,235,255,.09),rgba(220,235,255,.025));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+}
+.testimonial-mark{display:block;color:#b8d8ff;font:72px/1 Georgia,serif}
+.testimonial-empty strong{display:block;margin:10px 0 12px;font-size:18px}
+.testimonial-empty p,.faq-pending p{color:#aebdd1;font-size:13px;line-height:2}
+.faq-pending span{display:inline-block;margin-bottom:12px;color:#b8d8ff;font-size:12px;letter-spacing:4px}
+@media(max-width:600px){
+ .testimonials-section,.faq-section{padding:75px 7%}
+ .new-section-heading h2{letter-spacing:-2px}
+ .testimonial-empty,.faq-pending{padding:30px 20px}
+}
+</style>
+
 </head>
 
 
@@ -2159,7 +2222,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
   </div>
   <div class="rift-copy">
     <div class="rift-kicker">جهانی از ایده‌های بصری</div>
-    <div class="rift-title">یاسین</div>
+    <div class="rift-title">یاسین مرادی</div>
     <div class="rift-subtitle">طراح گرافیک · آثار منتخب</div>
   </div>
   <div class="rift-counter">نمونه‌کارها / ۱۴۰۵</div>
@@ -2173,7 +2236,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 <!-- HEADER -->
 
 <header>
-  <a class="logo" href="#">یاسین</a>
+  <a class="logo" href="#">یاسین مرادی</a>
 
   <nav class="nav">
     <a href="#works">آثار</a>
@@ -2304,10 +2367,37 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 
 </section>
 
+<!-- CUSTOMER FEEDBACK -->
+<section class="testimonials-section" id="testimonials">
+  <div class="new-section-heading">
+    <small>CLIENT FEEDBACK</small>
+    <h2>رضایت <span>مشتریان.</span></h2>
+    <p>تجربه همکاری مشتریان، به‌زودی در این بخش قرار می‌گیرد.</p>
+  </div>
+  <div class="testimonial-empty">
+    <span class="testimonial-mark">“</span>
+    <strong>صدای مشتریان</strong>
+    <p>این بخش برای نمایش نظرها و تجربه‌های واقعی مشتریان آماده شده است.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="new-section-heading">
+    <small>FREQUENTLY ASKED QUESTIONS</small>
+    <h2>سوالات <span>پرتکرار.</span></h2>
+    <p>پاسخ‌ها پس از تکمیل اطلاعات کاری و روند همکاری، به این بخش اضافه می‌شوند.</p>
+  </div>
+  <div class="faq-pending">
+    <span>FAQ</span>
+    <p>در حال آماده‌سازی پاسخ‌های دقیق درباره خدمات، زمان‌بندی و نحوه همکاری</p>
+  </div>
+</section>
+
 <!-- FOOTER -->
 
 <footer>
-  <span>یاسین © ۱۴۰۵</span>
+  <span>یاسین مرادی © ۱۴۰۵</span>
   <span>طراحی خلاقانه بصری</span>
 </footer>
 
