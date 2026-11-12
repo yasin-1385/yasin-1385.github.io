@@ -690,10 +690,7 @@ footer{background:rgba(5,10,19,.55);border-top:1px solid #ffffff1c;color:#aebdd1
 
 /* MULTI-STRAND SILK + ELASTIC PAGE RESPONSE */
 #silkFlow{position:fixed;inset:0;z-index:90;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
-body> .hero,body> .section,body> .gallery,body> .end-section,body> .contact-section,body>footer{
- scale:1 var(--scroll-stretch,1);
- transform-origin:center center;
-}
+/* Scroll no longer scales whole page sections; native scrolling stays smooth. */
 .hero-orb{animation:none!important;transform:translate3d(var(--orb-x,0px),var(--orb-y,0px),0);transition:transform .18s ease-out,filter .3s;will-change:transform}
 @media(hover:hover) and (pointer:fine){.hero-orb{filter:drop-shadow(0 0 85px rgba(180,210,245,.28))}.gallery .image-wrap{transition:transform .35s cubic-bezier(.2,.75,.25,1),border-color .35s}}
 @media(prefers-reduced-motion:reduce){#silkFlow{display:none}body> .hero,body> .section,body> .gallery,body> .end-section,body> .contact-section,body>footer{scale:none}}
@@ -1523,44 +1520,56 @@ body.lightbox-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){#glassCursor{transition:none}}
 </style>
 
-<style id="theme-refresh-emerald">
-/* THEME REFRESH — deep graphite + emerald */
-:root{
-  --ink:#07130f;--glass:rgba(255,255,255,.075);--glass-strong:rgba(255,255,255,.12);
-  --line:rgba(181,235,207,.20);--soft:#c0d5ca;--accent:#8fe0b5;
-  --cream:#101c17;--navy:#0b1712;--deep:#07110d;--yellow:#8fe0b5;--muted:#a9c2b4;
+<style id="category-carousel-refresh">
+/* Compact centered category selector */
+.category-showcase{width:min(100% - 40px,1000px);margin:0 auto 42px;padding:18px 0 8px;text-align:center}
+.category-stage{min-height:clamp(300px,42vw,440px);display:grid;grid-template-columns:1fr 1.48fr 1fr;align-items:center;gap:clamp(8px,2.4vw,26px);direction:ltr}
+.category-card{position:relative;display:block;width:100%;height:clamp(210px,31vw,330px);padding:0;overflow:hidden;border:1px solid rgba(220,235,255,.2);border-radius:20px;background:rgba(255,255,255,.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 18px 48px rgba(0,0,0,.28);cursor:pointer;color:white;transition:transform .42s ease,opacity .42s ease,filter .42s ease,box-shadow .42s ease}
+.category-card img{width:100%;height:100%;display:block;object-fit:cover}
+.category-card-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,10,20,.94),rgba(5,10,20,.05) 72%)}
+.category-card-label{position:absolute;left:16px;right:16px;bottom:18px;display:flex;flex-direction:column;gap:6px;text-align:center;direction:rtl;text-shadow:0 2px 12px #000}
+.category-card-label strong{font-size:clamp(12px,1.7vw,18px);line-height:1.7}
+.category-card-label small{font-size:10px;color:#c4d7ee}
+.category-card.center{height:clamp(270px,39vw,410px);border-color:rgba(184,217,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 25px 65px rgba(0,0,0,.42),0 0 35px rgba(155,190,230,.10);z-index:2}
+.category-card.side{height:clamp(190px,27vw,285px);opacity:.48;filter:blur(2.2px) saturate(.72);transform:scale(.88);cursor:pointer}
+.category-card.side:hover{opacity:.72;filter:blur(1px);transform:scale(.92)}
+.category-card.center:hover{transform:translateY(-5px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 30px 75px rgba(0,0,0,.5),0 0 42px rgba(155,190,230,.16)}
+.category-controls{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:16px;direction:ltr}
+.category-arrow{width:42px;height:42px;border:1px solid rgba(220,235,255,.3);border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.17),rgba(255,255,255,.045));color:#eaf3ff;font-size:27px;line-height:1;cursor:pointer;backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 24px #0003;transition:background .2s,transform .2s}
+.category-arrow:hover{background:rgba(184,217,255,.2);transform:scale(1.06)}
+.category-position{font-size:11px;color:#aebdd1;min-width:48px}
+.category-hint{margin-top:13px;color:#9eabc0;font-size:10px}
+.category-gallery-toolbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0 10px;padding:17px 20px;border:1px solid rgba(220,235,255,.18);border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.035));backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 15px 40px #0003}
+.category-gallery-toolbar small{font-size:10px;color:#b8d9ff}
+.category-gallery-toolbar h3{margin-top:5px;color:#f3f6fc;font-size:clamp(16px,2.5vw,23px)}
+.category-back{padding:10px 15px;border:1px solid rgba(184,217,255,.35);border-radius:999px;background:rgba(184,217,255,.1);color:#eaf3ff;font-size:11px;cursor:pointer;white-space:nowrap}
+#gallery.is-expanded{width:min(100% - 40px,1050px);margin:0 auto 65px;padding:0;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 18px}
+#gallery.is-expanded .item{grid-column:auto!important;margin:0!important;opacity:1!important;transform:none!important;clip-path:none!important;transition:box-shadow .25s ease}
+#gallery.is-expanded .image-wrap{height:auto;aspect-ratio:4/5;overflow:hidden;border:1px solid rgba(220,235,255,.18);border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.035));padding:9px;backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 18px 42px #0003}
+#gallery.is-expanded .image-wrap img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+#gallery.is-expanded .caption{min-height:60px}
+@media(max-width:700px){
+ .category-showcase{width:calc(100% - 24px);margin-bottom:30px}
+ .category-stage{min-height:270px;grid-template-columns:.72fr 1.55fr .72fr;gap:5px}
+ .category-card{height:190px;border-radius:14px}
+ .category-card.center{height:250px}
+ .category-card.side{height:165px;filter:blur(2px)}
+ .category-card-label{left:7px;right:7px;bottom:12px}
+ .category-card-label strong{font-size:10px}
+ .category-card-label small{font-size:8px}
+ .category-arrow{width:38px;height:38px}
+ #gallery.is-expanded{width:calc(100% - 24px);grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 11px}
+ .category-gallery-toolbar{grid-column:1/-1;padding:13px;border-radius:14px}
+ .category-back{font-size:9px;padding:9px 11px}
 }
-body{background:#07110d;color:#f1faf4}
-body:before{
- background:radial-gradient(ellipse at 12% 15%,rgba(39,132,91,.27),transparent 34%),
- radial-gradient(ellipse at 88% 42%,rgba(67,155,111,.19),transparent 33%),
- radial-gradient(ellipse at 45% 100%,rgba(45,105,79,.16),transparent 38%),#07110d;
+@media(max-width:380px){
+ .category-stage{grid-template-columns:.55fr 1.7fr .55fr}
+ .category-card.side{opacity:.36}
+ .category-card-label strong{font-size:9px}
 }
-.logo span,.eyebrow,.section-heading small,.end-section small,.contact-section small{color:#8fe0b5}
-.hero h1 span{
- background:linear-gradient(110deg,#f4fff8 8%,#83dfae 48%,#d8ffea 80%);
- -webkit-background-clip:text;background-clip:text;color:transparent;
+@media(prefers-reduced-motion:reduce){
+ .category-card,.category-arrow,#gallery.is-expanded .item{transition:none!important}
 }
-.hero-button,.contact-link,.work-count,.image-wrap:after,.close{
- border-color:rgba(143,224,181,.55);
-}
-.hero-button{background:linear-gradient(135deg,rgba(143,224,181,.27),rgba(63,155,105,.15));color:#effff5}
-.hero-button:hover{box-shadow:0 12px 38px rgba(91,205,143,.25)}
-.hero-orb{
- background:radial-gradient(circle at 30% 25%,#d9ffe8 0%,#8fe0b5 9%,#3aaf78 24%,#285e48 48%,#153326 67%,transparent 72%);
- filter:drop-shadow(0 0 70px rgba(104,220,157,.20));
-}
-.hero-orb:after{border-color:rgba(160,238,194,.3);box-shadow:0 0 0 35px rgba(143,224,181,.04)}
-.section-heading{border-color:rgba(181,235,207,.20)}
-.work-count{background:rgba(143,224,181,.13);color:#dcffeb}
-.gallery-group h3,.gallery-group span,.caption span{color:#8fe0b5}
-.image-wrap:after{background:rgba(91,190,132,.25);color:#effff5}
-.end-section h2 span,.contact-section h2 span{color:#8fe0b5}
-.contact-card:hover{border-color:#8fe0b5;background:linear-gradient(145deg,rgba(91,190,132,.19),rgba(255,255,255,.04));box-shadow:0 18px 45px rgba(91,205,143,.12)}
-.contact-icon{color:#8fe0b5}
-.close{background:rgba(91,190,132,.24);color:#f2fff7}
-#fabricAtmosphere{filter:hue-rotate(95deg) saturate(.78)}
-#silkFlow{filter:hue-rotate(95deg) saturate(.78)}
 </style>
 
 </head>
@@ -1661,7 +1670,16 @@ body:before{
 
 </section>
 
-<main class="gallery" id="gallery"></main>
+<section class="category-showcase" id="categoryShowcase" aria-label="دسته‌بندی نمونه‌کارها">
+  <div class="category-stage" id="categoryStage"></div>
+  <div class="category-controls">
+    <button class="category-arrow" id="categoryPrev" type="button" aria-label="دسته قبلی">‹</button>
+    <span class="category-position" id="categoryPosition"></span>
+    <button class="category-arrow" id="categoryNext" type="button" aria-label="دسته بعدی">›</button>
+  </div>
+  <p class="category-hint">برای مشاهده تمام طرح‌های این دسته، تصویر وسط را انتخاب کنید</p>
+</section>
+<main class="gallery" id="gallery" aria-live="polite"></main>
 
 <!-- ABOUT -->
 
@@ -1758,30 +1776,109 @@ body:before{
 
 <script>
 
-/* EDITORIAL GALLERY + PROJECT DETAILS */
+/* CATEGORY CAROUSEL + COMPACT CATEGORY GALLERY */
+let portfolioImages=[];
+let portfolioCategories=[];
+let activeCategoryIndex=0;
+
 fetch("images.json")
 .then(response=>{
   if(!response.ok) throw new Error("گالری پیدا نشد");
   return response.json();
 })
 .then(images=>{
-  const gallery=document.getElementById("gallery");
+  portfolioImages=images;
+  const grouped=new Map();
+  images.forEach(work=>{
+    if(!grouped.has(work.category)) grouped.set(work.category,[]);
+    grouped.get(work.category).push(work);
+  });
+  portfolioCategories=[...grouped.entries()].map(([name,works])=>({name,works}));
   document.getElementById("count").textContent=String(images.length).padStart(2,"0")+" اثر";
-  let currentCategory="";
-  images.forEach((work,index)=>{
-    if(work.category!==currentCategory){
-      currentCategory=work.category;
-      const heading=document.createElement("div");
-      heading.className="gallery-group";
-      const title=document.createElement("h3");
-      title.textContent=currentCategory;
-      const count=document.createElement("span");
-      count.textContent=String(images.filter(x=>x.category===currentCategory).length).padStart(2,"0")+" اثر";
-      heading.append(title,count);
-      gallery.appendChild(heading);
-    }
+  renderCategoryCarousel();
+})
+.catch(error=>{
+  document.getElementById("count").textContent="نمایش آثار ممکن نیست";
+  console.error(error);
+});
+
+function renderCategoryCarousel(){
+  const stage=document.getElementById("categoryStage");
+  const total=portfolioCategories.length;
+  if(!total)return;
+  const prev=(activeCategoryIndex-1+total)%total;
+  const next=(activeCategoryIndex+1)%total;
+  const entries=[
+    {index:prev,position:"side side-prev"},
+    {index:activeCategoryIndex,position:"center"},
+    {index:next,position:"side side-next"}
+  ];
+  stage.replaceChildren();
+  entries.forEach(entry=>{
+    const category=portfolioCategories[entry.index];
+    const card=document.createElement("button");
+    card.type="button";
+    card.className="category-card "+entry.position;
+    card.setAttribute("aria-label",entry.position==="center"?"باز کردن دسته "+category.name:"رفتن به دسته "+category.name);
+    const image=document.createElement("img");
+    image.src=category.works[0].src;
+    image.alt="";
+    image.loading="eager";
+    image.decoding="async";
+    const shade=document.createElement("span");
+    shade.className="category-card-shade";
+    const label=document.createElement("span");
+    label.className="category-card-label";
+    label.innerHTML="<strong></strong><small></small>";
+    label.querySelector("strong").textContent=category.name;
+    label.querySelector("small").textContent=String(category.works.length).padStart(2,"0")+" نمونه‌کار";
+    card.append(image,shade,label);
+    card.addEventListener("click",()=>{
+      if(entry.position==="center")openCategory(entry.index);
+      else{
+        activeCategoryIndex=entry.index;
+        renderCategoryCarousel();
+      }
+    });
+    stage.appendChild(card);
+  });
+  document.getElementById("categoryPosition").textContent=
+    String(activeCategoryIndex+1).padStart(2,"0")+" / "+String(total).padStart(2,"0");
+}
+document.getElementById("categoryPrev").addEventListener("click",()=>{
+  activeCategoryIndex=(activeCategoryIndex-1+portfolioCategories.length)%portfolioCategories.length;
+  renderCategoryCarousel();
+});
+document.getElementById("categoryNext").addEventListener("click",()=>{
+  activeCategoryIndex=(activeCategoryIndex+1)%portfolioCategories.length;
+  renderCategoryCarousel();
+});
+
+function openCategory(index){
+  activeCategoryIndex=index;
+  const category=portfolioCategories[index];
+  const gallery=document.getElementById("gallery");
+  const showcase=document.getElementById("categoryShowcase");
+  gallery.replaceChildren();
+  gallery.classList.add("is-expanded");
+  showcase.hidden=true;
+
+  const toolbar=document.createElement("div");
+  toolbar.className="category-gallery-toolbar";
+  const heading=document.createElement("div");
+  heading.innerHTML="<small>دسته‌بندی نمونه‌کارها</small><h3></h3>";
+  heading.querySelector("h3").textContent=category.name;
+  const close=document.createElement("button");
+  close.type="button";
+  close.className="category-back";
+  close.textContent="بازگشت به دسته‌بندی‌ها";
+  close.addEventListener("click",closeCategory);
+  toolbar.append(heading,close);
+  gallery.appendChild(toolbar);
+
+  category.works.forEach(work=>{
     const item=document.createElement("article");
-    item.className="item";
+    item.className="item visible";
     const wrap=document.createElement("div");
     wrap.className="image-wrap";
     const img=document.createElement("img");
@@ -1789,7 +1886,6 @@ fetch("images.json")
     img.alt=work.title+" — "+work.kind;
     img.loading="lazy";
     img.decoding="async";
-    img.addEventListener("click",()=>openImage(work));
     const caption=document.createElement("div");
     caption.className="caption";
     const info=document.createElement("div");
@@ -1807,20 +1903,16 @@ fetch("images.json")
     item.addEventListener("click",()=>openImage(work));
     gallery.appendChild(item);
   });
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  },{threshold:.06});
-  gallery.querySelectorAll(".item,.gallery-group").forEach(item=>observer.observe(item));
-})
-.catch(error=>{
-  document.getElementById("count").textContent="نمایش آثار ممکن نیست";
-  console.error(error);
-});
+  document.getElementById("works").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function closeCategory(){
+  document.getElementById("gallery").classList.remove("is-expanded");
+  document.getElementById("gallery").replaceChildren();
+  document.getElementById("categoryShowcase").hidden=false;
+  renderCategoryCarousel();
+  document.getElementById("works").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
 /* PROJECT LIGHTBOX */
 function openImage(work){
   const lightbox=document.getElementById("lightbox");
@@ -1839,118 +1931,16 @@ function closeImage(event){
   document.body.classList.remove("lightbox-open");
 }
 document.addEventListener("keydown",event=>{
-  if(event.key==="Escape") closeImage();
+  if(event.key==="Escape"){
+    if(document.getElementById("lightbox").style.display==="flex")closeImage();
+    else if(document.getElementById("gallery").classList.contains("is-expanded"))closeCategory();
+  }
+  if(!document.getElementById("gallery").classList.contains("is-expanded")){
+    if(event.key==="ArrowLeft")document.getElementById("categoryNext").click();
+    if(event.key==="ArrowRight")document.getElementById("categoryPrev").click();
+  }
 });
-
-
-/* SILK FLOW — MULTI TRAIL + ELASTIC SCROLL */
-(()=>{
- const canvas=document.getElementById("silkFlow");
- if(!canvas)return;
- const ctx=canvas.getContext("2d",{alpha:true});
- if(!ctx)return;
- let w=0,h=0,dpr=1,raf=0,scrollPower=0,lastY=scrollY;
- const points=[];
- const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
- const root=document.documentElement;
- function resize(){
-  dpr=Math.min(devicePixelRatio||1,1.35);w=innerWidth;h=innerHeight;
-  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
-  canvas.style.width=w+"px";canvas.style.height=h+"px";
-  ctx.setTransform(dpr,0,0,dpr,0,0);
- }
- resize();addEventListener("resize",resize,{passive:true});
- function move(e){
-  points.push({x:e.clientX,y:e.clientY,t:performance.now()});
-  while(points.length>58)points.shift();
-  draw();
- }
- function scroll(){
-  const delta=scrollY-lastY;lastY=scrollY;
-  scrollPower=Math.min(1,scrollPower+Math.min(Math.abs(delta)/85,.55));
-  draw();
- }
- function draw(){if(!raf)raf=requestAnimationFrame(render)}
- function render(){
-  raf=0;ctx.clearRect(0,0,w,h);
-  const now=performance.now();
-  while(points.length&&now-points[0].t>1050)points.shift();
-  if(points.length>2){
-   const p=points,first=p[0],last=p[p.length-1];
-   const dx=last.x-first.x,dy=last.y-first.y,len=Math.max(1,Math.hypot(dx,dy));
-   const nx=-dy/len,ny=dx/len;
-   // Several soft silk filaments follow the same gesture with different delays.
-   for(let strand=0;strand<5;strand++){
-    ctx.beginPath();
-    for(let i=0;i<p.length;i++){
-     const q=p[i],u=i/(p.length-1);
-     const age=now-q.t,life=Math.max(0,1-age/1050);
-     const drift=Math.sin(u*10+now*.002-strand*.8)*(7+strand*3);
-     const offset=(strand-2)*7+drift;
-     const x=q.x+nx*offset,y=q.y+ny*offset;
-     if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-     if(i===p.length-1)continue;
-    }
-    const newest=Math.max(0,1-(now-last.t)/1050);
-    ctx.strokeStyle="rgba(218,235,255,"+((.055+strand*.012)*newest)+")";
-    ctx.lineWidth= strand===2 ? 2.2 : 1.1;
-    ctx.lineCap="round";ctx.lineJoin="round";ctx.stroke();
-   }
-   // A wider, translucent fabric ribbon in the center.
-   ctx.beginPath();
-   for(let i=0;i<p.length;i++){
-    const q=p[i],u=i/(p.length-1),life=Math.max(0,1-(now-q.t)/1050);
-    const width=(2+Math.sin(u*Math.PI)*19)*life;
-    const ripple=Math.sin(u*12+now*.002)*scrollPower*12;
-    const x=q.x+nx*(width+ripple),y=q.y+ny*(width+ripple);
-    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-   }
-   for(let i=p.length-1;i>=0;i--){
-    const q=p[i],u=i/(p.length-1),life=Math.max(0,1-(now-q.t)/1050);
-    const width=(2+Math.sin(u*Math.PI)*19)*life;
-    const ripple=Math.sin(u*12+now*.002+1.3)*scrollPower*12;
-    ctx.lineTo(q.x-nx*(width+ripple),q.y-ny*(width+ripple));
-   }
-   ctx.closePath();
-   const grad=ctx.createLinearGradient(first.x,first.y,last.x,last.y);
-   grad.addColorStop(0,"rgba(170,205,245,0)");
-   grad.addColorStop(.5,"rgba(190,220,255,.075)");
-   grad.addColorStop(1,"rgba(245,250,255,"+(.17*Math.max(0,1-(now-last.t)/1050))+")");
-   ctx.fillStyle=grad;ctx.fill();
-  }
-  if(scrollPower>.012){
-   scrollPower*=.91;
-   const phase=now*.0018;
-   // Replace the sharp scroll line with a broad, soft fabric-like wave.
-   root.style.setProperty("--scroll-stretch",(1+scrollPower*.032).toFixed(4));
-   const center=h*.76;
-   ctx.beginPath();
-   for(let x=0;x<=w;x+=8){
-    const wave=Math.sin(x*.009+phase)*scrollPower*27+Math.sin(x*.0035-phase*1.2)*scrollPower*17;
-    const y=center+wave;
-    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-   }
-   for(let x=w;x>=0;x-=8){
-    const wave=Math.sin(x*.009+phase+1.1)*scrollPower*27+Math.sin(x*.0035-phase*1.2+1.1)*scrollPower*17;
-    ctx.lineTo(x,center+wave+scrollPower*78);
-   }
-   ctx.closePath();
-   const fabric=ctx.createLinearGradient(0,center-scrollPower*25,0,center+scrollPower*100);
-   fabric.addColorStop(0,"rgba(190,220,255,0)");
-   fabric.addColorStop(.45,"rgba(190,220,255,"+(.045*scrollPower)+")");
-   fabric.addColorStop(1,"rgba(190,220,255,0)");
-   ctx.fillStyle=fabric;ctx.fill();
-  }else{
-   scrollPower=0;
-   root.style.setProperty("--scroll-stretch","1");
-  }
-  if(points.length>1||scrollPower>.015)draw();
- }
- if(!reduce){
-  addEventListener("pointermove",move,{passive:true});
-  addEventListener("scroll",scroll,{passive:true});
- }
-})();</script>
+</script>
 
 
 <script>
