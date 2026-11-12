@@ -598,7 +598,6 @@ html{scroll-behavior:smooth;scroll-padding-top:110px}
 body{background:#080d19;color:#f4f7fc;font-family:Arial,sans-serif}
 body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 12% 15%,rgba(75,119,177,.24),transparent 34%),radial-gradient(ellipse at 88% 42%,rgba(111,157,196,.17),transparent 33%),radial-gradient(ellipse at 45% 100%,rgba(93,105,160,.14),transparent 38%),#080d19}
 body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
-#scrollProgress{position:fixed;z-index:120;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#8bbcff,#f4f8ff,#9dc9ff);box-shadow:0 0 14px #a6ceff;pointer-events:none}
 
 header{position:fixed;top:18px;left:5%;width:90%;padding:13px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(13,22,38,.55);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%);box-shadow:0 12px 40px #0003}
 .logo{font-size:23px;letter-spacing:-1.8px}.logo span{color:#b9d9ff}
@@ -698,7 +697,7 @@ body> .hero,body> .section,body> .gallery,body> .end-section,body> .contact-sect
 </head>
 
 <body>
-<div id="scrollProgress"></div>\n<canvas id="silkFlow" aria-hidden="true"></canvas>
+<canvas id="silkFlow" aria-hidden="true"></canvas>
 
 
 
@@ -1046,15 +1045,25 @@ document.addEventListener("keydown",event=>{
   if(scrollPower>.012){
    scrollPower*=.91;
    const phase=now*.0018;
-   // The scroll wave and the page's vertical elastic stretch share one force value.
-   root.style.setProperty("--scroll-stretch",(1+scrollPower*.055).toFixed(4));
+   // Replace the sharp scroll line with a broad, soft fabric-like wave.
+   root.style.setProperty("--scroll-stretch",(1+scrollPower*.032).toFixed(4));
+   const center=h*.76;
    ctx.beginPath();
-   for(let x=0;x<=w;x+=10){
-    const y=h*.78+Math.sin(x*.012+phase)*scrollPower*25+Math.sin(x*.004-phase)*scrollPower*15;
+   for(let x=0;x<=w;x+=8){
+    const wave=Math.sin(x*.009+phase)*scrollPower*27+Math.sin(x*.0035-phase*1.2)*scrollPower*17;
+    const y=center+wave;
     if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
    }
-   ctx.strokeStyle="rgba(190,220,255,"+(.25*scrollPower)+")";
-   ctx.lineWidth=1.5+scrollPower*2.5;ctx.stroke();
+   for(let x=w;x>=0;x-=8){
+    const wave=Math.sin(x*.009+phase+1.1)*scrollPower*27+Math.sin(x*.0035-phase*1.2+1.1)*scrollPower*17;
+    ctx.lineTo(x,center+wave+scrollPower*78);
+   }
+   ctx.closePath();
+   const fabric=ctx.createLinearGradient(0,center-scrollPower*25,0,center+scrollPower*100);
+   fabric.addColorStop(0,"rgba(190,220,255,0)");
+   fabric.addColorStop(.45,"rgba(190,220,255,"+(.045*scrollPower)+")");
+   fabric.addColorStop(1,"rgba(190,220,255,0)");
+   ctx.fillStyle=fabric;ctx.fill();
   }else{
    scrollPower=0;
    root.style.setProperty("--scroll-stretch","1");
