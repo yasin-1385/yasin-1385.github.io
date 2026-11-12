@@ -1496,6 +1496,32 @@ body.lightbox-open{overflow:hidden}
  .lightbox-panel .close{width:38px;height:38px;margin-bottom:-50px}
 }
 </style>
+
+<style>
+/* MINIMAL GLASS CURSOR + ABOUT PROFILE */
+@media (hover:hover) and (pointer:fine){html,body,body *{cursor:none!important}#glassCursor{display:block}}
+#glassCursor{display:none;position:fixed;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:10001;pointer-events:none;border:1px solid rgba(235,245,255,.72);border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.23),rgba(190,220,255,.055));backdrop-filter:blur(9px) saturate(155%);-webkit-backdrop-filter:blur(9px) saturate(155%);box-shadow:inset 0 1px 2px rgba(255,255,255,.42),0 3px 18px rgba(0,0,0,.18);opacity:0;transform:translate3d(-100px,-100px,0);transition:width .22s,height .22s,margin .22s,background .22s,opacity .2s}
+#glassCursor:after{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.24);border-radius:50%}
+#glassCursor.cursor-visible{opacity:1}
+#glassCursor.cursor-hover{width:42px;height:42px;margin:-21px 0 0 -21px;background:linear-gradient(145deg,rgba(255,255,255,.3),rgba(190,220,255,.1));border-color:rgba(255,255,255,.9)}
+.about-section{padding:105px 9%;text-align:right}
+.about-inner{width:min(100%,1120px);margin:auto;display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(35px,7vw,100px);align-items:center}
+.about-heading h2{font-size:clamp(45px,6vw,76px);line-height:1.18;letter-spacing:-3px;margin:24px 0 0}
+.about-heading h2 span{color:#b8d8ff}
+.about-content{padding:30px;border:1px solid rgba(255,255,255,.16);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025));backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 60px rgba(0,0,0,.2)}
+.about-name{font-size:19px;font-weight:800;color:#f5f8ff;margin-bottom:15px}
+.about-name span{font-size:12px;font-weight:400;color:#aebdd1}
+.about-bio{font-size:13px;line-height:2.5;color:#bdc9d9;letter-spacing:0!important}
+.about-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:25px}
+.about-fact{padding:15px 10px;border:1px solid rgba(255,255,255,.12);border-radius:13px;background:rgba(255,255,255,.045);display:flex;flex-direction:column;gap:7px}
+.about-fact strong{font-size:22px;color:#dcecff;direction:ltr;text-align:right}
+.about-fact span{font-size:10px;color:#9eabc0}
+.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.about-tags span{padding:8px 11px;border:1px solid rgba(190,220,255,.2);border-radius:999px;color:#c9d9ec;font-size:10px;background:rgba(190,220,255,.06)}
+@media(max-width:750px){.about-section{padding:80px 6%}.about-inner{grid-template-columns:1fr;gap:25px}.about-heading h2{font-size:54px;margin-top:15px}.about-content{padding:22px}}
+@media(max-width:420px){.about-facts{gap:6px}.about-fact{padding:12px 8px}.about-fact strong{font-size:18px}.about-fact span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#glassCursor{transition:none}}
+</style>
 </head>
 
 
@@ -1598,17 +1624,23 @@ body.lightbox-open{overflow:hidden}
 
 <!-- ABOUT -->
 
-<section class="end-section" id="about">
-
-  <small>ممنون از بازدید شما</small>
-
-  <h2>
-    خلق کن،<br>
-    <span>ماندگار.</span>
-  </h2>
-
-  <p>یاسین — طراح گرافیک · ۱۴۰۵</p>
-
+<section class="end-section about-section" id="about">
+  <div class="about-inner">
+    <div class="about-heading">
+      <small>درباره من / ABOUT ME</small>
+      <h2>طراحی با<br><span>فکر و هدف.</span></h2>
+    </div>
+    <div class="about-content">
+      <p class="about-name">یاسین مرادی <span>— طراح گرافیک</span></p>
+      <p class="about-bio">من طراح گرافیک هستم و حدود دو سال تجربه حرفه‌ای در طراحی دارم. در زمینه طراحی هویت بصری و برندینگ، تبلیغات چاپی و محتوای بصری شبکه‌های اجتماعی فعالیت می‌کنم. برای من هر طراحی باید علاوه بر ظاهر جذاب، پیام مشخصی داشته باشد و به هدف کسب‌وکار کمک کند.</p>
+      <div class="about-facts">
+        <div class="about-fact"><strong>۰۲+</strong><span>سال تجربه حرفه‌ای</span></div>
+        <div class="about-fact"><strong>PS</strong><span>Adobe Photoshop</span></div>
+        <div class="about-fact"><strong>AI</strong><span>Adobe Illustrator</span></div>
+      </div>
+      <div class="about-tags"><span>هویت بصری</span><span>طراحی تبلیغاتی</span><span>طراحی چاپی</span><span>محتوای شبکه‌های اجتماعی</span></div>
+    </div>
+  </div>
 </section>
 
 <!-- CONTACT -->
@@ -1666,6 +1698,8 @@ body.lightbox-open{overflow:hidden}
   <span>یاسین © ۱۴۰۵</span>
   <span>طراحی خلاقانه بصری</span>
 </footer>
+
+<div id="glassCursor" aria-hidden="true"></div>
 
 <!-- LIGHTBOX -->
 
@@ -1964,5 +1998,21 @@ document.addEventListener("keydown",event=>{
 })();
 </script>
 
+
+<script>
+/* FOLLOWING MINIMAL GLASS CURSOR */
+(()=>{
+ const cursor=document.getElementById("glassCursor");
+ if(!cursor||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+ let x=-100,y=-100,tx=-100,ty=-100,raf=0;
+ const render=()=>{raf=0;x+=(tx-x)*.24;y+=(ty-y)*.24;cursor.style.left=x+"px";cursor.style.top=y+"px";if(Math.abs(tx-x)>.1||Math.abs(ty-y)>.1)raf=requestAnimationFrame(render)};
+ addEventListener("pointermove",e=>{tx=e.clientX;ty=e.clientY;cursor.classList.add("cursor-visible");if(!raf)raf=requestAnimationFrame(render)},{passive:true});
+ addEventListener("pointerdown",()=>cursor.classList.add("cursor-hover"),{passive:true});
+ addEventListener("pointerup",()=>cursor.classList.remove("cursor-hover"),{passive:true});
+ document.addEventListener("pointerover",e=>{if(e.target.closest("a,button,.item,[role='button']"))cursor.classList.add("cursor-hover")},{passive:true});
+ document.addEventListener("pointerout",e=>{if(e.target.closest("a,button,.item,[role='button']")&&!e.relatedTarget?.closest("a,button,.item,[role='button']"))cursor.classList.remove("cursor-hover")},{passive:true});
+ addEventListener("blur",()=>cursor.classList.remove("cursor-visible"));
+})();
+</script>
 </body>
 </html>
