@@ -585,10 +585,35 @@ footer{
   }
 }
 
+
+/* SILK FABRIC DISTORTION */
+.silk-surface{
+  transform-origin:center;
+  will-change:filter;
+}
+.silk-surface.silk-active{
+  filter:url(#silk-fabric-warp);
+}
+@media(max-width:750px){
+  .silk-surface.silk-active{filter:url(#silk-fabric-warp)}
+}
+@media(prefers-reduced-motion:reduce){
+  .silk-surface{filter:none!important}
+}
+
 </style>
 </head>
 
 <body>
+
+<!-- SVG FILTER: ORGANIC SILK / FABRIC WARP -->
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;left:-100%;top:-100%;overflow:hidden">
+  <filter id="silk-fabric-warp" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+    <feTurbulence id="silk-noise" type="fractalNoise" baseFrequency="0.0025 0.014" numOctaves="1" seed="7" result="fabricNoise"/>
+    <feDisplacementMap id="silk-displace" in="SourceGraphic" in2="fabricNoise" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
 
 <!-- HEADER -->
 
@@ -868,6 +893,105 @@ if(window.matchMedia("(hover:hover) and (pointer:fine)").matches){
   });
 
 }
+
+
+/* SILK FABRIC: POINTER DRAG + SCROLL TENSION */
+(()=>{
+  const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduceMotion) return;
+
+  const filter=document.getElementById("silk-displace");
+  const noise=document.getElementById("silk-noise");
+  if(!filter || !noise) return;
+
+  const surfaces=[...document.querySelectorAll(
+    ".hero, .section, .gallery, .end-section, .contact-section, footer"
+  )];
+
+  surfaces.forEach(surface=>surface.classList.add("silk-surface"));
+
+  let active=null;
+  let pointerX=0, pointerY=0;
+  let lastX=0, lastY=0, lastTime=0;
+  let energy=0, targetEnergy=0;
+  let scrollEnergy=0, lastScroll=window.scrollY;
+  let raf=0;
+
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+
+  function setActive(surface){
+    if(active===surface) return;
+    if(active) active.classList.remove("silk-active");
+    active=surface;
+    if(active) active.classList.add("silk-active");
+  }
+
+  function surfaceAt(x,y){
+    const el=document.elementFromPoint(x,y);
+    return el && el.closest(".silk-surface");
+  }
+
+  function pointerMove(event){
+    pointerX=event.clientX;
+    pointerY=event.clientY;
+    const now=performance.now();
+    if(lastTime){
+      const dt=Math.max(8,now-lastTime);
+      const speed=Math.hypot(pointerX-lastX,pointerY-lastY)/dt;
+      targetEnergy=Math.max(targetEnergy,clamp(speed*1.5,0,1));
+    }
+    lastX=pointerX;
+    lastY=pointerY;
+    lastTime=now;
+    setActive(surfaceAt(pointerX,pointerY));
+    requestFrame();
+  }
+
+  function onScroll(){
+    const now=window.scrollY;
+    const delta=Math.abs(now-lastScroll);
+    lastScroll=now;
+    scrollEnergy=Math.max(scrollEnergy,clamp(delta/32,0,1));
+    const y=clamp(window.innerHeight*.52,0,window.innerHeight-1);
+    setActive(surfaceAt(window.innerWidth*.5,y));
+    requestFrame();
+  }
+
+  function requestFrame(){
+    if(!raf) raf=requestAnimationFrame(render);
+  }
+
+  function render(){
+    raf=0;
+    targetEnergy=Math.max(targetEnergy*.88,scrollEnergy*.92);
+    energy+=(targetEnergy-energy)*.22;
+    scrollEnergy*=.84;
+
+    const scale=energy*34;
+    filter.setAttribute("scale",scale.toFixed(2));
+
+    const fx=.0025+energy*.0018;
+    const fy=.014+energy*.006;
+    noise.setAttribute("baseFrequency",fx.toFixed(4)+" "+fy.toFixed(4));
+
+    if(energy>.012 || targetEnergy>.012 || scrollEnergy>.012){
+      requestFrame();
+    }else{
+      filter.setAttribute("scale","0");
+      if(active) active.classList.remove("silk-active");
+      active=null;
+      energy=0;
+      targetEnergy=0;
+    }
+  }
+
+  window.addEventListener("pointermove",pointerMove,{passive:true});
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("pointerleave",()=>{
+    targetEnergy=0;
+    requestFrame();
+  });
+})();
 
 </script>
 
