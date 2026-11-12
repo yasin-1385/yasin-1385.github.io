@@ -4,101 +4,352 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YASIN — Graphic Design Portfolio</title>
+<meta name="theme-color" content="#101D35">
+<title>YASIN — Graphic Designer</title>
 
 <style>
+:root{
+  --navy:#101D35;
+  --navy-light:#1B2D4B;
+  --yellow:#F4C542;
+  --cream:#F4F1E8;
+  --white:#FFFFFF;
+  --muted:#AAB3C1;
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
 
+html{scroll-behavior:smooth}
+
 body{
-background:#f5f5f3;
-color:#171717;
-font-family:Arial,sans-serif;
+  background:var(--cream);
+  color:var(--navy);
+  font-family:Arial,sans-serif;
+  overflow-x:hidden;
 }
+
+/* HEADER */
 
 header{
-padding:35px 6%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
+  background:var(--navy);
+  color:white;
+  padding:25px 7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.12);
 }
 
-.logo{font-size:25px;font-weight:900;letter-spacing:-1px}
-.header-label{font-size:10px;letter-spacing:3px;color:#777}
+.logo{
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:-1.5px;
+}
 
-.intro{padding:75px 6% 55px}
-.intro small{letter-spacing:4px;color:#888;font-size:11px}
+.logo span{color:var(--yellow)}
+
+.header-label{
+  font-size:10px;
+  letter-spacing:3px;
+  color:var(--muted);
+}
+
+/* INTRO */
+
+.intro{
+  background:var(--navy);
+  color:white;
+  padding:100px 7% 95px;
+  position:relative;
+  overflow:hidden;
+}
+
+.intro:after{
+  content:"";
+  position:absolute;
+  width:370px;
+  height:370px;
+  border:1px solid rgba(244,197,66,.22);
+  border-radius:50%;
+  right:-100px;
+  top:40px;
+  box-shadow:0 0 0 45px rgba(244,197,66,.035),
+             0 0 0 90px rgba(244,197,66,.025);
+  pointer-events:none;
+}
+
+.intro small{
+  color:var(--yellow);
+  font-size:11px;
+  letter-spacing:5px;
+  font-weight:bold;
+}
+
 .intro h1{
-font-size:clamp(38px,8vw,85px);
-letter-spacing:-4px;
-margin-top:18px;
-line-height:1;
+  font-size:clamp(55px,10vw,125px);
+  line-height:.9;
+  letter-spacing:-7px;
+  margin-top:30px;
+  position:relative;
+  z-index:1;
 }
-.intro p{margin-top:20px;color:#777;font-size:14px}
 
-.section-title{
-padding:0 6% 22px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+.intro h1 span{color:var(--yellow)}
+
+.intro p{
+  margin-top:35px;
+  color:var(--muted);
+  font-size:13px;
+  letter-spacing:1.5px;
 }
-.section-title h2{font-size:14px;letter-spacing:2px}
-.section-title span{font-size:11px;color:#888}
+
+.intro-bottom{
+  margin-top:65px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:1;
+}
+
+.yellow-line{
+  width:75px;
+  height:4px;
+  background:var(--yellow);
+}
+
+.scroll-label{
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--muted);
+}
+
+/* GALLERY HEADER */
+
+.works{
+  padding:75px 7% 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+.works small{
+  color:#9A7920;
+  font-size:10px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+
+.works h2{
+  font-size:clamp(28px,4vw,43px);
+  margin-top:10px;
+  letter-spacing:-2px;
+}
+
+.count{
+  background:var(--yellow);
+  color:var(--navy);
+  padding:12px 18px;
+  font-size:11px;
+  font-weight:bold;
+  border-radius:2px;
+}
+
+/* GALLERY */
 
 .gallery{
-padding:0 6% 70px;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:22px 15px;
+  padding:25px 7% 100px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:45px 22px;
 }
 
-.item{cursor:pointer}
-.item img{
-width:100%;
-aspect-ratio:4/5;
-object-fit:contain;
-background:#e9e9e7;
-display:block;
-transition:.3s;
+.item{
+  cursor:pointer;
+  min-width:0;
 }
-.item:hover img{opacity:.85}
-.item p{font-size:11px;letter-spacing:1px;margin-top:10px;color:#555}
+
+.item:nth-child(3n + 2){
+  transform:translateY(35px);
+}
+
+.image-wrap{
+  background:#E5E1D6;
+  overflow:hidden;
+  position:relative;
+}
+
+.item img{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:contain;
+  display:block;
+  transition:transform .5s ease;
+}
+
+.item:hover img{
+  transform:scale(1.035);
+}
+
+.image-wrap:after{
+  content:"VIEW +";
+  position:absolute;
+  bottom:15px;
+  right:15px;
+  background:var(--yellow);
+  color:var(--navy);
+  padding:10px 13px;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:1px;
+  opacity:0;
+  transform:translateY(8px);
+  transition:.3s;
+}
+
+.item:hover .image-wrap:after{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.caption{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:13px;
+  border-top:1px solid #D5D0C4;
+  margin-top:12px;
+}
+
+.caption p{
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+.caption span{
+  color:#9A7920;
+  font-size:10px;
+}
+
+/* FOOTER */
 
 footer{
-border-top:1px solid #ddd;
-padding:30px 6%;
-font-size:10px;
-letter-spacing:2px;
-color:#888;
+  background:var(--navy);
+  color:white;
+  padding:55px 7%;
 }
+
+.footer-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.footer-title{
+  font-size:clamp(25px,5vw,48px);
+  font-weight:900;
+  letter-spacing:-2px;
+}
+
+.footer-title span{color:var(--yellow)}
+
+.footer-note{
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:1px;
+  margin-top:25px;
+  line-height:2;
+}
+
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.15);
+  margin-top:45px;
+  padding-top:20px;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:2px;
+}
+
+/* LIGHTBOX */
 
 .lightbox{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.94);
-z-index:10;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-.lightbox img{max-width:100%;max-height:85vh;object-fit:contain}
-.lightbox button{
-position:absolute;
-top:20px;
-right:25px;
-background:none;
-border:none;
-color:white;
-font-size:35px;
-cursor:pointer;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(9,17,32,.97);
+  z-index:100;
+  justify-content:center;
+  align-items:center;
+  padding:30px;
 }
 
-@media(max-width:650px){
-.gallery{grid-template-columns:repeat(2,1fr);gap:18px 10px}
-.intro{padding-top:55px}
-header{padding:25px 6%}
-.intro h1{letter-spacing:-2px}
+.lightbox img{
+  max-width:95%;
+  max-height:88vh;
+  object-fit:contain;
+}
+
+.lightbox button{
+  position:absolute;
+  top:20px;
+  right:28px;
+  background:var(--yellow);
+  color:var(--navy);
+  border:0;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  font-size:27px;
+  cursor:pointer;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:800px){
+  .gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .item:nth-child(3n + 2){
+    transform:none;
+  }
+
+  .item:nth-child(even){
+    transform:translateY(25px);
+  }
+
+  .intro h1{letter-spacing:-4px}
+}
+
+@media(max-width:500px){
+  header{padding:22px 6%}
+  .logo{font-size:22px}
+  .header-label{font-size:8px;letter-spacing:2px}
+
+  .intro{padding:75px 6% 65px}
+  .intro h1{
+    font-size:57px;
+    letter-spacing:-3px;
+  }
+
+  .intro p{font-size:11px}
+
+  .works{padding:55px 6% 20px}
+  .gallery{
+    padding:20px 6% 75px;
+    gap:35px 12px;
+  }
+
+  .item img{aspect-ratio:4/5}
+  .caption p{font-size:9px}
+  .caption span{font-size:9px}
+
+  footer{padding:40px 6%}
+  .footer-bottom{font-size:8px}
 }
 </style>
 </head>
@@ -106,70 +357,113 @@ header{padding:25px 6%}
 <body>
 
 <header>
-<div class="logo">YASIN.</div>
-<div class="header-label">GRAPHIC DESIGNER</div>
+  <div class="logo">YASIN<span>.</span></div>
+  <div class="header-label">GRAPHIC DESIGNER</div>
 </header>
 
 <section class="intro">
-<small>PORTFOLIO — 2026</small>
-<h1>SELECTED<br>WORKS.</h1>
-<p>Visual Design · Social Media · Creative Graphics</p>
+  <small>PORTFOLIO — 2026</small>
+
+  <h1>CREATIVE<br><span>VISUAL</span><br>DESIGN.</h1>
+
+  <p>Visual Design · Social Media · Creative Graphics</p>
+
+  <div class="intro-bottom">
+    <div class="yellow-line"></div>
+    <div class="scroll-label">SCROLL TO EXPLORE ↓</div>
+  </div>
 </section>
 
-<section class="section-title">
-<h2>ALL PROJECTS</h2>
-<span id="count">Loading...</span>
+<section class="works">
+  <div>
+    <small>MY SELECTED WORKS</small>
+    <h2>Portfolio.</h2>
+  </div>
+
+  <div class="count" id="count">LOADING...</div>
 </section>
 
 <main class="gallery" id="gallery"></main>
 
-<div class="lightbox" id="lightbox">
-<button onclick="closeImage()">×</button>
-<img id="largeImage" src="" alt="Portfolio preview">
-</div>
+<footer>
+  <div class="footer-top">
+    <div class="footer-title">LET'S MAKE<br><span>AN IMPACT.</span></div>
+    <div class="yellow-line"></div>
+  </div>
 
-<footer>YASIN — GRAPHIC DESIGN PORTFOLIO</footer>
+  <p class="footer-note">
+    YASIN — GRAPHIC DESIGNER<br>
+    VISUAL DESIGN · CREATIVE CONTENT
+  </p>
+
+  <div class="footer-bottom">
+    <span>YASIN © 2026</span>
+    <span>DESIGNED WITH PURPOSE.</span>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" onclick="closeImage()">
+  <button aria-label="Close" onclick="closeImage()">×</button>
+  <img id="largeImage" src="" alt="Portfolio preview">
+</div>
 
 <script>
 fetch("images.json")
-.then(response => {
-if(!response.ok) throw new Error("Gallery not found");
-return response.json();
+.then(response=>{
+  if(!response.ok) throw new Error("Gallery not found");
+  return response.json();
 })
-.then(images => {
-const gallery=document.getElementById("gallery");
-document.getElementById("count").textContent=images.length+" WORKS";
+.then(images=>{
+  const gallery=document.getElementById("gallery");
+  document.getElementById("count").textContent=
+    String(images.length).padStart(2,"0")+" WORKS";
 
-images.forEach((filename,index)=>{
-const item=document.createElement("div");
-item.className="item";
+  images.forEach((filename,index)=>{
+    const item=document.createElement("div");
+    item.className="item";
 
-const img=document.createElement("img");
-img.src=filename;
-img.alt="Design "+(index+1);
-img.loading="lazy";
+    const wrap=document.createElement("div");
+    wrap.className="image-wrap";
 
-img.onclick=()=>{
-document.getElementById("largeImage").src=filename;
-document.getElementById("lightbox").style.display="flex";
-};
+    const img=document.createElement("img");
+    img.src=filename;
+    img.alt="Design "+(index+1);
+    img.loading="lazy";
 
-const caption=document.createElement("p");
-caption.textContent="PROJECT / "+String(index+1).padStart(2,"0");
+    img.onclick=()=>{
+      document.getElementById("largeImage").src=filename;
+      document.getElementById("lightbox").style.display="flex";
+    };
 
-item.append(img,caption);
-gallery.appendChild(item);
-});
+    const caption=document.createElement("div");
+    caption.className="caption";
+
+    const title=document.createElement("p");
+    title.textContent="PROJECT / "+
+      String(index+1).padStart(2,"0");
+
+    const number=document.createElement("span");
+    number.textContent="YASIN DESIGN";
+
+    caption.append(title,number);
+    wrap.appendChild(img);
+    item.append(wrap,caption);
+    gallery.appendChild(item);
+  });
 })
 .catch(error=>{
-document.getElementById("count").textContent="Gallery unavailable";
-console.error(error);
+  document.getElementById("count").textContent="GALLERY UNAVAILABLE";
+  console.error(error);
 });
 
 function closeImage(){
-document.getElementById("lightbox").style.display="none";
-document.getElementById("largeImage").src="";
+  document.getElementById("lightbox").style.display="none";
+  document.getElementById("largeImage").src="";
 }
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape") closeImage();
+});
 </script>
 
 </body>
