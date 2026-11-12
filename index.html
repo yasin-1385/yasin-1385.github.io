@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101D35">
 <title>یاسین — طراح گرافیک</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23080d19'/%3E%3Cpath d='M14 15h10l8 15 8-15h10L36 39v10H27V39z' fill='%23d9e3ef'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1271,17 +1272,89 @@ header .logo{font-family:"Vazirmatn",Tahoma,sans-serif!important;font-size:26px!
 #siteIntro .rift-title,
 #siteIntro .rift-subtitle,
 #siteIntro .rift-counter{
-  opacity:1!important;
   visibility:visible!important;
-  animation:none!important;
   letter-spacing:0!important;
   font-family:"Vazirmatn",Tahoma,sans-serif!important;
 }
-#siteIntro .rift-kicker{font-size:clamp(14px,1.5vw,19px)!important;color:#d1d9e5!important}
-#siteIntro .rift-title{font-size:clamp(76px,13vw,150px)!important;line-height:1.15!important;letter-spacing:0!important;margin-top:20px!important}
-#siteIntro .rift-title span{color:#c7d5e7!important}
-#siteIntro .rift-subtitle{font-size:clamp(13px,1.4vw,18px)!important;color:#b8c5d6!important;margin-top:20px!important}
-#siteIntro .rift-counter{font-size:12px!important;right:5vw!important;letter-spacing:0!important}
+#siteIntro .rift-kicker{
+  opacity:0!important;
+  animation:riftText .8s 2.8s both!important;
+  font-size:clamp(14px,1.5vw,19px)!important;
+  color:#d1d9e5!important;
+}
+#siteIntro .rift-title{
+  opacity:0!important;
+  animation:riftText .9s 3.5s both!important;
+  font-size:clamp(76px,13vw,150px)!important;
+  line-height:1.15!important;
+  letter-spacing:0!important;
+  margin-top:20px!important;
+}
+#siteIntro .rift-subtitle{
+  opacity:0!important;
+  animation:riftText .8s 4s both!important;
+  font-size:clamp(13px,1.4vw,18px)!important;
+  color:#b8c5d6!important;
+  margin-top:20px!important;
+}
+#siteIntro .rift-counter{
+  opacity:0!important;
+  animation:riftText .7s 4.2s both!important;
+  font-size:12px!important;
+  right:5vw!important;
+  letter-spacing:0!important;
+}
+/* Stable, aligned navigation bar */
+header{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  min-height:68px;
+  z-index:10000!important;
+}
+header .logo{
+  flex:0 0 auto;
+  white-space:nowrap;
+  text-decoration:none!important;
+}
+header .nav{
+  display:flex!important;
+  flex:0 1 auto!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:clamp(16px,2.4vw,32px)!important;
+  margin:0!important;
+  padding:0!important;
+  white-space:nowrap;
+  line-height:1.5!important;
+}
+header .nav a{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:38px;
+  color:#cbd7e7!important;
+  text-decoration:none!important;
+  transition:color .25s ease,background .25s ease,border-color .25s ease;
+}
+header .nav a:hover{color:#fff!important}
+header .nav .contact-link{
+  min-height:40px;
+  padding:9px 19px!important;
+  border:1px solid rgba(195,221,250,.55)!important;
+  border-radius:999px!important;
+  background:rgba(225,240,255,.09)!important;
+  color:#edf5ff!important;
+}
+@media(max-width:600px){
+  header{gap:10px!important;min-height:56px;padding:10px 12px!important}
+  header .nav{gap:clamp(8px,2.2vw,14px)!important}
+  header .nav a{font-size:12px!important;min-height:34px}
+  header .nav .contact-link{padding:7px 10px!important}
+}
 @media(max-width:900px){
   .hero-content{width:100%!important;max-width:100%!important}
   #orb{display:none!important}
@@ -1326,7 +1399,7 @@ header .logo{font-family:"Vazirmatn",Tahoma,sans-serif!important;font-size:26px!
   </div>
   <div class="rift-copy">
     <div class="rift-kicker">جهانی از ایده‌های بصری</div>
-    <div class="rift-title">یاسین<span>.</span></div>
+    <div class="rift-title">یاسین</div>
     <div class="rift-subtitle">طراح گرافیک · آثار منتخب</div>
   </div>
   <div class="rift-counter">نمونه‌کارها / ۱۴۰۵</div>
@@ -1340,7 +1413,7 @@ header .logo{font-family:"Vazirmatn",Tahoma,sans-serif!important;font-size:26px!
 <!-- HEADER -->
 
 <header>
-  <a class="logo" href="#">یاسین<span>.</span></a>
+  <a class="logo" href="#">یاسین</a>
 
   <nav class="nav">
     <a href="#works">آثار</a>
