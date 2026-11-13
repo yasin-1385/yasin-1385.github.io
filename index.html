@@ -2485,7 +2485,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 
     <div>
       <small>گزیده آثار</small>
-      <h2>آثار من.</h2>
+      <h2>آثار من</h2>
     </div>
 
     <div class="work-count" id="count">در حال بارگذاری...</div>
@@ -3375,7 +3375,8 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  document.addEventListener("click",event=>{
   if(event.target.closest("#siteSoundToggle"))return;
   if(event.target.closest(".faq-item summary"))play("faq");
-  else if(event.target.closest(".category-arrow,.category-card"))play("slide");
+  else if(event.target.closest(".category-card.center"))play("open");
+  else if(event.target.closest(".category-arrow,.category-card,.category-bottom-arrow"))play("slide");
   else if(event.target.closest(".category-back,.category-bottom-back,.close"))play("close");
   else if(event.target.closest(".item"))play("open");
   else if(event.target.closest(".hero-button,a,button"))play("nav");
