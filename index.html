@@ -3288,7 +3288,7 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   },{passive:true});
   addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
  }
- let enabled=true,ctx=null,musicBus=null,sfxBus=null,compressor=null,musicTimer=null,chordIndex=0,unlocked=false,introPlayed=false;
+ let enabled=true,ctx=null,musicBus=null,sfxBus=null,compressor=null,musicTimer=null,chordIndex=0,unlocked=false,introPlayed=false,unlocking=false;
  const introWasShown=!!document.getElementById("siteIntro");
  const toggle=document.createElement("button");
  toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","true");
@@ -3332,7 +3332,7 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  function startMusic(){
   if(!enabled||!ctx)return;
   musicBus.gain.cancelScheduledValues(ctx.currentTime);
-  musicBus.gain.setTargetAtTime(1,ctx.currentTime,.55);
+  musicBus.gain.setTargetAtTime(.8,ctx.currentTime,.55);
   if(musicTimer)clearInterval(musicTimer);
   playChord();
   musicTimer=setInterval(playChord,6800);
@@ -3351,22 +3351,43 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  function playIntro(){
   if(!ctx||!enabled||introPlayed)return;
   introPlayed=true;
-  // A clearly audible cinematic rise, with a low impact and bright finishing notes.
-  note(58,1.15,.13,"sine",0,sfxBus);
-  note(174,1.0,.075,"triangle",.08,sfxBus);
-  note(392,.85,.052,"sine",.36,sfxBus);
-  note(587,1.0,.042,"sine",.68,sfxBus);
-  note(784,.8,.026,"sine",.92,sfxBus);
+  // Cinematic intro: deep impact, rising sweep and a bright resolving chime.
+  const t=ctx.currentTime;
+  const impact=ctx.createOscillator(),impactGain=ctx.createGain();
+  impact.type="sine";
+  impact.frequency.setValueAtTime(92,t);
+  impact.frequency.exponentialRampToValueAtTime(38,t+.62);
+  impactGain.gain.setValueAtTime(.0001,t);
+  impactGain.gain.exponentialRampToValueAtTime(.24,t+.025);
+  impactGain.gain.exponentialRampToValueAtTime(.0001,t+1.25);
+  impact.connect(impactGain);impactGain.connect(sfxBus);
+  impact.start(t);impact.stop(t+1.3);
+  const rise=ctx.createOscillator(),riseFilter=ctx.createBiquadFilter(),riseGain=ctx.createGain();
+  rise.type="sawtooth";rise.frequency.setValueAtTime(110,t+.05);
+  rise.frequency.exponentialRampToValueAtTime(880,t+1.35);
+  riseFilter.type="lowpass";riseFilter.frequency.setValueAtTime(280,t);
+  riseFilter.frequency.exponentialRampToValueAtTime(3200,t+1.35);
+  riseGain.gain.setValueAtTime(.0001,t);
+  riseGain.linearRampToValueAtTime(.075,t+.95);
+  riseGain.gain.exponentialRampToValueAtTime(.0001,t+1.65);
+  rise.connect(riseFilter);riseFilter.connect(riseGain);riseGain.connect(sfxBus);
+  rise.start(t);rise.stop(t+1.7);
+  note(261.63,.9,.045,"triangle",.72,sfxBus);
+  note(523.25,1.15,.07,"sine",1.05,sfxBus);
+  note(783.99,1.35,.045,"sine",1.22,sfxBus);
+  note(1046.5,1.5,.025,"sine",1.38,sfxBus);
  }
- function unlock(){
-  if(!enabled)return;
+ async function unlock(){
+  if(!enabled||unlocking)return;
   setupAudio();if(!ctx)return;
-  if(ctx.state==="suspended")ctx.resume();
+  unlocking=true;
+  try{if(ctx.state==="suspended")await ctx.resume();}
+  catch(error){unlocking=false;return;}
   fadeOn();
   unlocked=true;
-  // Browsers require a user gesture for audio. Play the intro cue on the first
-  // available gesture, even if the visual intro has already begun to disappear.
+  // Audio starts only after a real user gesture, as required by mobile browsers.
   if(introWasShown&&!introPlayed)playIntro();
+  unlocking=false;
  }
  function play(kind){
   if(!enabled||!ctx||!unlocked)return;
@@ -3397,7 +3418,7 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  document.addEventListener("visibilitychange",()=>{
   if(!ctx||!enabled)return;
   if(document.hidden)musicBus.gain.setTargetAtTime(0,ctx.currentTime,.2);
-  else if(unlocked)musicBus.gain.setTargetAtTime(1,ctx.currentTime,.8);
+  else if(unlocked)musicBus.gain.setTargetAtTime(.8,ctx.currentTime,.8);
  });
  window.siteSound={play,unlock};
 })();
@@ -3507,6 +3528,14 @@ html:has(header.gallery-header-active){scroll-padding-top:150px}
   max-width:92px!important;padding:7px 6px!important;font-size:8px!important;
  }
  header.gallery-header-active .category-gallery-toolbar h3{font-size:10px!important}
+}
+</style>
+<style id="mobile-golden-figure-bottom-fade">
+@media(max-width:650px){
+ #orb .golden-hero-figure{
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,1) 68%,rgba(0,0,0,.72) 81%,rgba(0,0,0,.28) 92%,rgba(0,0,0,0) 100%)!important;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,1) 68%,rgba(0,0,0,.72) 81%,rgba(0,0,0,.28) 92%,rgba(0,0,0,0) 100%)!important;
+ }
 }
 </style>
 </body>
