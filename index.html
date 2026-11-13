@@ -2463,7 +2463,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 <section class="hero">
 
   
-  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure depth-object-image" src="Layer%201.png" alt="" fetchpriority="high"></div>
+  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure depth-object-image mobile-hero-figure" src="Layer%202.png" alt="" fetchpriority="high"><img class="desktop-portrait-source" src="Layer%201.png" alt="" fetchpriority="high"></div>
 
 
   <div class="hero-content">
@@ -3813,7 +3813,9 @@ body>.category-gallery-toolbar .category-back{
 <style id="desktop-portrait-webgl-depth">
 @media (min-width:901px) and (hover:hover) and (pointer:fine){
  #orb{left:auto!important;right:8%!important;top:51%!important;bottom:auto!important;width:clamp(300px,37vw,510px)!important;height:clamp(420px,62vw,690px)!important;transform:translateY(-48%) rotate(-2deg)!important;perspective:1100px;transform-style:preserve-3d;overflow:visible!important;filter:drop-shadow(0 28px 38px rgba(0,0,0,.42))!important}
- #orb .depth-object-image{opacity:0!important;visibility:hidden!important}
+ #orb .mobile-hero-figure,#orb .desktop-portrait-source{opacity:0!important;visibility:hidden!important}
+ #orb .portrait-3d-canvas{z-index:4}
+@media(max-width:900px){#orb .desktop-portrait-source{display:none!important}#orb .mobile-hero-figure{opacity:1!important;visibility:visible!important}}
  .portrait-3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
  #portrait-depth-object{display:none!important}
 }
@@ -3825,7 +3827,7 @@ body>.category-gallery-toolbar .category-back{
  const desktop=window.matchMedia('(min-width:901px) and (hover:hover) and (pointer:fine)');
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  if(!desktop.matches||reduced.matches)return;
- const wrap=document.getElementById('orb'),img=wrap&&wrap.querySelector('img');
+ const wrap=document.getElementById('orb'),img=wrap&&wrap.querySelector('.desktop-portrait-source');
  if(!wrap||!img)return;
  const canvas=document.createElement('canvas');canvas.className='portrait-3d-canvas';wrap.appendChild(canvas);
  const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:true});
