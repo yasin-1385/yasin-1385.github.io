@@ -2304,6 +2304,47 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 @media(prefers-reduced-motion:reduce){#orb:before{animation:none!important}}
 </style>
 
+
+<style id="golden-figure-cursor-sound-fix">
+/* Restore the original golden figure on every screen size. */
+@media(max-width:650px){
+ #orb{
+  display:block!important;position:absolute!important;
+  width:min(67vw,330px)!important;height:min(100vw,490px)!important;
+  right:-5%!important;left:auto!important;top:53%!important;bottom:auto!important;
+  transform:translateY(-45%) rotate(-4deg) scaleX(-1)!important;
+  opacity:.88!important;z-index:1!important;
+  border:0!important;border-radius:0!important;
+  background-color:transparent!important;
+  background-image:url("golden_glass_mannequin_web_3x.webp")!important;
+  background-position:center!important;background-repeat:no-repeat!important;background-size:contain!important;
+  -webkit-mask:none!important;mask:none!important;
+  box-shadow:none!important;filter:drop-shadow(0 15px 32px rgba(0,0,0,.28))!important;
+ }
+ .hero-content{z-index:3!important}
+}
+/* Never hide the real pointer unless the custom pointer has actually started. */
+@media(hover:hover) and (pointer:fine){
+ html:not(.cursor-ready),html:not(.cursor-ready) *{cursor:auto!important}
+ html.cursor-ready,html.cursor-ready *{cursor:none!important}
+ #navyDotCursor{display:none!important;opacity:0!important}
+ html.cursor-ready #navyDotCursor{display:block!important;opacity:1!important;visibility:visible!important}
+}
+#siteSoundToggle{
+ position:fixed;left:22px;bottom:22px;z-index:2147483000;
+ display:flex;align-items:center;gap:8px;padding:10px 14px;
+ border:1px solid rgba(220,235,255,.24);border-radius:999px;
+ background:rgba(10,18,32,.72);color:#eaf3ff;
+ font:600 11px Tahoma,Arial,sans-serif;
+ -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+ box-shadow:0 8px 25px rgba(0,0,0,.22);cursor:pointer;
+}
+#siteSoundToggle[aria-pressed="true"]{border-color:rgba(244,197,66,.72);color:#ffe49a}
+#siteSoundToggle .sound-dot{width:7px;height:7px;border-radius:50%;background:#8b98aa}
+#siteSoundToggle[aria-pressed="true"] .sound-dot{background:#F4C542;box-shadow:0 0 10px #F4C54288}
+@media(max-width:480px){#siteSoundToggle{left:12px;bottom:12px;padding:9px 12px;font-size:10px}}
+</style>
+
 </head>
 
 
@@ -3168,6 +3209,62 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
    }
   });
  });
+})();
+</script>
+
+
+<script id="site-cursor-and-sound-effects">
+(()=>{
+ const dot=document.getElementById("navyDotCursor");
+ if(dot && matchMedia("(hover:hover) and (pointer:fine)").matches){
+  addEventListener("pointermove",e=>{
+   document.documentElement.classList.add("cursor-ready");
+   dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";
+   dot.classList.add("is-visible");
+  },{passive:true});
+  addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
+ }
+ const toggle=document.createElement("button");
+ toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","false");
+ toggle.innerHTML='<span class="sound-dot"></span><span>صدا: خاموش</span>';
+ toggle.setAttribute("aria-label","روشن یا خاموش کردن افکت‌های صوتی");
+ document.body.appendChild(toggle);
+ let enabled=false,ctx=null,lastSound=0;
+ const audio=()=>{
+  if(!ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;ctx=new C()}
+  if(ctx.state==="suspended")ctx.resume();
+  return ctx;
+ };
+ const tone=(freq,duration,volume,type="sine",delay=0)=>{
+  const c=audio();if(!c)return;
+  const start=c.currentTime+delay,osc=c.createOscillator(),gain=c.createGain();
+  osc.type=type;osc.frequency.setValueAtTime(freq,start);
+  gain.gain.setValueAtTime(.0001,start);
+  gain.gain.exponentialRampToValueAtTime(volume,start+.012);
+  gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+  osc.connect(gain);gain.connect(c.destination);osc.start(start);osc.stop(start+duration+.025);
+ };
+ const play=(kind)=>{
+  if(!enabled)return;
+  const now=performance.now();if(now-lastSound<85)return;lastSound=now;
+  if(kind==="open"){tone(520,.11,.035,"sine");tone(780,.16,.022,"sine",.045)}
+  else if(kind==="select"){tone(420,.075,.026,"triangle");tone(620,.10,.018,"sine",.035)}
+  else if(kind==="close"){tone(480,.09,.022,"sine");tone(350,.10,.015,"sine",.035)}
+  else{tone(560,.055,.018,"sine")}
+ };
+ toggle.addEventListener("click",()=>{
+  enabled=!enabled;
+  toggle.setAttribute("aria-pressed",String(enabled));
+  toggle.lastElementChild.textContent=enabled?"صدا: روشن":"صدا: خاموش";
+  if(enabled){audio();play("select")}
+ });
+ document.addEventListener("click",e=>{
+  if(e.target.closest("#siteSoundToggle"))return;
+  if(e.target.closest(".category-back,.close"))play("close");
+  else if(e.target.closest(".category-arrow,.category-card"))play("select");
+  else if(e.target.closest(".item,.hero-button"))play("open");
+  else if(e.target.closest("a,button"))play("tap");
+ },true);
 })();
 </script>
 
