@@ -2463,7 +2463,8 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 <section class="hero">
 
   
-  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure depth-object-image mobile-hero-figure" src="Layer%202.png" alt="" fetchpriority="high"><img class="desktop-portrait-source" src="Layer%201.png" alt="" fetchpriority="high"></div>
+  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure depth-object-image" src="Layer%202.png" alt="" fetchpriority="high"></div>
+  <div id="portrait-depth-object" aria-hidden="true"><img class="depth-object-image" src="Layer%201.png" alt="" fetchpriority="high"></div>
 
 
   <div class="hero-content">
@@ -3810,55 +3811,152 @@ body>.category-gallery-toolbar .category-back{
 
 
 
-<style id="desktop-portrait-webgl-depth">
+<style id="desktop-face-mesh-interaction">
 @media (min-width:901px) and (hover:hover) and (pointer:fine){
- #orb{left:auto!important;right:8%!important;top:51%!important;bottom:auto!important;width:clamp(300px,37vw,510px)!important;height:clamp(420px,62vw,690px)!important;transform:translateY(-48%) rotate(-2deg)!important;perspective:1100px;transform-style:preserve-3d;overflow:visible!important;filter:drop-shadow(0 28px 38px rgba(0,0,0,.42))!important}
- #orb .mobile-hero-figure,#orb .desktop-portrait-source{opacity:0!important;visibility:hidden!important}
- #orb .desktop-portrait-source{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important}
- #orb .portrait-3d-canvas{z-index:4}
- .portrait-3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
- #portrait-depth-object{display:none!important}
+ #orb{
+  left:auto!important;right:8%!important;top:51%!important;bottom:auto!important;
+  width:clamp(300px,37vw,510px)!important;height:clamp(420px,62vw,690px)!important;
+  transform:translateY(-48%) rotate(-3deg)!important;
+  perspective:1000px;transform-style:preserve-3d;overflow:visible!important;
+  filter:drop-shadow(0 26px 34px rgba(0,0,0,.4))!important;
+ }
+ #portrait-depth-object{
+  display:block!important;position:absolute!important;z-index:3!important;
+  left:4%!important;right:auto!important;top:51%!important;
+  width:clamp(190px,20vw,280px)!important;height:clamp(260px,36vw,410px)!important;
+  transform:translateY(-48%)!important;overflow:visible!important;
+ }
+ #orb .depth-object-image,#portrait-depth-object .depth-object-image{
+  opacity:0!important;visibility:hidden!important;
+ }
+ .face-mesh-canvas{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+  pointer-events:none;overflow:visible;
+ }
+ #orb .face-mesh-canvas{
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 56%,rgba(0,0,0,.76) 68%,rgba(0,0,0,.34) 81%,rgba(0,0,0,.08) 91%,transparent 98%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 56%,rgba(0,0,0,.76) 68%,rgba(0,0,0,.34) 81%,rgba(0,0,0,.08) 91%,transparent 98%);
+ }
 }
-@media(max-width:900px){.portrait-3d-canvas{display:none!important}#orb .desktop-portrait-source{display:none!important}#orb .mobile-hero-figure{opacity:1!important;visibility:visible!important}}
-@media(prefers-reduced-motion:reduce){.portrait-3d-canvas{display:none!important}}
+@media(max-width:900px){#portrait-depth-object{display:none!important}}
+@media(prefers-reduced-motion:reduce){.face-mesh-canvas{display:none!important}}
 </style>
-<script id="desktop-portrait-webgl">
-(()=> {
- const desktop=window.matchMedia('(min-width:901px) and (hover:hover) and (pointer:fine)');
+<script id="desktop-face-mesh-pointer">
+(()=>{
+ const query=window.matchMedia('(min-width:901px) and (hover:hover) and (pointer:fine)');
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- if(!desktop.matches||reduced.matches)return;
- const wrap=document.getElementById('orb'),img=wrap&&wrap.querySelector('.desktop-portrait-source');
- if(!wrap||!img)return;
- const canvas=document.createElement('canvas');canvas.className='portrait-3d-canvas';wrap.appendChild(canvas);
- const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:true});
- if(!gl){canvas.remove();img.style.setProperty('opacity','1','important');img.style.setProperty('visibility','visible','important');return;}
- const vertex='attribute vec2 aUv;uniform float uYaw,uPitch,uDepth,uFitX,uFitY;varying vec2 vUv;float depthAt(vec2 uv){vec2 p=(uv-vec2(.5,.645))/vec2(.292,.345);float r=dot(p,p);float face=pow(max(0.0,1.0-r),.72);float nose=exp(-pow(abs((uv.x-.5)/.043),2.0)-pow(abs((uv.y-.625)/.105),2.0));float bridge=exp(-pow(abs((uv.x-.5)/.025),2.0)-pow(abs((uv.y-.69)/.14),2.0));float cheekL=exp(-pow(abs((uv.x-.385)/.085),2.0)-pow(abs((uv.y-.585)/.075),2.0));float cheekR=exp(-pow(abs((uv.x-.615)/.085),2.0)-pow(abs((uv.y-.585)/.075),2.0));float brow=exp(-pow(abs((uv.y-.735)/.035),2.0))*(exp(-pow(abs((uv.x-.405)/.09),2.0))+exp(-pow(abs((uv.x-.595)/.09),2.0)));float chin=exp(-pow(abs((uv.x-.5)/.11),2.0)-pow(abs((uv.y-.425)/.05),2.0));return face*.18+nose*.16+bridge*.075+(cheekL+cheekR)*.045+brow*.025+chin*.035;}void main(){vUv=aUv;vec3 p=vec3((aUv.x-.5)*2.0*uFitX,(aUv.y-.5)*2.0*uFitY,depthAt(aUv)*uDepth*2.0);float headWeight=smoothstep(.34,.53,aUv.y);vec3 pivot=vec3(0.0,-.16,0.0);vec3 q=p-pivot;float yaw=uYaw*headWeight;float pitch=uPitch*headWeight;q=vec3(q.x*cos(yaw)+q.z*sin(yaw),q.y,-q.x*sin(yaw)+q.z*cos(yaw));q=vec3(q.x,q.y*cos(pitch)-q.z*sin(pitch),q.y*sin(pitch)+q.z*cos(pitch));q+=pivot;float perspective=1.0-q.z*.12;gl_Position=vec4(q.x*perspective,q.y*perspective,q.z*.08,1.0);}' ;
- const fragment='precision mediump float;uniform sampler2D uPhoto;uniform float uDepth;varying vec2 vUv;float depthAt(vec2 uv){vec2 p=(uv-vec2(.5,.645))/vec2(.292,.345);float r=dot(p,p);float face=pow(max(0.0,1.0-r),.72);float nose=exp(-pow(abs((uv.x-.5)/.043),2.0)-pow(abs((uv.y-.625)/.105),2.0));float bridge=exp(-pow(abs((uv.x-.5)/.025),2.0)-pow(abs((uv.y-.69)/.14),2.0));float cheekL=exp(-pow(abs((uv.x-.385)/.085),2.0)-pow(abs((uv.y-.585)/.075),2.0));float cheekR=exp(-pow(abs((uv.x-.615)/.085),2.0)-pow(abs((uv.y-.585)/.075),2.0));float brow=exp(-pow(abs((uv.y-.735)/.035),2.0))*(exp(-pow(abs((uv.x-.405)/.09),2.0))+exp(-pow(abs((uv.x-.595)/.09),2.0)));float chin=exp(-pow(abs((uv.x-.5)/.11),2.0)-pow(abs((uv.y-.425)/.05),2.0));return face*.18+nose*.16+bridge*.075+(cheekL+cheekR)*.045+brow*.025+chin*.035;}void main(){vec4 photo=texture2D(uPhoto,vUv);if(photo.a<.012)discard;float e=.004;float dx=depthAt(vUv+vec2(e,0.0))-depthAt(vUv-vec2(e,0.0));float dy=depthAt(vUv+vec2(0.0,e))-depthAt(vUv-vec2(0.0,e));vec3 normal=normalize(vec3(-dx*24.0*uDepth,-dy*24.0*uDepth,1.0));vec3 light=normalize(vec3(-.42,.58,.72));float diffuse=max(dot(normal,light),0.0);float spec=pow(max(dot(reflect(-light,normal),vec3(0.0,0.0,1.0)),0.0),24.0);float shade=.78+.30*diffuse+spec*.10;float rim=pow(1.0-max(normal.z,0.0),2.0)*.12;vec3 color=photo.rgb*shade+vec3(.62,.76,1.0)*rim;gl_FragColor=vec4(color,photo.a);}';
- function shader(type,source){const sh=gl.createShader(type);gl.shaderSource(sh,source);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(sh));return null;}return sh;}
- const vs=shader(gl.VERTEX_SHADER,vertex),fs=shader(gl.FRAGMENT_SHADER,fragment);
- if(!vs||!fs){canvas.remove();img.style.setProperty('opacity','1','important');img.style.setProperty('visibility','visible','important');return;}
- const program=gl.createProgram();gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);
- if(!gl.getProgramParameter(program,gl.LINK_STATUS)){console.error(gl.getProgramInfoLog(program));canvas.remove();img.style.setProperty('opacity','1','important');img.style.setProperty('visibility','visible','important');return;}
- gl.useProgram(program);
- const nx=112,ny=144,vertices=[],indices=[];
- for(let y=0;y<=ny;y++)for(let x=0;x<=nx;x++)vertices.push(x/nx,y/ny);
- for(let y=0;y<ny;y++)for(let x=0;x<nx;x++){const i=y*(nx+1)+x;indices.push(i,i+1,i+nx+2,i,i+nx+2,i+nx+1);}
- const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
- const ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(indices),gl.STATIC_DRAW);
- const uvLoc=gl.getAttribLocation(program,'aUv');gl.enableVertexAttribArray(uvLoc);gl.vertexAttribPointer(uvLoc,2,gl.FLOAT,false,0,0);
- const loc={yaw:gl.getUniformLocation(program,'uYaw'),pitch:gl.getUniformLocation(program,'uPitch'),depth:gl.getUniformLocation(program,'uDepth'),fitX:gl.getUniformLocation(program,'uFitX'),fitY:gl.getUniformLocation(program,'uFitY'),photo:gl.getUniformLocation(program,'uPhoto')};
- const texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);
- gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
- gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,1);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,1);gl.uniform1i(loc.photo,0);gl.uniform1f(loc.depth,.25);
- let ready=false,raf=0;const pointer={x:0,y:0,tx:0,ty:0};
- function resize(){const box=wrap.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.75);if(!box.width||!box.height)return;canvas.width=Math.round(box.width*dpr);canvas.height=Math.round(box.height*dpr);gl.viewport(0,0,canvas.width,canvas.height);const ia=(img.naturalWidth||3)/(img.naturalHeight||4),ba=box.width/box.height;gl.uniform1f(loc.fitX,Math.min(1,ia/ba));gl.uniform1f(loc.fitY,Math.min(1,ba/ia));draw();}
- function draw(){if(!ready)return;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniform1f(loc.yaw,pointer.x*.24);gl.uniform1f(loc.pitch,-pointer.y*.15);gl.drawElements(gl.TRIANGLES,indices.length,gl.UNSIGNED_SHORT,0);}
- function tick(){pointer.x+=(pointer.tx-pointer.x)*.105;pointer.y+=(pointer.ty-pointer.y)*.105;draw();if(Math.abs(pointer.x-pointer.tx)>.0008||Math.abs(pointer.y-pointer.ty)>.0008)raf=requestAnimationFrame(tick);else raf=0;}
- function move(e){const r=wrap.getBoundingClientRect();pointer.tx=Math.max(-1,Math.min(1,((e.clientX-r.left)/r.width-.5)*2));pointer.ty=Math.max(-1,Math.min(1,((e.clientY-r.top)/r.height-.5)*2));if(!raf)raf=requestAnimationFrame(tick);}
- function leave(){pointer.tx=0;pointer.ty=0;if(!raf)raf=requestAnimationFrame(tick);}
- function init(){if(ready)return;try{gl.bindTexture(gl.TEXTURE_2D,texture);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);ready=true;resize();img.style.opacity='0';img.style.visibility='hidden';}catch(e){console.error('Portrait texture could not be loaded',e);canvas.remove();img.style.setProperty('opacity','1','important');img.style.setProperty('visibility','visible','important');}}
- if(img.complete&&img.naturalWidth)init();else img.addEventListener('load',init,{once:true});
- const observer=new ResizeObserver(resize);observer.observe(wrap);wrap.addEventListener('pointermove',move,{passive:true});wrap.addEventListener('pointerleave',leave,{passive:true});window.addEventListener('resize',resize,{passive:true});
+ if(!query.matches||reduced.matches)return;
+ const hero=document.querySelector('.hero');
+ const configs=[
+  {wrap:document.getElementById('orb'),cx:.50,cy:.31,rx:.27,ry:.27,depth:1.0},
+  {wrap:document.getElementById('portrait-depth-object'),cx:.50,cy:.30,rx:.25,ry:.25,depth:.82}
+ ];
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const pointer={x:0,y:0,tx:0,ty:0};
+ let raf=0;
+ function affine(ctx,src,dst,dpr){
+  const [s0,s1,s2]=src,[d0,d1,d2]=dst;
+  const den=s0.x*(s1.y-s2.y)+s1.x*(s2.y-s0.y)+s2.x*(s0.y-s1.y);
+  if(Math.abs(den)<.001)return;
+  const a=(d0.x*(s1.y-s2.y)+d1.x*(s2.y-s0.y)+d2.x*(s0.y-s1.y))/den;
+  const c=(d0.x*(s2.x-s1.x)+d1.x*(s0.x-s2.x)+d2.x*(s1.x-s0.x))/den;
+  const e=(d0.x*(s1.x*s2.y-s2.x*s1.y)+d1.x*(s2.x*s0.y-s0.x*s2.y)+d2.x*(s0.x*s1.y-s1.x*s0.y))/den;
+  const b=(d0.y*(s1.y-s2.y)+d1.y*(s2.y-s0.y)+d2.y*(s0.y-s1.y))/den;
+  const d=(d0.y*(s2.x-s1.x)+d1.y*(s0.x-s2.x)+d2.y*(s1.x-s0.x))/den;
+  const f=(d0.y*(s1.x*s2.y-s2.x*s1.y)+d1.y*(s2.x*s0.y-s0.x*s2.y)+d2.y*(s0.x*s1.y-s1.x*s0.y))/den;
+  ctx.setTransform(a*dpr,b*dpr,c*dpr,d*dpr,e*dpr,f*dpr);
+ }
+ function create(cfg){
+  if(!cfg.wrap)return;
+  const img=cfg.wrap.querySelector('img');
+  if(!img)return;
+  const canvas=document.createElement('canvas');
+  canvas.className='face-mesh-canvas';
+  cfg.wrap.appendChild(canvas);
+  const ctx=canvas.getContext('2d',{alpha:true});
+  const cols=26,rows=34;
+  let W=0,H=0,source=null,points=[];
+  function resize(){
+   const w=img.naturalWidth,h=img.naturalHeight;
+   if(!w||!h)return;
+   W=w;H=h;source=document.createElement('canvas');source.width=w;source.height=h;
+   source.getContext('2d').drawImage(img,0,0,w,h);
+   const dpr=Math.min(devicePixelRatio||1,2);
+   const box=cfg.wrap.getBoundingClientRect();
+   canvas.width=Math.round(box.width*dpr);canvas.height=Math.round(box.height*dpr);
+   canvas.style.width='100%';canvas.style.height='100%';
+   ctx.setTransform(dpr,0,0,dpr,0,0);
+   points=[];
+   for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++){
+    const u=x/cols,v=y/rows;
+    points.push({x:u*w,y:v*h,u,v});
+   }
+  }
+  if(img.complete)resize();else img.addEventListener('load',resize,{once:true});
+  new ResizeObserver(resize).observe(cfg.wrap);
+  function render(){
+   const box=cfg.wrap.getBoundingClientRect();
+   const dpr=Math.min(devicePixelRatio||1,2);
+   if(!W||!H||!box.width||!box.height)return;
+   if(canvas.width!==Math.round(box.width*dpr)||canvas.height!==Math.round(box.height*dpr))resize();
+   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,box.width,box.height);
+   const sx=box.width/W,sy=box.height/H;
+   const yaw=pointer.x*.20*cfg.depth,pitch=pointer.y*.13*cfg.depth;
+   const dst=points.map(p=>{
+    const nx=(p.u-cfg.cx)/cfg.rx,ny=(p.v-cfg.cy)/cfg.ry;
+    const r=nx*nx+ny*ny;
+    const face=Math.exp(-r*1.65);
+    const edge=Math.exp(-r*2.8);
+    const z=Math.sqrt(Math.max(0,1-Math.min(1,r)));
+    const dx=(yaw*(.16+z*.84)*cfg.rx*W*.30*face) + (yaw*cfg.rx*W*.08*edge);
+    const dy=(-pitch*(.15+z*.85)*cfg.ry*H*.23*face) + (Math.abs(yaw)*ny*cfg.ry*H*.055*edge);
+    const perspective=(p.u-.5)*yaw*W*.035*edge;
+    return {x:(p.x+dx+perspective)*sx,y:(p.y+dy)*sy};
+   });
+   ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+    const i=y*(cols+1)+x;
+    const tris=[[i,i+1,i+cols+2],[i,i+cols+2,i+cols+1]];
+    for(const tri of tris){
+     const sp=tri.map(k=>points[k]),dp=tri.map(k=>dst[k]);
+     ctx.save();ctx.beginPath();ctx.moveTo(dp[0].x,dp[0].y);ctx.lineTo(dp[1].x,dp[1].y);ctx.lineTo(dp[2].x,dp[2].y);ctx.closePath();ctx.clip();
+     affine(ctx,sp,dp,dpr);ctx.drawImage(source,0,0);ctx.restore();
+    }
+   }
+   // Directional face lighting adds a subtle sculpted highlight and opposing shadow.
+   const fx=cfg.cx*box.width+pointer.x*box.width*.045;
+   const fy=cfg.cy*box.height+pointer.y*box.height*.035;
+   ctx.save();ctx.globalCompositeOperation='screen';
+   const light=ctx.createRadialGradient(fx-box.width*.10,fy-box.height*.10,2,fx,fy,box.width*.34);
+   light.addColorStop(0,cfg.wrap.id==='orb'?'rgba(255,220,150,.18)':'rgba(220,235,255,.14)');
+   light.addColorStop(.48,'rgba(255,255,255,.045)');light.addColorStop(1,'rgba(255,255,255,0)');
+   ctx.fillStyle=light;ctx.fillRect(0,0,box.width,box.height);
+   ctx.restore();
+   ctx.save();ctx.globalCompositeOperation='multiply';
+   const shade=ctx.createRadialGradient(fx+box.width*.12,fy+box.height*.04,2,fx+box.width*.12,fy,box.width*.29);
+   shade.addColorStop(0,'rgba(5,10,22,0)');shade.addColorStop(1,'rgba(5,10,22,.16)');
+   ctx.fillStyle=shade;ctx.fillRect(0,0,box.width,box.height);ctx.restore();
+  }
+  return render;
+ }
+ const renderers=configs.map(create).filter(Boolean);
+ function move(e){
+  const r=hero.getBoundingClientRect();
+  pointer.tx=clamp((e.clientX-r.left)/r.width-.5,-.5,.5)*2;
+  pointer.ty=clamp((e.clientY-r.top)/r.height-.5,-.5,.5)*2;
+  if(!raf)raf=requestAnimationFrame(tick);
+ }
+ function tick(){
+  pointer.x+=(pointer.tx-pointer.x)*.16;pointer.y+=(pointer.ty-pointer.y)*.16;
+  renderers.forEach(fn=>fn());
+  if(Math.abs(pointer.x-pointer.tx)>.001||Math.abs(pointer.y-pointer.ty)>.001)raf=requestAnimationFrame(tick);
+  else raf=0;
+ }
+ function reset(){pointer.tx=0;pointer.ty=0;if(!raf)raf=requestAnimationFrame(tick);}
+ hero.addEventListener('pointermove',move,{passive:true});
+ hero.addEventListener('pointerleave',reset,{passive:true});
+ window.addEventListener('resize',()=>renderers.forEach(fn=>fn()),{passive:true});
+ renderers.forEach(fn=>fn());
 })();
 </script>
 
