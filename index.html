@@ -2559,7 +2559,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
        target="_blank"
        rel="noopener noreferrer">
 
-      <div class="contact-icon">◎</div>
+      <div class="contact-icon" aria-hidden="true"><svg class="brand-icon instagram-brand" viewBox="0 0 24 24" role="img"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.6" r="1.25" fill="currentColor"/></svg></div>
       <strong>اینستاگرام</strong>
       <span>@design__moradi</span>
 
@@ -2570,7 +2570,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
        target="_blank"
        rel="noopener noreferrer">
 
-      <div class="contact-icon">➤</div>
+      <div class="contact-icon" aria-hidden="true"><svg class="brand-icon telegram-brand" viewBox="0 0 24 24" role="img"><path fill="currentColor" d="M21.8 3.2 18.5 20c-.25 1.2-.98 1.48-1.98.92l-5.48-4.04-2.64 2.54c-.3.3-.55.55-1.12.55l.4-5.58 10.16-9.18c.44-.4-.1-.62-.68-.23L4.6 12.56.98 11.42c-1.18-.37-1.2-1.18.25-1.67L20.6 2.2c.98-.36 1.83.22 1.2 1z"/><path fill="none" stroke="#080d19" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" d="m8.1 14.4 9.5-8.5-6.6 10.3"/></svg></div>
       <strong>تلگرام</strong>
       <span>@YYohoho</span>
 
@@ -3766,5 +3766,54 @@ body>.category-gallery-toolbar .category-back{
  }
 }
 </style>
+
+<style id="desktop-hero-right-layout-and-brand-contact-icons">
+.contact-icon{display:flex!important;align-items:center!important;justify-content:center!important}
+.contact-icon .brand-icon{display:block!important;width:30px!important;height:30px!important;overflow:visible!important}
+@media(min-width:901px){
+ .hero{
+  background:
+   radial-gradient(ellipse 48% 58% at 82% 43%,rgba(100,139,184,.20),transparent 72%),
+   radial-gradient(ellipse 42% 48% at 100% 88%,rgba(75,102,142,.13),transparent 72%),
+   #080d19!important;
+ }
+ .hero:before{
+  display:block!important;content:""!important;
+  position:absolute!important;inset:0 0 0 49%!important;
+  z-index:0!important;pointer-events:none!important;
+  opacity:.19!important;
+  background-image:
+   linear-gradient(rgba(218,232,250,.13) 1px,transparent 1px),
+   linear-gradient(90deg,rgba(218,232,250,.13) 1px,transparent 1px)!important;
+  background-size:68px 68px!important;
+  mask-image:linear-gradient(to left,#000 0%,rgba(0,0,0,.78) 55%,transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to left,#000 0%,rgba(0,0,0,.78) 55%,transparent 100%)!important;
+ }
+ .hero:after{
+  content:""!important;display:block!important;position:absolute!important;
+  z-index:0!important;pointer-events:none!important;
+  right:4.5%!important;left:auto!important;top:16%!important;
+  width:47%!important;height:68%!important;
+  border:1px solid rgba(221,237,255,.13)!important;
+  border-radius:30px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(160,195,231,.018) 52%,rgba(255,255,255,.045))!important;
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.14),0 35px 90px rgba(0,0,0,.17)!important;
+  transform:rotate(-5deg)!important;
+ }
+ .hero-content{
+  position:absolute!important;z-index:4!important;
+  top:50%!important;right:8%!important;left:auto!important;
+  width:min(47%,650px)!important;max-width:650px!important;
+  margin:0!important;padding:0!important;
+  transform:translateY(-48%)!important;
+  text-align:right!important;
+ }
+ #orb{
+  left:2%!important;right:auto!important;
+  z-index:2!important;
+ }
+}
+</style>
+
 </body>
 </html>
