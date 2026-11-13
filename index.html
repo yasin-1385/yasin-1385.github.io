@@ -3288,7 +3288,8 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   },{passive:true});
   addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
  }
- let enabled=true,ctx=null,musicBus=null,sfxBus=null,musicTimer=null,chordIndex=0,unlocked=false,introPlayed=false;
+ let enabled=true,ctx=null,musicBus=null,sfxBus=null,compressor=null,musicTimer=null,chordIndex=0,unlocked=false,introPlayed=false;
+ const introWasShown=!!document.getElementById("siteIntro");
  const toggle=document.createElement("button");
  toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","true");
  toggle.innerHTML='<span class="sound-dot"></span><span>صدا: روشن</span>';
@@ -3304,8 +3305,12 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   if(ctx)return;
   const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
   ctx=new C();
-  musicBus=ctx.createGain();musicBus.gain.value=0;musicBus.connect(ctx.destination);
-  sfxBus=ctx.createGain();sfxBus.gain.value=0;sfxBus.connect(ctx.destination);
+  compressor=ctx.createDynamicsCompressor();
+  compressor.threshold.value=-16;compressor.knee.value=18;compressor.ratio.value=4;
+  compressor.attack.value=.004;compressor.release.value=.22;
+  compressor.connect(ctx.destination);
+  musicBus=ctx.createGain();musicBus.gain.value=0;musicBus.connect(compressor);
+  sfxBus=ctx.createGain();sfxBus.gain.value=0;sfxBus.connect(compressor);
  }
  function note(freq,duration,volume,type="sine",delay=0,bus=sfxBus){
   if(!ctx||!bus)return;
@@ -3318,17 +3323,16 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  }
  function playChord(){
   if(!enabled||!ctx)return;
-  const now=ctx.currentTime;
   chords[chordIndex%chords.length].forEach((freq,i)=>{
-   note(freq,8.2,i===0?.009:.006,"sine",i*.035,musicBus);
-   if(i===2)note(freq*2,7.2,.0018,"triangle",.08,musicBus);
+   note(freq,8.2,i===0?.038:.026,"sine",i*.035,musicBus);
+   if(i===2)note(freq*2,7.2,.012,"triangle",.08,musicBus);
   });
   chordIndex++;
  }
  function startMusic(){
   if(!enabled||!ctx)return;
   musicBus.gain.cancelScheduledValues(ctx.currentTime);
-  musicBus.gain.setTargetAtTime(.9,ctx.currentTime,.9);
+  musicBus.gain.setTargetAtTime(1,ctx.currentTime,.55);
   if(musicTimer)clearInterval(musicTimer);
   playChord();
   musicTimer=setInterval(playChord,6800);
@@ -3341,8 +3345,18 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  }
  function fadeOn(){
   if(!ctx)return;
-  sfxBus.gain.setTargetAtTime(.72,ctx.currentTime,.06);
+  sfxBus.gain.setTargetAtTime(1,ctx.currentTime,.04);
   startMusic();
+ }
+ function playIntro(){
+  if(!ctx||!enabled||introPlayed)return;
+  introPlayed=true;
+  // A clearly audible cinematic rise, with a low impact and bright finishing notes.
+  note(58,1.15,.13,"sine",0,sfxBus);
+  note(174,1.0,.075,"triangle",.08,sfxBus);
+  note(392,.85,.052,"sine",.36,sfxBus);
+  note(587,1.0,.042,"sine",.68,sfxBus);
+  note(784,.8,.026,"sine",.92,sfxBus);
  }
  function unlock(){
   if(!enabled)return;
@@ -3350,26 +3364,18 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   if(ctx.state==="suspended")ctx.resume();
   fadeOn();
   unlocked=true;
-  const intro=document.getElementById("siteIntro");
-  if(!introPlayed&&intro&&getComputedStyle(intro).visibility!=="hidden"){
-   introPlayed=true;playIntro();
-  }
- }
- function playIntro(){
-  if(!ctx||!enabled)return;
-  note(58,.95,.025,"sine",0,sfxBus);
-  note(174,.85,.012,"triangle",.08,sfxBus);
-  note(392,.7,.009,"sine",.35,sfxBus);
-  note(587,.9,.006,"sine",.62,sfxBus);
+  // Browsers require a user gesture for audio. Play the intro cue on the first
+  // available gesture, even if the visual intro has already begun to disappear.
+  if(introWasShown&&!introPlayed)playIntro();
  }
  function play(kind){
   if(!enabled||!ctx||!unlocked)return;
-  if(kind==="faq"){note(660,.13,.013,"sine");note(880,.17,.008,"sine",.045)}
-  else if(kind==="slide"){note(440,.12,.014,"triangle");note(554,.16,.009,"sine",.055)}
-  else if(kind==="open"){note(523,.17,.016,"sine");note(784,.22,.009,"sine",.07)}
-  else if(kind==="close"){note(392,.15,.012,"sine");note(294,.18,.008,"sine",.06)}
-  else if(kind==="nav"){note(494,.1,.011,"sine");note(659,.13,.007,"sine",.04)}
-  else{note(587,.07,.008,"sine")}
+  if(kind==="faq"){note(660,.16,.052,"sine");note(880,.19,.036,"sine",.045)}
+  else if(kind==="slide"){note(440,.15,.055,"triangle");note(554,.18,.038,"sine",.055)}
+  else if(kind==="open"){note(523,.19,.062,"sine");note(784,.24,.04,"sine",.07)}
+  else if(kind==="close"){note(392,.17,.05,"sine");note(294,.2,.035,"sine",.06)}
+  else if(kind==="nav"){note(494,.13,.045,"sine");note(659,.16,.032,"sine",.04)}
+  else{note(587,.1,.035,"sine")}
  }
  toggle.addEventListener("click",()=>{
   enabled=!enabled;
@@ -3391,7 +3397,7 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
  document.addEventListener("visibilitychange",()=>{
   if(!ctx||!enabled)return;
   if(document.hidden)musicBus.gain.setTargetAtTime(0,ctx.currentTime,.2);
-  else if(unlocked)musicBus.gain.setTargetAtTime(.9,ctx.currentTime,1.2);
+  else if(unlocked)musicBus.gain.setTargetAtTime(1,ctx.currentTime,.8);
  });
  window.siteSound={play,unlock};
 })();
