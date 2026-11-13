@@ -3403,5 +3403,111 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
 })();
 </script>
 
+<style id="two-tier-mobile-category-header">
+/* Category title gets its own second row below the main floating header */
+header.gallery-header-active{
+ position:fixed!important;
+ display:flex!important;
+ flex-wrap:nowrap!important;
+ align-items:center!important;
+ min-height:66px;
+}
+header.gallery-header-active>.category-gallery-toolbar{
+ position:absolute!important;
+ top:calc(100% + 9px)!important;
+ left:0!important;
+ right:0!important;
+ width:100%!important;
+ min-width:0!important;
+ max-width:none!important;
+ margin:0!important;
+ padding:11px 16px!important;
+ display:flex!important;
+ flex-direction:row!important;
+ align-items:center!important;
+ justify-content:space-between!important;
+ gap:14px!important;
+ border:1px solid rgba(244,197,66,.28)!important;
+ border-radius:14px!important;
+ background:rgba(8,17,32,.94)!important;
+ box-shadow:0 12px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08)!important;
+ -webkit-backdrop-filter:blur(20px)!important;
+ backdrop-filter:blur(20px)!important;
+}
+header.gallery-header-active>.category-gallery-toolbar>div{
+ flex:1 1 auto!important;
+ min-width:0!important;
+ display:flex!important;
+ flex-direction:column!important;
+ align-items:flex-start!important;
+ gap:3px!important;
+}
+header.gallery-header-active .category-gallery-toolbar small{
+ display:block!important;
+ font-size:9px!important;
+ line-height:1.4!important;
+}
+header.gallery-header-active .category-gallery-toolbar h3{
+ display:block!important;
+ max-width:100%!important;
+ margin:0!important;
+ overflow:hidden!important;
+ text-overflow:ellipsis!important;
+ white-space:nowrap!important;
+ font-size:clamp(12px,1.5vw,16px)!important;
+ line-height:1.6!important;
+}
+header.gallery-header-active .category-back{
+ flex:0 0 auto!important;
+ white-space:nowrap!important;
+ padding:9px 13px!important;
+ font-size:10px!important;
+}
+html:has(header.gallery-header-active){scroll-padding-top:150px}
+@media(max-width:700px){
+ header.gallery-header-active{
+  min-height:56px!important;
+  padding:8px 12px!important;
+ }
+ header.gallery-header-active>.category-gallery-toolbar{
+  top:calc(100% + 7px)!important;
+  left:0!important;right:0!important;
+  width:100%!important;
+  padding:9px 11px!important;
+  gap:9px!important;
+  border-radius:12px!important;
+ }
+ header.gallery-header-active .category-gallery-toolbar>div{
+  flex:1 1 0!important;
+  gap:2px!important;
+ }
+ header.gallery-header-active .category-gallery-toolbar small{
+  font-size:8px!important;
+ }
+ header.gallery-header-active .category-gallery-toolbar h3{
+  max-width:100%!important;
+  font-size:11px!important;
+  line-height:1.55!important;
+ }
+ header.gallery-header-active .category-back{
+  max-width:112px!important;
+  padding:8px 9px!important;
+  font-size:9px!important;
+  line-height:1.4!important;
+  white-space:normal!important;
+  text-align:center!important;
+ }
+ html:has(header.gallery-header-active){scroll-padding-top:132px}
+}
+@media(max-width:360px){
+ header.gallery-header-active>.category-gallery-toolbar{
+  padding:8px!important;gap:6px!important;
+ }
+ header.gallery-header-active .category-back{
+  max-width:92px!important;padding:7px 6px!important;font-size:8px!important;
+ }
+ header.gallery-header-active .category-gallery-toolbar h3{font-size:10px!important}
+}
+</style>
 </body>
 </html>
