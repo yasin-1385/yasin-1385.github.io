@@ -3368,7 +3368,7 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   riseFilter.type="lowpass";riseFilter.frequency.setValueAtTime(280,t);
   riseFilter.frequency.exponentialRampToValueAtTime(3200,t+1.35);
   riseGain.gain.setValueAtTime(.0001,t);
-  riseGain.linearRampToValueAtTime(.075,t+.95);
+  riseGain.gain.linearRampToValueAtTime(.075,t+.95);
   riseGain.gain.exponentialRampToValueAtTime(.0001,t+1.65);
   rise.connect(riseFilter);riseFilter.connect(riseGain);riseGain.connect(sfxBus);
   rise.start(t);rise.stop(t+1.7);
@@ -3386,8 +3386,9 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   fadeOn();
   unlocked=true;
   // Audio starts only after a real user gesture, as required by mobile browsers.
-  if(introWasShown&&!introPlayed)playIntro();
-  unlocking=false;
+  try{if(introWasShown&&!introPlayed)playIntro();}
+  catch(error){console.warn("Intro sound could not be played:",error);}
+  finally{unlocking=false;}
  }
  function play(kind){
   if(!enabled||!ctx||!unlocked)return;
