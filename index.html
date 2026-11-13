@@ -3281,146 +3281,46 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
 (()=>{
  const dot=document.getElementById("navyDotCursor");
  if(dot && matchMedia("(hover:hover) and (pointer:fine)").matches){
-  addEventListener("pointermove",e=>{
-   document.documentElement.classList.add("cursor-ready");
-   dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";
-   dot.classList.add("is-visible");
-  },{passive:true});
+  addEventListener("pointermove",e=>{document.documentElement.classList.add("cursor-ready");dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";dot.classList.add("is-visible");},{passive:true});
   addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
  }
- let enabled=true,ctx=null,musicBus=null,sfxBus=null,compressor=null,musicTimer=null,chordIndex=0,unlocked=false,introPlayed=false,unlocking=false;
- const introWasShown=!!document.getElementById("siteIntro");
+ let enabled=true,ctx=null,master=null,musicBus=null,sfxBus=null,musicTimer=null,chordIndex=0,unlocked=false,unlocking=false,introPlayed=false;
  const toggle=document.createElement("button");
  toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","true");
  toggle.innerHTML='<span class="sound-dot"></span><span>صدا: روشن</span>';
- toggle.setAttribute("aria-label","خاموش یا روشن کردن موسیقی و افکت‌های صوتی");
- document.body.appendChild(toggle);
- const chords=[
-  [130.81,196,261.63,329.63],
-  [110,164.81,220,261.63],
-  [87.31,130.81,174.61,220],
-  [98,146.83,196,246.94]
- ];
+ toggle.setAttribute("aria-label","خاموش یا روشن کردن موسیقی و افکت‌های صوتی");document.body.appendChild(toggle);
+ const chords=[[130.81,196,261.63,329.63],[110,164.81,220,261.63],[87.31,130.81,174.61,220],[98,146.83,196,246.94]];
  function setupAudio(){
-  if(ctx)return;
-  const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
-  ctx=new C();
-  compressor=ctx.createDynamicsCompressor();
-  compressor.threshold.value=-16;compressor.knee.value=18;compressor.ratio.value=4;
-  compressor.attack.value=.004;compressor.release.value=.22;
-  compressor.connect(ctx.destination);
-  musicBus=ctx.createGain();musicBus.gain.value=0;musicBus.connect(compressor);
-  sfxBus=ctx.createGain();sfxBus.gain.value=0;sfxBus.connect(compressor);
+  if(ctx)return true;
+  try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return false;ctx=new Audio();master=ctx.createGain();master.gain.value=.9;master.connect(ctx.destination);musicBus=ctx.createGain();musicBus.gain.value=0;musicBus.connect(master);sfxBus=ctx.createGain();sfxBus.gain.value=0;sfxBus.connect(master);return true;}
+  catch(error){console.error("Audio setup failed",error);ctx=null;return false;}
  }
- function note(freq,duration,volume,type="sine",delay=0,bus=sfxBus){
+ function tone(freq,duration,volume,type="sine",delay=0,bus=sfxBus){
   if(!ctx||!bus)return;
-  const start=ctx.currentTime+delay,osc=ctx.createOscillator(),gain=ctx.createGain();
-  osc.type=type;osc.frequency.setValueAtTime(freq,start);
-  gain.gain.setValueAtTime(.0001,start);
-  gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),start+.035);
-  gain.gain.setTargetAtTime(.0001,start+duration*.62,Math.max(.04,duration*.18));
-  osc.connect(gain);gain.connect(bus);osc.start(start);osc.stop(start+duration+.35);
+  try{const t=ctx.currentTime+delay,osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(freq,t);gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),t+.035);gain.gain.exponentialRampToValueAtTime(.0001,t+duration);osc.connect(gain);gain.connect(bus);osc.start(t);osc.stop(t+duration+.04);}catch(error){console.warn("Sound effect failed",error);}
  }
- function playChord(){
-  if(!enabled||!ctx)return;
-  chords[chordIndex%chords.length].forEach((freq,i)=>{
-   note(freq,8.2,i===0?.038:.026,"sine",i*.035,musicBus);
-   if(i===2)note(freq*2,7.2,.012,"triangle",.08,musicBus);
-  });
-  chordIndex++;
- }
- function startMusic(){
-  if(!enabled||!ctx)return;
-  musicBus.gain.cancelScheduledValues(ctx.currentTime);
-  musicBus.gain.setTargetAtTime(.8,ctx.currentTime,.55);
-  if(musicTimer)clearInterval(musicTimer);
-  playChord();
-  musicTimer=setInterval(playChord,6800);
- }
- function fadeOff(){
-  if(!ctx)return;
-  musicBus.gain.setTargetAtTime(0,ctx.currentTime,.18);
-  sfxBus.gain.setTargetAtTime(0,ctx.currentTime,.08);
-  if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
- }
- function fadeOn(){
-  if(!ctx)return;
-  sfxBus.gain.setTargetAtTime(1,ctx.currentTime,.04);
-  startMusic();
- }
+ function playChord(){if(!enabled||!ctx||!musicBus)return;chords[chordIndex%chords.length].forEach((freq,i)=>{tone(freq,6.3,i===0?.030:.020,"sine",i*.035,musicBus);if(i===2)tone(freq*2,5.8,.009,"triangle",.08,musicBus);});chordIndex++;}
+ function startMusic(){if(!enabled||!ctx||!musicBus)return;musicBus.gain.cancelScheduledValues(ctx.currentTime);musicBus.gain.setTargetAtTime(.64,ctx.currentTime,.45);if(musicTimer)clearInterval(musicTimer);playChord();musicTimer=setInterval(playChord,6200);}
+ function fadeOff(){if(!ctx)return;musicBus.gain.setTargetAtTime(0,ctx.currentTime,.12);sfxBus.gain.setTargetAtTime(0,ctx.currentTime,.06);if(musicTimer){clearInterval(musicTimer);musicTimer=null;}}
+ function fadeOn(){if(!ctx)return;sfxBus.gain.setTargetAtTime(.9,ctx.currentTime,.035);startMusic();}
  function playIntro(){
-  if(!ctx||!enabled||introPlayed)return;
-  introPlayed=true;
-  // Cinematic intro: deep impact, rising sweep and a bright resolving chime.
-  const t=ctx.currentTime;
-  const impact=ctx.createOscillator(),impactGain=ctx.createGain();
-  impact.type="sine";
-  impact.frequency.setValueAtTime(92,t);
-  impact.frequency.exponentialRampToValueAtTime(38,t+.62);
-  impactGain.gain.setValueAtTime(.0001,t);
-  impactGain.gain.exponentialRampToValueAtTime(.24,t+.025);
-  impactGain.gain.exponentialRampToValueAtTime(.0001,t+1.25);
-  impact.connect(impactGain);impactGain.connect(sfxBus);
-  impact.start(t);impact.stop(t+1.3);
-  const rise=ctx.createOscillator(),riseFilter=ctx.createBiquadFilter(),riseGain=ctx.createGain();
-  rise.type="sawtooth";rise.frequency.setValueAtTime(110,t+.05);
-  rise.frequency.exponentialRampToValueAtTime(880,t+1.35);
-  riseFilter.type="lowpass";riseFilter.frequency.setValueAtTime(280,t);
-  riseFilter.frequency.exponentialRampToValueAtTime(3200,t+1.35);
-  riseGain.gain.setValueAtTime(.0001,t);
-  riseGain.gain.linearRampToValueAtTime(.075,t+.95);
-  riseGain.gain.exponentialRampToValueAtTime(.0001,t+1.65);
-  rise.connect(riseFilter);riseFilter.connect(riseGain);riseGain.connect(sfxBus);
-  rise.start(t);rise.stop(t+1.7);
-  note(261.63,.9,.045,"triangle",.72,sfxBus);
-  note(523.25,1.15,.07,"sine",1.05,sfxBus);
-  note(783.99,1.35,.045,"sine",1.22,sfxBus);
-  note(1046.5,1.5,.025,"sine",1.38,sfxBus);
+  if(!ctx||!enabled||introPlayed)return;introPlayed=true;const t=ctx.currentTime;
+  try{
+   const bass=ctx.createOscillator(),bassGain=ctx.createGain();bass.type="sine";bass.frequency.setValueAtTime(88,t);bass.frequency.exponentialRampToValueAtTime(36,t+.72);bassGain.gain.setValueAtTime(.0001,t);bassGain.gain.exponentialRampToValueAtTime(.20,t+.03);bassGain.gain.exponentialRampToValueAtTime(.0001,t+1.15);bass.connect(bassGain);bassGain.connect(sfxBus);bass.start(t);bass.stop(t+1.2);
+   const sweep=ctx.createOscillator(),filter=ctx.createBiquadFilter(),sweepGain=ctx.createGain();sweep.type="triangle";sweep.frequency.setValueAtTime(150,t);sweep.frequency.exponentialRampToValueAtTime(740,t+1.05);filter.type="lowpass";filter.frequency.setValueAtTime(350,t);filter.frequency.exponentialRampToValueAtTime(2600,t+1.2);sweepGain.gain.setValueAtTime(.0001,t);sweepGain.gain.linearRampToValueAtTime(.055,t+.8);sweepGain.gain.exponentialRampToValueAtTime(.0001,t+1.45);sweep.connect(filter);filter.connect(sweepGain);sweepGain.connect(sfxBus);sweep.start(t);sweep.stop(t+1.5);
+   tone(392,1,.035,"triangle",.55);tone(587.33,1.1,.052,"sine",.82);tone(783.99,1.25,.035,"sine",1.02);tone(1046.5,1.3,.018,"sine",1.2);
+  }catch(error){console.warn("Intro cue failed",error);}
  }
  async function unlock(){
-  if(!enabled||unlocking)return;
-  setupAudio();if(!ctx)return;
-  unlocking=true;
-  try{if(ctx.state==="suspended")await ctx.resume();}
-  catch(error){unlocking=false;return;}
-  fadeOn();
-  unlocked=true;
-  // Audio starts only after a real user gesture, as required by mobile browsers.
-  try{if(introWasShown&&!introPlayed)playIntro();}
-  catch(error){console.warn("Intro sound could not be played:",error);}
-  finally{unlocking=false;}
+  if(!enabled||unlocking||unlocked)return;if(!setupAudio())return;unlocking=true;
+  try{if(ctx.state!=="running")await ctx.resume();if(ctx.state!=="running")return;unlocked=true;fadeOn();playIntro();}
+  catch(error){console.warn("Audio unlock failed",error);}finally{unlocking=false;}
  }
- function play(kind){
-  if(!enabled||!ctx||!unlocked)return;
-  if(kind==="faq"){note(660,.16,.052,"sine");note(880,.19,.036,"sine",.045)}
-  else if(kind==="slide"){note(440,.15,.055,"triangle");note(554,.18,.038,"sine",.055)}
-  else if(kind==="open"){note(523,.19,.062,"sine");note(784,.24,.04,"sine",.07)}
-  else if(kind==="close"){note(392,.17,.05,"sine");note(294,.2,.035,"sine",.06)}
-  else if(kind==="nav"){note(494,.13,.045,"sine");note(659,.16,.032,"sine",.04)}
-  else{note(587,.1,.035,"sine")}
- }
- toggle.addEventListener("click",()=>{
-  enabled=!enabled;
-  toggle.setAttribute("aria-pressed",String(enabled));
-  toggle.lastElementChild.textContent=enabled?"صدا: روشن":"صدا: خاموش";
-  if(enabled){unlock();play("open")}else fadeOff();
- });
- document.addEventListener("pointerdown",unlock,{capture:true,passive:true});
- document.addEventListener("keydown",unlock,{capture:true});
- document.addEventListener("click",event=>{
-  if(event.target.closest("#siteSoundToggle"))return;
-  if(event.target.closest(".faq-item summary"))play("faq");
-  else if(event.target.closest(".category-card.center"))play("open");
-  else if(event.target.closest(".category-arrow,.category-card,.category-bottom-arrow"))play("slide");
-  else if(event.target.closest(".category-back,.category-bottom-back,.close"))play("close");
-  else if(event.target.closest(".item"))play("open");
-  else if(event.target.closest(".hero-button,a,button"))play("nav");
- },true);
- document.addEventListener("visibilitychange",()=>{
-  if(!ctx||!enabled)return;
-  if(document.hidden)musicBus.gain.setTargetAtTime(0,ctx.currentTime,.2);
-  else if(unlocked)musicBus.gain.setTargetAtTime(.8,ctx.currentTime,.8);
- });
+ function play(kind){if(!enabled||!ctx||!unlocked)return;if(kind==="faq"){tone(660,.14,.038);tone(880,.16,.025,"sine",.045);}else if(kind==="slide"){tone(440,.13,.04,"triangle");tone(554,.15,.028,"sine",.05);}else if(kind==="open"){tone(523,.16,.045);tone(784,.19,.03,"sine",.06);}else if(kind==="close"){tone(392,.15,.035);tone(294,.17,.025,"sine",.05);}else tone(587,.1,.025);}
+ toggle.addEventListener("click",()=>{enabled=!enabled;toggle.setAttribute("aria-pressed",String(enabled));toggle.lastElementChild.textContent=enabled?"صدا: روشن":"صدا: خاموش";if(enabled)unlock();else fadeOff();});
+ document.addEventListener("pointerdown",unlock,{capture:true,passive:true});document.addEventListener("keydown",unlock,{capture:true});
+ document.addEventListener("click",event=>{const target=event.target instanceof Element?event.target:null;if(!target||target.closest("#siteSoundToggle"))return;if(target.closest(".faq-item summary"))play("faq");else if(target.closest(".category-back,.category-bottom-back,.close"))play("close");else if(target.closest(".category-card.center,.item"))play("open");else if(target.closest(".category-arrow,.category-card,.category-bottom-arrow"))play("slide");else if(target.closest(".hero-button,a,button"))play("nav");},true);
+ document.addEventListener("visibilitychange",()=>{if(!ctx||!enabled||!unlocked)return;if(document.hidden)musicBus.gain.setTargetAtTime(0,ctx.currentTime,.15);else musicBus.gain.setTargetAtTime(.64,ctx.currentTime,.45);});
  window.siteSound={play,unlock};
 })();
 </script>
@@ -3538,6 +3438,16 @@ html:has(header.gallery-header-active){scroll-padding-top:150px}
   mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,1) 68%,rgba(0,0,0,.72) 81%,rgba(0,0,0,.28) 92%,rgba(0,0,0,0) 100%)!important;
  }
 }
+</style>
+<style id="mobile-category-toolbar-no-overlap">
+header.gallery-header-active{position:fixed!important;min-height:58px!important}
+header.gallery-header-active>.category-gallery-toolbar{position:absolute!important;top:calc(100% + 10px)!important;left:0!important;right:0!important;width:100%!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;padding:10px 13px!important;min-height:64px!important;box-sizing:border-box!important}
+header.gallery-header-active>.category-gallery-toolbar>div{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;min-width:0!important;gap:3px!important}
+header.gallery-header-active .category-gallery-toolbar small{display:block!important;font-size:8px!important;line-height:1.3!important}
+header.gallery-header-active .category-gallery-toolbar h3{display:block!important;width:100%!important;max-width:none!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;text-overflow:clip!important;font-size:12px!important;line-height:1.5!important}
+header.gallery-header-active .category-back{display:flex!important;align-items:center!important;justify-content:center!important;width:auto!important;max-width:118px!important;min-height:40px!important;padding:7px 9px!important;white-space:normal!important;text-align:center!important;line-height:1.45!important;font-size:9px!important;flex-shrink:0!important}
+@media(max-width:700px){header.gallery-header-active{min-height:56px!important;padding:8px 12px!important}header.gallery-header-active>.category-gallery-toolbar{top:calc(100% + 9px)!important;grid-template-columns:minmax(0,1fr) minmax(82px,auto)!important;min-height:70px!important;padding:9px 10px!important;gap:8px!important}header.gallery-header-active .category-gallery-toolbar small{font-size:8px!important}header.gallery-header-active .category-gallery-toolbar h3{font-size:11px!important;line-height:1.55!important}header.gallery-header-active .category-back{max-width:108px!important;min-width:82px!important;min-height:42px!important;font-size:9px!important;padding:6px 7px!important}html:has(header.gallery-header-active){scroll-padding-top:145px}}
+@media(max-width:360px){header.gallery-header-active>.category-gallery-toolbar{grid-template-columns:minmax(0,1fr) 88px!important;padding:8px!important;gap:6px!important}header.gallery-header-active .category-back{min-width:88px!important;max-width:88px!important;font-size:8px!important}header.gallery-header-active .category-gallery-toolbar h3{font-size:10px!important}}
 </style>
 </body>
 </html>
