@@ -3044,23 +3044,33 @@ document.addEventListener("keydown",event=>{
 
 <div id="navyDotCursor" aria-hidden="true"></div>
 <script>
-/* Simple solid navy cursor dot; no trail or canvas effect */
+/* Direction-aware elastic cursor: its long axis follows the actual pointer movement. */
 (()=>{
  const dot=document.getElementById("navyDotCursor");
  if(!dot||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
- let settleTimer;
+ let previousX=null,previousY=null,settleTimer=0;
  addEventListener("pointermove",e=>{
-  dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";
-  dot.classList.add("is-visible","is-moving");
-  clearTimeout(settleTimer);
-  settleTimer=setTimeout(()=>dot.classList.remove("is-moving"),150);
+  dot.style.left=e.clientX+"px";
+  dot.style.top=e.clientY+"px";
+  dot.classList.add("is-visible");
+  if(previousX!==null){
+   const dx=e.clientX-previousX,dy=e.clientY-previousY;
+   if(Math.hypot(dx,dy)>.35){
+    const angle=Math.atan2(dy,dx)*180/Math.PI;
+    dot.style.setProperty("--cursor-angle",angle.toFixed(2)+"deg");
+    dot.classList.add("is-moving");
+    clearTimeout(settleTimer);
+    settleTimer=setTimeout(()=>dot.classList.remove("is-moving"),125);
+   }
+  }
+  previousX=e.clientX;previousY=e.clientY;
  },{passive:true});
- addEventListener("pointerleave",()=>dot.classList.remove("is-moving"),{passive:true});
+ addEventListener("pointerleave",()=>{dot.classList.remove("is-moving");previousX=null;previousY=null},{passive:true});
  document.addEventListener("pointerover",e=>{
   if(e.target.closest("a,button,.item,[role='button']"))dot.classList.add("is-hover");
   else dot.classList.remove("is-hover");
  },{passive:true});
- addEventListener("blur",()=>dot.classList.remove("is-visible","is-hover"));
+ addEventListener("blur",()=>dot.classList.remove("is-visible","is-hover","is-moving"));
  addEventListener("pointerdown",()=>dot.classList.add("is-hover"),{passive:true});
  addEventListener("pointerup",()=>dot.classList.remove("is-hover"),{passive:true});
 })();
@@ -3685,8 +3695,8 @@ body>.category-gallery-toolbar .category-back{
 </style>
 
 <style id="golden-figure-edge-fade-and-cursor-elasticity">
-#orb{position:absolute!important;left:2%!important;right:auto!important;top:50%!important;bottom:auto!important;width:clamp(270px,40vw,540px)!important;height:clamp(390px,60vw,720px)!important;z-index:1!important;background:none!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important;transform:translate3d(0,-48%,0) rotate(-5deg) scaleX(-1)!important;pointer-events:none!important;overflow:visible!important}
-#orb .golden-hero-figure{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 18px 38px rgba(0,0,0,.28))!important;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 45%,rgba(0,0,0,.9) 61%,rgba(0,0,0,.55) 77%,rgba(0,0,0,.18) 91%,transparent 100%)!important;mask-image:linear-gradient(to bottom,#000 0%,#000 45%,rgba(0,0,0,.9) 61%,rgba(0,0,0,.55) 77%,rgba(0,0,0,.18) 91%,transparent 100%)!important;-webkit-mask-repeat:no-repeat!important;mask-repeat:no-repeat!important}
+#orb{position:absolute!important;left:2%!important;right:auto!important;top:50%!important;bottom:auto!important;width:clamp(270px,40vw,540px)!important;height:clamp(390px,60vw,720px)!important;z-index:1!important;background:none!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 18px 38px rgba(0,0,0,.22))!important;transform:translate3d(0,-48%,0) rotate(-5deg) scaleX(-1)!important;pointer-events:none!important;overflow:visible!important}
+#orb .golden-hero-figure{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;filter:none!important;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 56%,rgba(0,0,0,.76) 68%,rgba(0,0,0,.34) 81%,rgba(0,0,0,.08) 91%,transparent 98%)!important;mask-image:linear-gradient(to bottom,#000 0%,#000 56%,rgba(0,0,0,.76) 68%,rgba(0,0,0,.34) 81%,rgba(0,0,0,.08) 91%,transparent 98%)!important;-webkit-mask-size:100% 100%!important;mask-size:100% 100%!important;-webkit-mask-repeat:no-repeat!important;mask-repeat:no-repeat!important}
 @media(min-width:901px){#orb{left:2%!important;right:auto!important;width:clamp(340px,42vw,590px)!important;height:clamp(460px,64vw,760px)!important}.hero-content{width:min(53%,760px)!important;max-width:760px!important;margin-left:0!important;margin-right:auto!important;text-align:right!important}}
 @media(max-width:900px){#orb{left:50%!important;right:auto!important;top:auto!important;bottom:0!important;width:min(74vw,430px)!important;height:min(92vw,520px)!important;transform:translateX(-50%) rotate(-3deg) scaleX(-1)!important;display:block!important}.hero{padding-bottom:clamp(390px,78vw,500px)!important}}
 @media(max-width:650px){#orb{left:50%!important;right:auto!important;top:auto!important;bottom:0!important;width:min(88vw,420px)!important;height:min(112vw,510px)!important;transform:translateX(-50%) rotate(-3deg) scaleX(-1)!important;display:block!important}.hero{padding-bottom:clamp(390px,100vw,470px)!important}}
@@ -3702,6 +3712,7 @@ body>.category-gallery-toolbar .category-back{
   justify-content:space-between!important;gap:0 10px!important;
   padding:10px 12px!important;box-sizing:border-box!important;
  }
+ header.gallery-header-active>.nav{display:none!important}
  header.gallery-header-active>.logo{flex:0 0 auto!important;order:1!important}
  header.gallery-header-active>.category-gallery-toolbar.mobile-header-category{
   position:static!important;inset:auto!important;transform:none!important;
@@ -3747,7 +3758,7 @@ body>.category-gallery-toolbar .category-back{
   --cursor-angle:0deg;
   transform:translate(-50%,-50%) rotate(0deg) scale(1)!important;
   transform-origin:center!important;
-  transition:opacity .14s ease,box-shadow .18s ease,filter .18s ease,transform .16s cubic-bezier(.2,.8,.2,1)!important;
+  transition:opacity .14s ease,box-shadow .18s ease,filter .18s ease,transform .16s cubic-bezier(.2,.8,.2,1),border-radius .16s ease!important;
  }
  #navyDotCursor.is-moving{
   transform:translate(-50%,-50%) rotate(var(--cursor-angle)) scaleX(1.32) scaleY(.76)!important;
