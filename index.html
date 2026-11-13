@@ -2846,14 +2846,8 @@ function openCategory(index){
     else siteHeader.appendChild(toolbar);
     toolbar.classList.add("desktop-header-category");
   }else{
-    document.body.appendChild(toolbar);
-    const positionCategoryToolbar=()=>{
-      const headerBottom=siteHeader?siteHeader.getBoundingClientRect().bottom:0;
-      toolbar.style.setProperty("top",Math.ceil(headerBottom+14)+"px","important");
-    };
-    positionCategoryToolbar();
-    window.addEventListener("resize",positionCategoryToolbar,{passive:true});
-    toolbar._positionHandler=positionCategoryToolbar;
+    toolbar.classList.add("mobile-header-category");
+    siteHeader.appendChild(toolbar);
   }
 
   category.works.forEach(work=>{
@@ -3309,10 +3303,21 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
 (()=>{
  const dot=document.getElementById("navyDotCursor");
  if(dot && matchMedia("(hover:hover) and (pointer:fine)").matches){
+  let previousX=null,previousY=null,stopTimer=0;
   addEventListener("pointermove",e=>{
    document.documentElement.classList.add("cursor-ready");
    dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";
    dot.classList.add("is-visible");
+   if(previousX!==null){
+    const dx=e.clientX-previousX,dy=e.clientY-previousY;
+    if(Math.hypot(dx,dy)>.35){
+     dot.style.setProperty("--cursor-angle",(Math.atan2(dy,dx)*180/Math.PI).toFixed(1)+"deg");
+     dot.classList.add("is-moving");
+     clearTimeout(stopTimer);
+     stopTimer=setTimeout(()=>dot.classList.remove("is-moving"),95);
+    }
+   }
+   previousX=e.clientX;previousY=e.clientY;
   },{passive:true});
   addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
  }
@@ -3687,5 +3692,68 @@ body>.category-gallery-toolbar .category-back{
 @media(max-width:650px){#orb{left:50%!important;right:auto!important;top:auto!important;bottom:0!important;width:min(88vw,420px)!important;height:min(112vw,510px)!important;transform:translateX(-50%) rotate(-3deg) scaleX(-1)!important;display:block!important}.hero{padding-bottom:clamp(390px,100vw,470px)!important}}
 @media(min-width:701px){header.gallery-header-active>.category-gallery-toolbar.desktop-header-category{align-items:center!important;height:100%!important;align-self:stretch!important}header.gallery-header-active>.category-gallery-toolbar.desktop-header-category .category-back{align-self:center!important;position:static!important;top:auto!important;transform:none!important;margin-block:auto!important}}
 @media(hover:hover) and (pointer:fine){#navyDotCursor{transform:translate(-50%,-50%) rotate(0deg) scale(1)!important;transition:opacity .14s ease,box-shadow .18s ease,filter .18s ease,transform .2s cubic-bezier(.2,.8,.2,1)!important}#navyDotCursor.is-moving{transform:translate(-50%,-50%) rotate(45deg) scaleX(.78) scaleY(1.18)!important}}
-</style></body>
+</style>
+<style id="mobile-category-toolbar-integrated-header">
+@media(max-width:700px){
+ header.gallery-header-active{
+  position:fixed!important;top:10px!important;left:3%!important;width:94%!important;
+  min-height:0!important;height:auto!important;max-height:none!important;
+  display:flex!important;flex-wrap:wrap!important;align-items:center!important;
+  justify-content:space-between!important;gap:0 10px!important;
+  padding:10px 12px!important;box-sizing:border-box!important;
+ }
+ header.gallery-header-active>.logo{flex:0 0 auto!important;order:1!important}
+ header.gallery-header-active>.category-gallery-toolbar.mobile-header-category{
+  position:static!important;inset:auto!important;transform:none!important;
+  order:2!important;flex:0 0 100%!important;width:100%!important;max-width:none!important;
+  min-width:0!important;min-height:0!important;height:auto!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;gap:8px 12px!important;
+  margin:9px 0 0!important;padding:9px 0 0!important;
+  border:0!important;border-top:1px solid rgba(244,197,66,.24)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ }
+ header.gallery-header-active>.category-gallery-toolbar.mobile-header-category>div{
+  min-width:0!important;width:auto!important;display:flex!important;
+  flex-direction:column!important;align-items:flex-start!important;gap:2px!important;
+  overflow:hidden!important;
+ }
+ header.gallery-header-active .category-gallery-toolbar.mobile-header-category small{
+  display:block!important;font-size:8px!important;line-height:1.35!important
+ }
+ header.gallery-header-active .category-gallery-toolbar.mobile-header-category h3{
+  display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;
+  margin:0!important;font-size:clamp(12px,3.5vw,15px)!important;line-height:1.45!important;
+  white-space:normal!important;overflow-wrap:anywhere!important
+ }
+ header.gallery-header-active .category-gallery-toolbar.mobile-header-category .category-back{
+  position:static!important;inset:auto!important;transform:none!important;
+  justify-self:end!important;align-self:center!important;flex:0 0 auto!important;
+  width:auto!important;max-width:124px!important;min-width:0!important;min-height:38px!important;
+  margin:0!important;padding:7px 10px!important;white-space:normal!important;
+  text-align:center!important;line-height:1.35!important;font-size:9px!important;
+ }
+ #gallery.is-expanded{scroll-margin-top:150px!important}
+}
+@media(max-width:360px){
+ header.gallery-header-active>.category-gallery-toolbar.mobile-header-category{gap:7px!important}
+ header.gallery-header-active .category-gallery-toolbar.mobile-header-category .category-back{max-width:104px!important;padding:6px 7px!important;font-size:8px!important}
+}
+</style>
+<style id="directional-elastic-cursor-final">
+@media(hover:hover) and (pointer:fine){
+ #navyDotCursor{
+  --cursor-angle:0deg;
+  transform:translate(-50%,-50%) rotate(0deg) scale(1)!important;
+  transform-origin:center!important;
+  transition:opacity .14s ease,box-shadow .18s ease,filter .18s ease,transform .16s cubic-bezier(.2,.8,.2,1)!important;
+ }
+ #navyDotCursor.is-moving{
+  transform:translate(-50%,-50%) rotate(var(--cursor-angle)) scaleX(1.32) scaleY(.76)!important;
+  border-radius:42% 58% 42% 58%!important;
+ }
+}
+</style>
+</body>
 </html>
