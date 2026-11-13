@@ -2345,6 +2345,57 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 @media(max-width:480px){#siteSoundToggle{left:12px;bottom:12px;padding:9px 12px;font-size:10px}}
 </style>
 
+
+<style id="november-carousel-hero-audio-fix">
+/* Position-to-position carousel: FLIP owns the movement on desktop and mobile. */
+#categoryStage{perspective:1100px;transform-style:preserve-3d}
+#categoryStage>.category-card{transform-origin:center center;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:translate,scale,opacity,filter}
+#categoryStage>.category-card[data-outgoing]{display:none!important}
+@media(prefers-reduced-motion:reduce){
+ #categoryStage>.category-card{will-change:auto}
+}
+/* Show the actual golden artwork as an image element, not a CSS-only background. */
+#orb{
+ background:none!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:visible!important;
+ -webkit-mask:none!important;mask:none!important;
+ filter:none!important;opacity:1!important;
+}
+#orb .golden-hero-figure{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:contain!important;object-position:center!important;
+ opacity:1!important;visibility:visible!important;
+ filter:drop-shadow(0 18px 38px rgba(0,0,0,.3))!important;
+}
+@media(min-width:901px){
+ #orb{width:clamp(330px,40vw,560px)!important;height:clamp(430px,61vw,730px)!important;right:5%!important;top:50%!important;left:auto!important;bottom:auto!important;transform:translateY(-48%) rotate(-4deg) scaleX(-1)!important}
+ .hero-content{max-width:58%!important}
+}
+@media(min-width:651px) and (max-width:900px){
+ .hero{min-height:820px!important}
+ #orb{width:clamp(280px,43vw,390px)!important;height:clamp(390px,62vw,560px)!important;right:1%!important;left:auto!important;top:auto!important;bottom:0!important;transform:rotate(-3deg) scaleX(-1)!important;opacity:.9!important}
+ .hero-content{max-width:68%!important}
+}
+@media(max-width:650px){
+ .hero{min-height:900px!important;height:auto!important;max-height:none!important;justify-content:flex-start!important;padding:112px 7% 400px!important}
+ .hero-content{width:100%!important;max-width:100%!important;text-align:center!important;z-index:6!important}
+ .hero h1{font-size:clamp(48px,12vw,68px)!important;line-height:1.12!important}
+ .hero-description{margin:22px auto 0!important;max-width:340px!important}
+ .hero-bottom{justify-content:center!important;margin-top:26px!important;flex-wrap:wrap}
+ #orb{display:block!important;position:absolute!important;right:50%!important;left:auto!important;top:auto!important;bottom:5px!important;width:min(70vw,330px)!important;height:min(88vw,410px)!important;transform:translateX(50%) rotate(-2deg) scaleX(-1)!important;opacity:1!important;z-index:2!important}
+ .hero-content:before{inset:-14px -8px -14px!important;mask-image:none!important;background:linear-gradient(180deg,rgba(8,13,25,.7),rgba(8,13,25,.22))!important}
+ .hero-index{display:none!important}
+}
+@media(max-width:380px){
+ .hero{min-height:860px!important;padding-bottom:360px!important}
+ #orb{width:74vw!important;height:92vw!important}
+}
+/* Persian title spacing: remove the trailing stop and give dots room. */
+.section-heading h2{
+ letter-spacing:0!important;word-spacing:.06em!important;
+ line-height:1.4!important;padding:.04em .02em .13em!important;
+}
+</style>
 </head>
 
 
@@ -2398,7 +2449,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 <section class="hero">
 
   
-  <div class="hero-orb" id="orb"></div>
+  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure" src="/golden_glass_mannequin_web_3x.webp" alt="" fetchpriority="high"></div>
 
 
   <div class="hero-content">
@@ -2645,104 +2696,110 @@ fetch("images.json")
 });
 
 let categoryMotionDirection="next";
+function updateCategoryCard(card,index,position){
+  const total=portfolioCategories.length;
+  const category=portfolioCategories[(index+total)%total];
+  card.className="category-card "+position;
+  card.dataset.categoryIndex=String((index+total)%total);
+  card.setAttribute("aria-label",position==="center"?"باز کردن دسته "+category.name:"رفتن به دسته "+category.name);
+  const img=card.querySelector("img");
+  setPortfolioImage(img,category.works[0].src);
+  img.alt=category.name;
+  const label=card.querySelector(".category-card-label");
+  label.querySelector("strong").textContent=category.name;
+  label.querySelector("small").textContent=String(category.works.length).padStart(2,"0")+" نمونه‌کار";
+}
+function createCategoryCard(index,position){
+  const card=document.createElement("button");
+  card.type="button";
+  const img=document.createElement("img");
+  const shade=document.createElement("span");shade.className="category-card-shade";
+  const label=document.createElement("span");label.className="category-card-label";
+  label.innerHTML="<strong></strong><small></small>";
+  card.append(img,shade,label);
+  card.addEventListener("click",()=>{
+    const target=Number(card.dataset.categoryIndex);
+    if(card.classList.contains("center"))openCategory(target);
+    else slideCategory(target,card.classList.contains("side-next")?"next":"prev");
+  });
+  updateCategoryCard(card,index,position);
+  return card;
+}
 function renderCategoryCarousel(){
   const stage=document.getElementById("categoryStage");
-  const oldCenter=stage.querySelector(".category-card.center");
-  let outgoing=null;
-  if(oldCenter){
-    const rect=oldCenter.getBoundingClientRect();
-    const stageRect=stage.getBoundingClientRect();
-    outgoing=oldCenter.cloneNode(true);
-    outgoing.dataset.outgoing="1";
-    outgoing.removeAttribute("aria-label");
-    outgoing.tabIndex=-1;
-    outgoing.style.setProperty("position","absolute","important");
-    outgoing.style.setProperty("left",(rect.left-stageRect.left)+"px","important");
-    outgoing.style.setProperty("top",(rect.top-stageRect.top)+"px","important");
-    outgoing.style.setProperty("right","auto","important");
-    outgoing.style.setProperty("bottom","auto","important");
-    outgoing.style.setProperty("width",rect.width+"px","important");
-    outgoing.style.setProperty("height",rect.height+"px","important");
-    outgoing.style.setProperty("margin","0","important");
-    outgoing.style.setProperty("transform","none","important");
-    outgoing.style.setProperty("z-index","12","important");
-    outgoing.style.setProperty("pointer-events","none","important");
-    outgoing.style.setProperty("filter","none","important");
-    stage.appendChild(outgoing);
-  }
   const total=portfolioCategories.length;
   if(!total)return;
+  const existing=[...stage.querySelectorAll(".category-card")];
+  if(existing.length===3){
+    const center=existing.find(card=>card.classList.contains("center"));
+    if(Number(center?.dataset.categoryIndex)===activeCategoryIndex)return;
+    slideCategory(activeCategoryIndex,categoryMotionDirection);
+    return;
+  }
+  stage.replaceChildren();
   const prev=(activeCategoryIndex-1+total)%total;
   const next=(activeCategoryIndex+1)%total;
-  const entries=[
-    {index:prev,position:"side side-prev"},
-    {index:activeCategoryIndex,position:"center"},
-    {index:next,position:"side side-next"}
-  ];
-  stage.querySelectorAll(".category-card:not([data-outgoing])").forEach(card=>card.remove());
-  stage.dataset.direction=categoryMotionDirection;
-  entries.forEach(entry=>{
-    const category=portfolioCategories[entry.index];
-    const card=document.createElement("button");
-    card.type="button";
-    card.className="category-card "+entry.position;
-    card.dataset.categoryIndex=String(entry.index);
-    card.setAttribute("aria-label",entry.position==="center"?"باز کردن دسته "+category.name:"رفتن به دسته "+category.name);
-    const image=document.createElement("img");
-    setPortfolioImage(image,category.works[0].src);
-    image.alt=category.name;
-    const shade=document.createElement("span");
-    shade.className="category-card-shade";
-    const label=document.createElement("span");
-    label.className="category-card-label";
-    label.innerHTML="<strong></strong><small></small>";
-    label.querySelector("strong").textContent=category.name;
-    label.querySelector("small").textContent=String(category.works.length).padStart(2,"0")+" نمونه‌کار";
-    card.append(image,shade,label);
-    card.addEventListener("click",()=>{
-      if(entry.position==="center")openCategory(entry.index);
-      else{
-        categoryMotionDirection=entry.position==="side-next"?"next":"prev";
-        activeCategoryIndex=entry.index;
-        renderCategoryCarousel();
-      }
-    });
-    stage.appendChild(card);
-  });
+  stage.append(
+    createCategoryCard(prev,"side side-prev"),
+    createCategoryCard(activeCategoryIndex,"center"),
+    createCategoryCard(next,"side side-next")
+  );
   document.getElementById("categoryPosition").textContent=
     String(activeCategoryIndex+1).padStart(2,"0")+" / "+String(total).padStart(2,"0");
-
-  const center=stage.querySelector(".category-card.center");
-  const sides=[...stage.querySelectorAll(".category-card.side")];
-  if(outgoing){
-    outgoing.animate(
-      [{translate:"0 0",opacity:1,filter:"blur(0px)"},
-       {translate:"0 -86px",opacity:0,filter:"blur(13px)"}],
-      {duration:680,easing:"cubic-bezier(.55,0,.85,.35)",fill:"forwards"}
-    ).finished.finally(()=>outgoing.remove());
-    center.animate(
-      [{translate:"0 78px",opacity:0,filter:"blur(14px)",scale:".94"},
-       {translate:"0 0",opacity:1,filter:"blur(0px)",scale:"1"}],
-      {duration:1050,easing:"cubic-bezier(.16,1,.3,1)",fill:"both"}
-    );
-    sides.forEach((card,i)=>{
-      card.animate(
-        [{opacity:0,filter:"blur(12px)",translate:"0 -28px"},
-         {opacity:getComputedStyle(card).opacity,filter:getComputedStyle(card).filter,translate:"0 0"}],
-        {duration:900,delay:90+i*70,easing:"cubic-bezier(.22,1,.36,1)",fill:"both"}
-      );
-    });
+}
+function slideCategory(nextIndex,direction){
+  const stage=document.getElementById("categoryStage");
+  const total=portfolioCategories.length;
+  if(!total)return;
+  const cards=[...stage.querySelectorAll(".category-card")];
+  if(cards.length!==3){activeCategoryIndex=nextIndex;categoryMotionDirection=direction;renderCategoryCarousel();return;}
+  cards.forEach(card=>card.getAnimations().forEach(animation=>animation.cancel()));
+  const oldRects=new Map(cards.map(card=>[card,card.getBoundingClientRect()]));
+  const oldStyles=new Map(cards.map(card=>{
+    const style=getComputedStyle(card);
+    return [card,{opacity:style.opacity,filter:style.filter}];
+  }));
+  const oldPrev=cards.find(card=>card.classList.contains("side-prev"));
+  const oldCenter=cards.find(card=>card.classList.contains("center"));
+  const oldNext=cards.find(card=>card.classList.contains("side-next"));
+  if(!oldPrev||!oldCenter||!oldNext)return;
+  activeCategoryIndex=(nextIndex+total)%total;
+  categoryMotionDirection=direction;
+  const prevIndex=(activeCategoryIndex-1+total)%total;
+  const next=(activeCategoryIndex+1)%total;
+  let newPrev,newCenter,newNext;
+  if(direction==="next"){
+    newPrev=oldCenter;newCenter=oldNext;newNext=oldPrev;
+  }else{
+    newPrev=oldNext;newCenter=oldPrev;newNext=oldCenter;
   }
+  updateCategoryCard(newPrev,prevIndex,"side side-prev");
+  updateCategoryCard(newCenter,activeCategoryIndex,"center");
+  updateCategoryCard(newNext,next,"side side-next");
+  stage.dataset.direction=direction;
+  stage.append(newPrev,newCenter,newNext);
+  document.getElementById("categoryPosition").textContent=
+    String(activeCategoryIndex+1).padStart(2,"0")+" / "+String(total).padStart(2,"0");
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce)return;
+  [newPrev,newCenter,newNext].forEach(card=>{
+    const from=oldRects.get(card),to=card.getBoundingClientRect(),old=oldStyles.get(card);
+    if(!from||!to||!to.width||!to.height)return;
+    const dx=from.left-to.left,dy=from.top-to.top;
+    const sx=from.width/to.width,sy=from.height/to.height;
+    const target=getComputedStyle(card);
+    const animation=card.animate([
+      {translate:dx+"px "+dy+"px",scale:sx+" "+sy,opacity:old.opacity,filter:old.filter},
+      {translate:"0px 0px",scale:"1 1",opacity:target.opacity,filter:target.filter}
+    ],{duration:760,easing:"cubic-bezier(.2,.78,.22,1)",fill:"both"});
+    animation.onfinish=()=>animation.cancel();
+  });
 }
 document.getElementById("categoryPrev").addEventListener("click",()=>{
-  categoryMotionDirection="prev";
-  activeCategoryIndex=(activeCategoryIndex-1+portfolioCategories.length)%portfolioCategories.length;
-  renderCategoryCarousel();
+  slideCategory((activeCategoryIndex-1+portfolioCategories.length)%portfolioCategories.length,"prev");
 });
 document.getElementById("categoryNext").addEventListener("click",()=>{
-  categoryMotionDirection="next";
-  activeCategoryIndex=(activeCategoryIndex+1)%portfolioCategories.length;
-  renderCategoryCarousel();
+  slideCategory((activeCategoryIndex+1)%portfolioCategories.length,"next");
 });
 
 function openCategory(index){
@@ -3224,47 +3281,111 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
   },{passive:true});
   addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
  }
+ let enabled=true,ctx=null,musicBus=null,sfxBus=null,musicTimer=null,chordIndex=0,unlocked=false,introPlayed=false;
  const toggle=document.createElement("button");
- toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","false");
- toggle.innerHTML='<span class="sound-dot"></span><span>صدا: خاموش</span>';
- toggle.setAttribute("aria-label","روشن یا خاموش کردن افکت‌های صوتی");
+ toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","true");
+ toggle.innerHTML='<span class="sound-dot"></span><span>صدا: روشن</span>';
+ toggle.setAttribute("aria-label","خاموش یا روشن کردن موسیقی و افکت‌های صوتی");
  document.body.appendChild(toggle);
- let enabled=false,ctx=null,lastSound=0;
- const audio=()=>{
-  if(!ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;ctx=new C()}
-  if(ctx.state==="suspended")ctx.resume();
-  return ctx;
- };
- const tone=(freq,duration,volume,type="sine",delay=0)=>{
-  const c=audio();if(!c)return;
-  const start=c.currentTime+delay,osc=c.createOscillator(),gain=c.createGain();
+ const chords=[
+  [130.81,196,261.63,329.63],
+  [110,164.81,220,261.63],
+  [87.31,130.81,174.61,220],
+  [98,146.83,196,246.94]
+ ];
+ function setupAudio(){
+  if(ctx)return;
+  const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+  ctx=new C();
+  musicBus=ctx.createGain();musicBus.gain.value=0;musicBus.connect(ctx.destination);
+  sfxBus=ctx.createGain();sfxBus.gain.value=0;sfxBus.connect(ctx.destination);
+ }
+ function note(freq,duration,volume,type="sine",delay=0,bus=sfxBus){
+  if(!ctx||!bus)return;
+  const start=ctx.currentTime+delay,osc=ctx.createOscillator(),gain=ctx.createGain();
   osc.type=type;osc.frequency.setValueAtTime(freq,start);
   gain.gain.setValueAtTime(.0001,start);
-  gain.gain.exponentialRampToValueAtTime(volume,start+.012);
-  gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
-  osc.connect(gain);gain.connect(c.destination);osc.start(start);osc.stop(start+duration+.025);
- };
- const play=(kind)=>{
+  gain.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),start+.035);
+  gain.gain.setTargetAtTime(.0001,start+duration*.62,Math.max(.04,duration*.18));
+  osc.connect(gain);gain.connect(bus);osc.start(start);osc.stop(start+duration+.35);
+ }
+ function playChord(){
+  if(!enabled||!ctx)return;
+  const now=ctx.currentTime;
+  chords[chordIndex%chords.length].forEach((freq,i)=>{
+   note(freq,8.2,i===0?.009:.006,"sine",i*.035,musicBus);
+   if(i===2)note(freq*2,7.2,.0018,"triangle",.08,musicBus);
+  });
+  chordIndex++;
+ }
+ function startMusic(){
+  if(!enabled||!ctx)return;
+  musicBus.gain.cancelScheduledValues(ctx.currentTime);
+  musicBus.gain.setTargetAtTime(.9,ctx.currentTime,.9);
+  if(musicTimer)clearInterval(musicTimer);
+  playChord();
+  musicTimer=setInterval(playChord,6800);
+ }
+ function fadeOff(){
+  if(!ctx)return;
+  musicBus.gain.setTargetAtTime(0,ctx.currentTime,.18);
+  sfxBus.gain.setTargetAtTime(0,ctx.currentTime,.08);
+  if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
+ }
+ function fadeOn(){
+  if(!ctx)return;
+  sfxBus.gain.setTargetAtTime(.72,ctx.currentTime,.06);
+  startMusic();
+ }
+ function unlock(){
   if(!enabled)return;
-  const now=performance.now();if(now-lastSound<85)return;lastSound=now;
-  if(kind==="open"){tone(520,.11,.035,"sine");tone(780,.16,.022,"sine",.045)}
-  else if(kind==="select"){tone(420,.075,.026,"triangle");tone(620,.10,.018,"sine",.035)}
-  else if(kind==="close"){tone(480,.09,.022,"sine");tone(350,.10,.015,"sine",.035)}
-  else{tone(560,.055,.018,"sine")}
- };
+  setupAudio();if(!ctx)return;
+  if(ctx.state==="suspended")ctx.resume();
+  fadeOn();
+  unlocked=true;
+  const intro=document.getElementById("siteIntro");
+  if(!introPlayed&&intro&&getComputedStyle(intro).visibility!=="hidden"){
+   introPlayed=true;playIntro();
+  }
+ }
+ function playIntro(){
+  if(!ctx||!enabled)return;
+  note(58,.95,.025,"sine",0,sfxBus);
+  note(174,.85,.012,"triangle",.08,sfxBus);
+  note(392,.7,.009,"sine",.35,sfxBus);
+  note(587,.9,.006,"sine",.62,sfxBus);
+ }
+ function play(kind){
+  if(!enabled||!ctx||!unlocked)return;
+  if(kind==="faq"){note(660,.13,.013,"sine");note(880,.17,.008,"sine",.045)}
+  else if(kind==="slide"){note(440,.12,.014,"triangle");note(554,.16,.009,"sine",.055)}
+  else if(kind==="open"){note(523,.17,.016,"sine");note(784,.22,.009,"sine",.07)}
+  else if(kind==="close"){note(392,.15,.012,"sine");note(294,.18,.008,"sine",.06)}
+  else if(kind==="nav"){note(494,.1,.011,"sine");note(659,.13,.007,"sine",.04)}
+  else{note(587,.07,.008,"sine")}
+ }
  toggle.addEventListener("click",()=>{
   enabled=!enabled;
   toggle.setAttribute("aria-pressed",String(enabled));
   toggle.lastElementChild.textContent=enabled?"صدا: روشن":"صدا: خاموش";
-  if(enabled){audio();play("select")}
+  if(enabled){unlock();play("open")}else fadeOff();
  });
- document.addEventListener("click",e=>{
-  if(e.target.closest("#siteSoundToggle"))return;
-  if(e.target.closest(".category-back,.close"))play("close");
-  else if(e.target.closest(".category-arrow,.category-card"))play("select");
-  else if(e.target.closest(".item,.hero-button"))play("open");
-  else if(e.target.closest("a,button"))play("tap");
+ document.addEventListener("pointerdown",unlock,{capture:true,passive:true});
+ document.addEventListener("keydown",unlock,{capture:true});
+ document.addEventListener("click",event=>{
+  if(event.target.closest("#siteSoundToggle"))return;
+  if(event.target.closest(".faq-item summary"))play("faq");
+  else if(event.target.closest(".category-arrow,.category-card"))play("slide");
+  else if(event.target.closest(".category-back,.category-bottom-back,.close"))play("close");
+  else if(event.target.closest(".item"))play("open");
+  else if(event.target.closest(".hero-button,a,button"))play("nav");
  },true);
+ document.addEventListener("visibilitychange",()=>{
+  if(!ctx||!enabled)return;
+  if(document.hidden)musicBus.gain.setTargetAtTime(0,ctx.currentTime,.2);
+  else if(unlocked)musicBus.gain.setTargetAtTime(.9,ctx.currentTime,1.2);
+ });
+ window.siteSound={play,unlock};
 })();
 </script>
 
