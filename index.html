@@ -3854,7 +3854,7 @@ body>.category-gallery-toolbar .category-back{
  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
  const pointer={x:0,y:0,tx:0,ty:0};
  let raf=0;
- function affine(ctx,src,dst){
+ function affine(ctx,src,dst,dpr){
   const [s0,s1,s2]=src,[d0,d1,d2]=dst;
   const den=s0.x*(s1.y-s2.y)+s1.x*(s2.y-s0.y)+s2.x*(s0.y-s1.y);
   if(Math.abs(den)<.001)return;
@@ -3864,7 +3864,7 @@ body>.category-gallery-toolbar .category-back{
   const b=(d0.y*(s1.y-s2.y)+d1.y*(s2.y-s0.y)+d2.y*(s0.y-s1.y))/den;
   const d=(d0.y*(s2.x-s1.x)+d1.y*(s0.x-s2.x)+d2.y*(s1.x-s0.x))/den;
   const f=(d0.y*(s1.x*s2.y-s2.x*s1.y)+d1.y*(s2.x*s0.y-s0.x*s2.y)+d2.y*(s0.x*s1.y-s1.x*s0.y))/den;
-  ctx.setTransform(a,b,c,d,e,f);
+  ctx.setTransform(a*dpr,b*dpr,c*dpr,d*dpr,e*dpr,f*dpr);
  }
  function create(cfg){
   if(!cfg.wrap)return;
@@ -3920,7 +3920,7 @@ body>.category-gallery-toolbar .category-back{
     for(const tri of tris){
      const sp=tri.map(k=>points[k]),dp=tri.map(k=>dst[k]);
      ctx.save();ctx.beginPath();ctx.moveTo(dp[0].x,dp[0].y);ctx.lineTo(dp[1].x,dp[1].y);ctx.lineTo(dp[2].x,dp[2].y);ctx.closePath();ctx.clip();
-     affine(ctx,sp,dp);ctx.drawImage(source,0,0);ctx.restore();
+     affine(ctx,sp,dp,dpr);ctx.drawImage(source,0,0);ctx.restore();
     }
    }
    // Directional face lighting adds a subtle sculpted highlight and opposing shadow.
