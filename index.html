@@ -2463,7 +2463,8 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 <section class="hero">
 
   
-  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure" src="/golden_glass_mannequin_web_3x.webp" alt="" fetchpriority="high"></div>
+  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure depth-object-image" src="Layer%202.png" alt="" fetchpriority="high"></div>
+  <div id="portrait-depth-object" aria-hidden="true"><img class="depth-object-image" src="Layer%201.png" alt="" fetchpriority="high"></div>
 
 
   <div class="hero-content">
@@ -3804,6 +3805,84 @@ body>.category-gallery-toolbar .category-back{
  }
 }
 </style>
+
+
+<style id="desktop-two-character-depth-interaction">
+@media (min-width:901px) and (hover:hover) and (pointer:fine){
+ #orb{
+  width:clamp(300px,37vw,510px)!important;height:clamp(420px,62vw,690px)!important;
+  right:9%!important;top:51%!important;left:auto!important;
+  background:none!important;mask:none!important;-webkit-mask:none!important;
+  transform:translate3d(var(--gold-x,0px),calc(-48% + var(--gold-y,0px)),0) rotateY(var(--gold-ry,0deg)) rotateX(var(--gold-rx,0deg)) rotate(-3deg)!important;
+  transform-style:preserve-3d!important;perspective:1100px;filter:drop-shadow(0 28px 28px rgba(0,0,0,.42))!important;
+  transition:filter .3s ease;will-change:transform;
+ }
+ #orb .depth-object-image{
+  display:block!important;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  transform:translateZ(34px) scale(1.015);transform-style:preserve-3d;
+  filter:drop-shadow(0 12px 24px rgba(255,190,35,.17));
+ }
+ #orb:before{
+  content:"";position:absolute;inset:8% 13%;z-index:-1;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(244,181,42,.2),transparent 68%);
+  filter:blur(32px);transform:translateZ(-35px);
+ }
+ #portrait-depth-object{
+  position:absolute;z-index:2;left:4%;top:51%;width:clamp(190px,20vw,280px);height:clamp(260px,36vw,410px);
+  transform:translate3d(var(--portrait-x,0px),calc(-48% + var(--portrait-y,0px)),0) rotateY(var(--portrait-ry,0deg)) rotateX(var(--portrait-rx,0deg));
+  transform-style:preserve-3d;perspective:900px;will-change:transform;
+  filter:drop-shadow(0 25px 35px rgba(0,0,0,.5));
+ }
+ #portrait-depth-object:before{
+  content:"";position:absolute;inset:8% 10%;z-index:-1;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(170,202,235,.2),transparent 70%);filter:blur(27px);transform:translateZ(-28px);
+ }
+ #portrait-depth-object img{
+  display:block;width:100%;height:100%;object-fit:contain;transform:translateZ(25px);
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,.38));
+ }
+ .hero-content{z-index:5!important}
+}
+@media(max-width:900px){#portrait-depth-object{display:none!important}}
+@media(prefers-reduced-motion:reduce){#orb,#portrait-depth-object{transition:none!important}}
+</style>
+<script id="desktop-depth-pointer-control">
+(()=>{
+ const gold=document.getElementById('orb');
+ const portrait=document.getElementById('portrait-depth-object');
+ const hero=document.querySelector('.hero');
+ if(!gold||!portrait||!hero)return;
+ const fine=window.matchMedia('(min-width:901px) and (hover:hover) and (pointer:fine)');
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ if(!fine.matches||reduced.matches)return;
+ let frame=0,px=0,py=0;
+ const move=e=>{
+  const r=hero.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width-.5;
+  const y=(e.clientY-r.top)/r.height-.5;
+  px=x;py=y;
+  if(frame)return;
+  frame=requestAnimationFrame(()=>{
+   gold.style.setProperty('--gold-x',(x*-19)+'px');
+   gold.style.setProperty('--gold-y',(y*-15)+'px');
+   gold.style.setProperty('--gold-ry',(x*11)+'deg');
+   gold.style.setProperty('--gold-rx',(y*-8)+'deg');
+   portrait.style.setProperty('--portrait-x',(x*13)+'px');
+   portrait.style.setProperty('--portrait-y',(y*10)+'px');
+   portrait.style.setProperty('--portrait-ry',(x*-9)+'deg');
+   portrait.style.setProperty('--portrait-rx',(y*7)+'deg');
+   frame=0;
+  });
+ };
+ const reset=()=>{
+  [gold,portrait].forEach(el=>{
+   ['--gold-x','--gold-y','--gold-ry','--gold-rx','--portrait-x','--portrait-y','--portrait-ry','--portrait-rx'].forEach(v=>el.style.removeProperty(v));
+  });
+ };
+ hero.addEventListener('pointermove',move,{passive:true});
+ hero.addEventListener('pointerleave',reset,{passive:true});
+})();
+</script>
 
 </body>
 </html>
