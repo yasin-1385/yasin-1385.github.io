@@ -2829,10 +2829,8 @@ function openCategory(index){
   close.textContent="بازگشت به دسته‌بندی‌ها";
   close.addEventListener("click",closeCategory);
   toolbar.append(heading,close);
-  const header=document.querySelector("header");
-  header.querySelectorAll(".category-gallery-toolbar").forEach(node=>node.remove());
-  header.appendChild(toolbar);
-  document.querySelector("header").classList.add("gallery-header-active");
+  document.body.querySelectorAll(":scope > .category-gallery-toolbar").forEach(node=>node.remove());
+  document.body.appendChild(toolbar);
 
   category.works.forEach(work=>{
     const item=document.createElement("article");
@@ -2892,10 +2890,7 @@ function openCategory(index){
   document.getElementById("works").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function closeCategory(){
-  const header=document.querySelector("header");
-  const activeToolbar=header.querySelector(".category-gallery-toolbar");
-  if(activeToolbar)activeToolbar.remove();
-  header.classList.remove("gallery-header-active");
+  document.body.querySelectorAll(":scope > .category-gallery-toolbar").forEach(node=>node.remove());
   document.getElementById("gallery").classList.remove("is-expanded");
   document.getElementById("gallery").replaceChildren();
   document.getElementById("categoryShowcase").hidden=false;
