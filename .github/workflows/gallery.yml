@@ -1,4 +1,3 @@
-
 name: Update Image Gallery
 
 on:
@@ -17,38 +16,96 @@ permissions:
 jobs:
   update-gallery:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate images.json
+      - name: Generate gallery and upload report
+        id: generate
+        shell: bash
         run: |
           python3 - <<'PY'
           import os
           import json
+          from datetime import datetime, timezone
 
-          images = []
+          files = sorted(
+              (name for name in os.listdir(".")
+               if os.path.isfile(name) and name.lower().endswith(".webp")),
+              key=str.lower
+          )
 
-          for filename in os.listdir("."):
-              if filename.lower().endswith(".webp"):
-                  if os.path.isfile(filename):
-                      images.append(filename)
+          gallery = []
+          unknown = []
+          counts = {"کاور ریلز": 0, "طراحی گرافیک": 0, "طراحی سه‌بعدی": 0}
 
-          images.sort(key=str.lower)
+          for filename in files:
+              lower = filename.lower()
+              if lower.startswith("cover"):
+                  category = "کاور ریلز"
+              elif lower.startswith("work"):
+                  category = "طراحی گرافیک"
+              elif lower.startswith("3d") or lower.startswith("golden_glass"):
+                  category = "طراحی سه‌بعدی"
+              else:
+                  category = "طراحی سه‌بعدی"
+                  unknown.append(filename)
 
-          with open("images.json", "w", encoding="utf-8") as file:
-              json.dump(images, file, ensure_ascii=False, indent=2)
+              counts[category] += 1
+              title = os.path.splitext(filename)[0].replace("_", " ").replace("-", " ").strip()
+              gallery.append({
+                  "category": category,
+                  "src": filename,
+                  "title": title,
+                  "kind": category,
+                  "summary": ""
+              })
 
-          print(f"Found {len(images)} WebP images")
+          with open("images.json", "w", encoding="utf-8") as f:
+              json.dump(gallery, f, ensure_ascii=False, indent=2)
+
+          now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+          lines = [
+              "# گزارش خودکار بارگذاری تصاویر",
+              "",
+              f"- زمان بررسی: {now}",
+              f"- تعداد کل تصاویر WEBP: {len(files)}",
+              "",
+              "## دسته‌بندی انجام‌شده",
+              f"- کاور ریلز: {counts['کاور ریلز']}",
+              f"- طراحی گرافیک: {counts['طراحی گرافیک']}",
+              f"- طراحی سه‌بعدی: {counts['طراحی سه‌بعدی']}",
+              "",
+              "## نام‌هایی که با الگوی دسته‌بندی تطبیق نداشتند",
+          ]
+          if unknown:
+              lines += [
+                  "این فایل‌ها فعلاً در دسته «طراحی سه‌بعدی» نمایش داده شده‌اند؛ برای دسته‌بندی دقیق‌تر، نامشان را با cover، work یا 3d شروع کن:",
+                  ""
+              ] + [f"- {name}" for name in unknown]
+          else:
+              lines.append("موردی پیدا نشد.")
+          lines += [
+              "",
+              "## الگوی نام‌گذاری",
+              "- cover...webp → کاور ریلز",
+              "- work...webp → طراحی گرافیک",
+              "- 3d...webp → طراحی سه‌بعدی",
+          ]
+          with open("upload-report.md", "w", encoding="utf-8") as f:
+              f.write("\n".join(lines) + "\n")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write(f"unknown_count={len(unknown)}\n")
+          print(f"Processed {len(files)} WebP images; {len(unknown)} need filename review.")
           PY
 
-      - name: Commit gallery
+      - name: Commit gallery and report
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add images.json
+          git config user.email "41898282+users.noreply.github.com"
+          git add images.json upload-report.md
           git diff --cached --quiet || (
-            git commit -m "Update WebP image gallery" &&
+            git commit -m "Automatically categorize WebP portfolio images" &&
             git push
           )
