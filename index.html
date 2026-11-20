@@ -2694,6 +2694,17 @@ fetch("images.json")
   return response.json();
 })
 .then(images=>{
+  // Accept both the legacy filename list and the structured gallery format.
+  images=images.map((entry,index)=>{
+    if(typeof entry==="string"){
+      const file=entry;
+      const clean=file.replace(/\\.[^.]+$/,"").replace(/[_-]+/g," ").replace(/\\s+/g," ").trim();
+      const category=file.toLowerCase().startsWith("cover rilz")?"کاور ریلز":
+        file.toLowerCase().startsWith("work")?"طراحی گرافیک":"طراحی سه‌بعدی";
+      return {category,src:file,title:clean||("نمونه‌کار "+(index+1)),kind:category,summary:""};
+    }
+    return entry;
+  });
   portfolioImages=images;
   const grouped=new Map();
   images.forEach(work=>{
