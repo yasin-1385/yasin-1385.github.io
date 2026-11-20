@@ -103,7 +103,7 @@ jobs:
       - name: Commit gallery and report
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add images.json upload-report.md
           git diff --cached --quiet || (
             git commit -m "Automatically categorize WebP portfolio images" &&
