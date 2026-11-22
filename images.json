@@ -43,6 +43,13 @@
   },
   {
     "category": "کاور ریلز",
+    "src": "cover rilz 3.webp",
+    "title": "cover rilz 3",
+    "kind": "کاور ریلز",
+    "summary": ""
+  },
+  {
+    "category": "کاور ریلز",
     "src": "cover rilz.webp",
     "title": "cover rilz",
     "kind": "کاور ریلز",
@@ -60,13 +67,6 @@
     "src": "golden_glass_mannequin_web_3x.webp",
     "title": "golden glass mannequin web 3x",
     "kind": "طراحی سه‌بعدی",
-    "summary": ""
-  },
-  {
-    "category": "طراحی گرافیک",
-    "src": "work1.webp",
-    "title": "work1",
-    "kind": "طراحی گرافیک",
     "summary": ""
   },
   {
