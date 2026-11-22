@@ -169,6 +169,13 @@
   },
   {
     "category": "طراحی سه‌بعدی",
+    "src": "logo 4.webp",
+    "title": "logo 4",
+    "kind": "طراحی سه‌بعدی",
+    "summary": ""
+  },
+  {
+    "category": "طراحی سه‌بعدی",
     "src": "meno 1.webp",
     "title": "meno 1",
     "kind": "طراحی سه‌بعدی",
@@ -220,13 +227,6 @@
     "category": "طراحی گرافیک",
     "src": "work3.webp",
     "title": "work3",
-    "kind": "طراحی گرافیک",
-    "summary": ""
-  },
-  {
-    "category": "طراحی گرافیک",
-    "src": "work30.webp",
-    "title": "work30",
     "kind": "طراحی گرافیک",
     "summary": ""
   },
