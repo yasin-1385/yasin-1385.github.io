@@ -2180,20 +2180,26 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 .new-section-heading h2{font-size:clamp(38px,6vw,68px);letter-spacing:-3px;margin:15px 0}
 .new-section-heading h2 span{color:#b8d8ff}
 .new-section-heading p{color:#aebdd1;font-size:13px;line-height:2}
-.testimonial-empty,.faq-pending{
-  max-width:850px;margin:auto;padding:38px 28px;text-align:center;
+.testimonial-card{
+  max-width:900px;margin:auto;padding:22px;display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(220px,.9fr);align-items:center;gap:28px;
   border:1px solid rgba(220,235,255,.17);border-radius:20px;
   background:linear-gradient(135deg,rgba(220,235,255,.09),rgba(220,235,255,.025));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
 }
+.testimonial-image-link{display:block;overflow:hidden;border-radius:14px;background:#fff}
+.testimonial-image-link img{display:block;width:100%;height:auto;max-height:680px;object-fit:contain}
+.testimonial-caption{text-align:center;padding:18px}
 .testimonial-mark{display:block;color:#b8d8ff;font:72px/1 Georgia,serif}
-.testimonial-empty strong{display:block;margin:10px 0 12px;font-size:18px}
-.testimonial-empty p,.faq-pending p{color:#aebdd1;font-size:13px;line-height:2}
+.testimonial-caption strong{display:block;margin:10px 0 12px;font-size:18px}
+.testimonial-caption p,.faq-pending p{color:#aebdd1;font-size:13px;line-height:2}
 .faq-pending span{display:inline-block;margin-bottom:12px;color:#b8d8ff;font-size:12px;letter-spacing:4px}
 @media(max-width:600px){
  .testimonials-section,.faq-section{padding:75px 7%}
  .new-section-heading h2{letter-spacing:-2px}
- .testimonial-empty,.faq-pending{padding:30px 20px}
+ .testimonial-card{grid-template-columns:1fr;padding:14px;gap:10px}
+ .testimonial-caption{padding:10px}
+ .faq-pending{padding:30px 20px}
 }
 </style>
 
@@ -2585,12 +2591,17 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
   <div class="new-section-heading">
     <small>CLIENT FEEDBACK</small>
     <h2>رضایت <span>مشتریان.</span></h2>
-    <p>تجربه همکاری مشتریان، به‌زودی در این بخش قرار می‌گیرد.</p>
+    <p>بخشی از تجربه و بازخورد مشتریان پس از همکاری</p>
   </div>
-  <div class="testimonial-empty">
-    <span class="testimonial-mark">“</span>
-    <strong>صدای مشتریان</strong>
-    <p>این بخش برای نمایش نظرها و تجربه‌های واقعی مشتریان آماده شده است.</p>
+  <div class="testimonial-card">
+    <a class="testimonial-image-link" href="rezayat/n1.webp" target="_blank" rel="noopener noreferrer" aria-label="نمایش تصویر رضایت مشتری در اندازه کامل">
+      <img src="rezayat/n1.webp" alt="تصویر پیام رضایت مشتری" loading="lazy">
+    </a>
+    <div class="testimonial-caption">
+      <span class="testimonial-mark">“</span>
+      <strong>پیام رضایت مشتری</strong>
+      <p>بازخورد واقعی مشتری پس از همکاری</p>
+    </div>
   </div>
 </section>
 
