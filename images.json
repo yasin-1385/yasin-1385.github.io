@@ -148,6 +148,13 @@
   },
   {
     "category": "طراحی سه‌بعدی",
+    "src": "logo 1.webp",
+    "title": "logo 1",
+    "kind": "طراحی سه‌بعدی",
+    "summary": ""
+  },
+  {
+    "category": "طراحی سه‌بعدی",
     "src": "poster 1.webp",
     "title": "poster 1",
     "kind": "طراحی سه‌بعدی",
@@ -179,13 +186,6 @@
     "src": "tracet 1.webp",
     "title": "tracet 1",
     "kind": "طراحی سه‌بعدی",
-    "summary": ""
-  },
-  {
-    "category": "طراحی گرافیک",
-    "src": "work25.webp",
-    "title": "work25",
-    "kind": "طراحی گرافیک",
     "summary": ""
   },
   {
