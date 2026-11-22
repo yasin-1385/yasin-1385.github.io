@@ -1,5 +1,12 @@
 [
   {
+    "category": "طراحی سه‌بعدی",
+    "src": "baner 1.webp",
+    "title": "baner 1",
+    "kind": "طراحی سه‌بعدی",
+    "summary": ""
+  },
+  {
     "category": "کاور ریلز",
     "src": "cover rilz (3).webp",
     "title": "cover rilz (3)",
@@ -88,13 +95,6 @@
     "src": "tracet 1.webp",
     "title": "tracet 1",
     "kind": "طراحی سه‌بعدی",
-    "summary": ""
-  },
-  {
-    "category": "طراحی گرافیک",
-    "src": "work13.webp",
-    "title": "work13",
-    "kind": "طراحی گرافیک",
     "summary": ""
   },
   {
