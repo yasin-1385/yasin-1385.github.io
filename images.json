@@ -1,13 +1,6 @@
 [
   {
     "category": "کاور ریلز",
-    "src": "cover rilz (2).webp",
-    "title": "cover rilz (2)",
-    "kind": "کاور ریلز",
-    "summary": ""
-  },
-  {
-    "category": "کاور ریلز",
     "src": "cover rilz (3).webp",
     "title": "cover rilz (3)",
     "kind": "کاور ریلز",
@@ -45,6 +38,13 @@
     "category": "کاور ریلز",
     "src": "cover rilz.webp",
     "title": "cover rilz",
+    "kind": "کاور ریلز",
+    "summary": ""
+  },
+  {
+    "category": "کاور ریلز",
+    "src": "cover rilz1.webp",
+    "title": "cover rilz1",
     "kind": "کاور ریلز",
     "summary": ""
   },
