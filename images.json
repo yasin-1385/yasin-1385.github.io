@@ -99,6 +99,13 @@
   },
   {
     "category": "طراحی سه‌بعدی",
+    "src": "poster 1.webp",
+    "title": "poster 1",
+    "kind": "طراحی سه‌بعدی",
+    "summary": ""
+  },
+  {
+    "category": "طراحی سه‌بعدی",
     "src": "sar barg 1.webp",
     "title": "sar barg 1",
     "kind": "طراحی سه‌بعدی",
@@ -109,13 +116,6 @@
     "src": "tracet 1.webp",
     "title": "tracet 1",
     "kind": "طراحی سه‌بعدی",
-    "summary": ""
-  },
-  {
-    "category": "طراحی گرافیک",
-    "src": "work16.webp",
-    "title": "work16",
-    "kind": "طراحی گرافیک",
     "summary": ""
   },
   {
