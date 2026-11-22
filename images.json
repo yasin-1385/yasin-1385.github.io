@@ -71,6 +71,13 @@
   },
   {
     "category": "کاور ریلز",
+    "src": "cover rilz 6.webp",
+    "title": "cover rilz 6",
+    "kind": "کاور ریلز",
+    "summary": ""
+  },
+  {
+    "category": "کاور ریلز",
     "src": "cover rilz.webp",
     "title": "cover rilz",
     "kind": "کاور ریلز",
@@ -95,13 +102,6 @@
     "src": "tracet 1.webp",
     "title": "tracet 1",
     "kind": "طراحی سه‌بعدی",
-    "summary": ""
-  },
-  {
-    "category": "طراحی گرافیک",
-    "src": "work14.webp",
-    "title": "work14",
-    "kind": "طراحی گرافیک",
     "summary": ""
   },
   {
