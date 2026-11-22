@@ -2694,24 +2694,16 @@ fetch("images.json")
   return response.json();
 })
 .then(images=>{
-  // Accept both the legacy filename list and the structured gallery format.
-  images=images.map((entry,index)=>{
-    if(typeof entry==="string"){
-      const file=entry;
-      const clean=file.replace(/\\.[^.]+$/,"").replace(/[_-]+/g," ").replace(/\\s+/g," ").trim();
-      const category=file.toLowerCase().startsWith("cover rilz")?"کاور ریلز":
-        file.toLowerCase().startsWith("work")?"طراحی گرافیک":"طراحی سه‌بعدی";
-      return {category,src:file,title:clean||("نمونه‌کار "+(index+1)),kind:category,summary:""};
-    }
-    return entry;
-  });
+  // Only the approved portfolio categories are shown. Legacy filename-only
+  // entries are ignored rather than being placed in an arbitrary category.
+  const categoryOrder=["کاور ریلز","بنر","کارت ویزیت","کارت ضمانت","فاکتور","لوگو","منو","پوستر","سربرگ","سرتیفیکیت","تراکت"];
+  images=images.filter(entry=>entry && typeof entry==="object" && categoryOrder.includes(entry.category) && entry.src);
   portfolioImages=images;
-  const grouped=new Map();
-  images.forEach(work=>{
-    if(!grouped.has(work.category)) grouped.set(work.category,[]);
-    grouped.get(work.category).push(work);
-  });
-  portfolioCategories=[...grouped.entries()].map(([name,works])=>({name,works}));
+  const grouped=new Map(categoryOrder.map(name=>[name,[]]));
+  images.forEach(work=>grouped.get(work.category).push(work));
+  portfolioCategories=categoryOrder
+    .filter(name=>grouped.get(name).length>0)
+    .map(name=>({name,works:grouped.get(name)}));
   document.getElementById("count").textContent=String(images.length).padStart(2,"0")+" اثر";
   renderCategoryCarousel();
 })
@@ -2728,8 +2720,10 @@ function updateCategoryCard(card,index,position){
   card.dataset.categoryIndex=String((index+total)%total);
   card.setAttribute("aria-label",position==="center"?"باز کردن دسته "+category.name:"رفتن به دسته "+category.name);
   const img=card.querySelector("img");
-  setPortfolioImage(img,category.works[0].src);
-  img.alt=category.name;
+  // Use a real portfolio piece as the category cover, never the filename text.
+  const coverWork=category.works.find(work=>work && work.src);
+  setPortfolioImage(img,coverWork ? coverWork.src : "");
+  img.alt="نمونه‌کار از دسته "+category.name;
   const label=card.querySelector(".category-card-label");
   label.querySelector("strong").textContent=category.name;
   label.querySelector("small").textContent=String(category.works.length).padStart(2,"0")+" نمونه‌کار";
