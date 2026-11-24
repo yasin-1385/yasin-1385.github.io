@@ -2180,25 +2180,40 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 .new-section-heading h2{font-size:clamp(38px,6vw,68px);letter-spacing:-3px;margin:15px 0}
 .new-section-heading h2 span{color:#b8d8ff}
 .new-section-heading p{color:#aebdd1;font-size:13px;line-height:2}
-.testimonial-card{
-  max-width:900px;margin:auto;padding:22px;display:grid;
-  grid-template-columns:minmax(0,1.1fr) minmax(220px,.9fr);align-items:center;gap:28px;
-  border:1px solid rgba(220,235,255,.17);border-radius:20px;
-  background:linear-gradient(135deg,rgba(220,235,255,.09),rgba(220,235,255,.025));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
-}
-.testimonial-image-link{display:block;overflow:hidden;border-radius:14px;background:#fff}
-.testimonial-image-link img{display:block;width:100%;height:auto;max-height:680px;object-fit:contain}
-.testimonial-caption{text-align:center;padding:18px}
-.testimonial-mark{display:block;color:#b8d8ff;font:72px/1 Georgia,serif}
-.testimonial-caption strong{display:block;margin:10px 0 12px;font-size:18px}
+.testimonial-library-trigger{width:min(100%,760px);margin:auto;padding:30px 28px;display:flex;align-items:center;justify-content:space-between;gap:22px;text-align:right;color:#edf4ff;cursor:pointer;border:1px solid rgba(220,235,255,.2);border-radius:22px;background:linear-gradient(120deg,rgba(220,235,255,.11),rgba(220,235,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.1);transition:.25s ease}
+.testimonial-library-trigger:hover{transform:translateY(-3px);border-color:rgba(184,216,255,.55);background:linear-gradient(120deg,rgba(184,216,255,.16),rgba(220,235,255,.045))}
+.testimonial-library-copy{display:flex;flex-direction:column;gap:9px}
+.testimonial-library-copy strong{font-size:19px}
+.testimonial-library-copy span{color:#aebdd1;font-size:12px;line-height:1.9}
+.testimonial-library-arrow{font-size:13px;color:#c9e2ff!important}
+.testimonial-library-count{flex:0 0 auto;min-width:76px;height:76px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(184,216,255,.35);color:#c9e2ff;font-size:13px}
+.testimonial-modal{display:none;position:fixed;inset:0;z-index:150;background:rgba(3,8,17,.88);backdrop-filter:blur(18px);padding:24px;align-items:center;justify-content:center}
+.testimonial-modal.is-open{display:flex}
+.testimonial-modal-panel{position:relative;width:min(100%,1050px);max-height:calc(100vh - 48px);overflow:auto;padding:28px;border:1px solid rgba(220,235,255,.2);border-radius:22px;background:#0d1626;box-shadow:0 25px 90px #000a}
+.testimonial-modal-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 22px}
+.testimonial-modal-head h3{margin:0;color:#f4f7fc;font-size:22px}
+.testimonial-modal-head p{margin:7px 0 0;color:#aebdd1;font-size:12px}
+.testimonial-modal-close{width:42px;height:42px;flex:0 0 42px;border:1px solid #ffffff55;border-radius:50%;background:#ffffff12;color:white;font-size:25px;cursor:pointer}
+.testimonial-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.testimonial-thumb{padding:9px;border:1px solid rgba(220,235,255,.14);border-radius:14px;background:rgba(255,255,255,.045);cursor:zoom-in;text-align:center;color:#edf4ff;transition:.2s}
+.testimonial-thumb:hover{border-color:#b8d8ff88;transform:translateY(-3px)}
+.testimonial-thumb img{display:block;width:100%;height:230px;object-fit:contain;border-radius:8px;background:#fff}
+.testimonial-thumb span{display:block;padding:10px 4px 3px;font-size:11px}
+.testimonial-loading,.testimonial-empty{grid-column:1/-1;text-align:center;padding:35px 12px;color:#b8c4d7;font-size:13px;line-height:2}
 .testimonial-caption p,.faq-pending p{color:#aebdd1;font-size:13px;line-height:2}
 .faq-pending span{display:inline-block;margin-bottom:12px;color:#b8d8ff;font-size:12px;letter-spacing:4px}
 @media(max-width:600px){
  .testimonials-section,.faq-section{padding:75px 7%}
  .new-section-heading h2{letter-spacing:-2px}
- .testimonial-card{grid-template-columns:1fr;padding:14px;gap:10px}
- .testimonial-caption{padding:10px}
+ .testimonial-library-trigger{padding:22px 17px;gap:12px}
+ .testimonial-library-copy strong{font-size:15px}
+ .testimonial-library-copy span{font-size:10px}
+ .testimonial-library-count{min-width:58px;height:58px;font-size:11px}
+ .testimonial-modal{padding:9px}
+ .testimonial-modal-panel{max-height:calc(100vh - 18px);padding:16px}
+ .testimonial-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .testimonial-thumb img{height:190px}
+ .testimonial-modal-head h3{font-size:18px}
  .faq-pending{padding:30px 20px}
 }
 </style>
@@ -2593,26 +2608,14 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
     <h2>رضایت <span>مشتریان.</span></h2>
     <p>بخشی از تجربه و بازخورد مشتریان پس از همکاری</p>
   </div>
-  <div class="testimonial-card">
-    <a class="testimonial-image-link" href="rezayat/n1.webp" target="_blank" rel="noopener noreferrer" aria-label="نمایش تصویر رضایت مشتری در اندازه کامل">
-      <img src="rezayat/n1.webp" alt="تصویر پیام رضایت مشتری" loading="lazy">
-    </a>
-    <div class="testimonial-caption">
-      <span class="testimonial-mark">“</span>
-      <strong>پیام رضایت مشتری</strong>
-      <p>بازخورد واقعی مشتری پس از همکاری</p>
-    </div>
-  </div>
-  <div class="testimonial-card">
-    <a class="testimonial-image-link" href="rezayat/n2.svg" target="_blank" rel="noopener noreferrer" aria-label="نمایش تصویر رضایت مشتری در اندازه کامل">
-      <img src="rezayat/n2.svg" alt="پیام مشتری درباره کیفیت و سرعت انجام سفارش و برخورد حرفه‌ای" loading="lazy">
-    </a>
-    <div class="testimonial-caption">
-      <span class="testimonial-mark">“</span>
-      <strong>بازخورد مثبت مشتری</strong>
-      <p>رضایت از کیفیت، سرعت انجام کار و برخورد حرفه‌ای</p>
-    </div>
-  </div>
+  <button class="testimonial-library-trigger" type="button" onclick="openTestimonials()" aria-haspopup="dialog" aria-controls="testimonialModal">
+    <span class="testimonial-library-copy">
+      <strong>مشاهده رضایت مشتریان</strong>
+      <span>برای دیدن پیام‌ها و تجربه‌های مشتریان، اینجا کلیک کنید</span>
+      <span class="testimonial-library-arrow">مشاهده همه رضایت‌ها ←</span>
+    </span>
+    <span class="testimonial-library-count" id="testimonialCount">...</span>
+  </button>
 </section>
 
 <!-- FAQ -->
@@ -2667,6 +2670,17 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 
 
 
+<!-- CUSTOMER TESTIMONIALS GALLERY -->
+<div class="testimonial-modal" id="testimonialModal" role="dialog" aria-modal="true" aria-labelledby="testimonialModalTitle" onclick="if(event.target===this)closeTestimonials()">
+  <div class="testimonial-modal-panel">
+    <div class="testimonial-modal-head">
+      <div><h3 id="testimonialModalTitle">رضایت مشتریان</h3><p>برای مشاهده هر پیام، روی تصویر آن کلیک کنید</p></div>
+      <button class="testimonial-modal-close" type="button" onclick="closeTestimonials()" aria-label="بستن">×</button>
+    </div>
+    <div class="testimonial-grid" id="testimonialGrid"><div class="testimonial-loading">در حال بارگذاری پیام‌های مشتریان...</div></div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 
 <div class="lightbox" id="lightbox" onclick="closeImage(event)" aria-label="نمایش جزئیات نمونه‌کار">
@@ -2682,6 +2696,52 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 </div>
 
 <script>
+
+/* CUSTOMER TESTIMONIALS: automatically read every image in /rezayat */
+let customerTestimonials=[];
+let testimonialsLoaded=false;
+async function loadTestimonials(){
+  const grid=document.getElementById("testimonialGrid");
+  const count=document.getElementById("testimonialCount");
+  try{
+    const response=await fetch("https://api.github.com/repos/yasin-1385/yasin-1385.github.io/contents/rezayat?ref=main",{cache:"no-store"});
+    if(!response.ok) throw new Error("فهرست تصاویر در دسترس نیست");
+    const files=await response.json();
+    const allowed=/\.(webp|png|jpe?g|avif|gif)$/i;
+    customerTestimonials=files.filter(file=>file.type==="file" && allowed.test(file.name))
+      .sort((a,b)=>a.name.localeCompare(b.name,"fa",{numeric:true}))
+      .map(file=>({name:file.name,src:file.download_url || "https://raw.githubusercontent.com/yasin-1385/yasin-1385.github.io/main/rezayat/"+encodeURIComponent(file.name)}));
+    count.textContent=String(customerTestimonials.length).padStart(2,"0")+" پیام";
+    grid.innerHTML="";
+    if(!customerTestimonials.length){grid.innerHTML='<div class="testimonial-empty">هنوز تصویری در پوشه رضایت مشتریان ثبت نشده است.</div>';testimonialsLoaded=true;return;}
+    customerTestimonials.forEach((item,index)=>{
+      const button=document.createElement("button");button.type="button";button.className="testimonial-thumb";
+      button.setAttribute("aria-label","نمایش تصویر رضایت مشتری "+(index+1));
+      const img=document.createElement("img");img.src=item.src;img.alt="تصویر رضایت مشتری";img.loading="lazy";
+      const label=document.createElement("span");label.textContent="رضایت مشتری "+(index+1);
+      button.append(img,label);
+      button.addEventListener("click",()=>openImage({src:item.src,title:"رضایت مشتری "+(index+1),kind:"رضایت مشتریان",description:"پیام ثبت‌شده مشتری پس از همکاری"}));
+      grid.appendChild(button);
+    });
+    testimonialsLoaded=true;
+  }catch(error){
+    count.textContent="مشاهده";
+    grid.innerHTML='<div class="testimonial-empty">بارگذاری تصاویر انجام نشد. لطفاً اتصال اینترنت را بررسی و دوباره صفحه را باز کنید.</div>';
+    console.error(error);
+  }
+}
+function openTestimonials(){
+  document.getElementById("testimonialModal").classList.add("is-open");
+  document.body.classList.add("lightbox-open");
+  if(!testimonialsLoaded)loadTestimonials();
+}
+function closeTestimonials(){
+  document.getElementById("testimonialModal").classList.remove("is-open");
+  if(document.getElementById("lightbox").style.display!=="flex")document.body.classList.remove("lightbox-open");
+}
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape" && document.getElementById("testimonialModal").classList.contains("is-open"))closeTestimonials();
+});
 
 /* CATEGORY CAROUSEL + COMPACT CATEGORY GALLERY */
 let portfolioImages=[];
