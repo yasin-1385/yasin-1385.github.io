@@ -2720,7 +2720,7 @@ async function loadTestimonials(){
       const img=document.createElement("img");img.src=item.src;img.alt="تصویر رضایت مشتری";img.loading="lazy";
       const label=document.createElement("span");label.textContent="رضایت مشتری "+(index+1);
       button.append(img,label);
-      button.addEventListener("click",()=>openImage({src:item.src,title:"رضایت مشتری "+(index+1),kind:"رضایت مشتریان",description:"پیام ثبت‌شده مشتری پس از همکاری"}));
+      button.addEventListener("click",()=>{closeTestimonials();openImage({src:item.src,title:"رضایت مشتری "+(index+1),kind:"رضایت مشتریان",description:"پیام ثبت‌شده مشتری پس از همکاری"});});
       grid.appendChild(button);
     });
     testimonialsLoaded=true;
