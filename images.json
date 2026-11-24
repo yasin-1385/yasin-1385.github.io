@@ -1,303 +1,317 @@
 [
   {
-    "category": "بنر",
+    "category": "طراحی سه‌بعدی",
     "src": "baner 1.webp",
-    "title": "معرفی خدمات مشاور املاک",
-    "kind": "بنر",
+    "title": "baner 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "کارت ویزیت",
+    "category": "طراحی سه‌بعدی",
     "src": "cart vizit 1.webp",
-    "title": "هویت بصری پرشین دکور",
-    "kind": "کارت ویزیت",
+    "title": "cart vizit 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "کارت ویزیت",
+    "category": "طراحی سه‌بعدی",
     "src": "cart vizit 2.webp",
-    "title": "کارت ویزیت کارواش خلیج فارس",
-    "kind": "کارت ویزیت",
+    "title": "cart vizit 2",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "کارت ویزیت",
+    "category": "طراحی سه‌بعدی",
     "src": "cart vizit 3.webp",
-    "title": "کارت ویزیت دکوراتیو کابینت",
-    "kind": "کارت ویزیت",
+    "title": "cart vizit 3",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "کارت ضمانت",
+    "category": "طراحی سه‌بعدی",
     "src": "cart zemanat 1.webp",
-    "title": "ضمانت‌نامه خدمات رایان رشدافزار",
-    "kind": "کارت ضمانت",
+    "title": "cart zemanat 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "کارت ضمانت",
+    "category": "طراحی سه‌بعدی",
     "src": "cart zemanat 2.webp",
-    "title": "کارت ضمانت شش‌ماهه فروشگاه ملت",
-    "kind": "کارت ضمانت",
+    "title": "cart zemanat 2",
+    "kind": "طراحی سه‌بعدی",
+    "summary": ""
+  },
+  {
+    "category": "کاور ریلز",
+    "src": "cover rils 12.webp",
+    "title": "cover rils 12",
+    "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz (3).webp",
-    "title": "معرفی کیک خانگی خاتون",
+    "title": "cover rilz (3)",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz (4).webp",
-    "title": "معرفی غذای ویژه سرآشپز",
+    "title": "cover rilz (4)",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz (5).webp",
-    "title": "کاور معرفی غذای رستورانی",
+    "title": "cover rilz (5)",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz (6).webp",
-    "title": "معرفی طعم غذای دودی",
+    "title": "cover rilz (6)",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz (7).webp",
-    "title": "کاور معرفی محصول و خدمات",
+    "title": "cover rilz (7)",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 10.webp",
-    "title": "راهنمای خدمات داروخانه",
+    "title": "cover rilz 10",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 11.webp",
-    "title": "آموزش قانون ۱۰، ۳۰ و ۶۰",
+    "title": "cover rilz 11",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 2.webp",
-    "title": "ما پنجره نمی‌سازیم",
+    "title": "cover rilz 2",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 3.webp",
-    "title": "معرفی کتانی نیوبالانس",
+    "title": "cover rilz 3",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 4.webp",
-    "title": "ویژه هالووین؛ نوشیدنی کافه",
+    "title": "cover rilz 4",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 5.webp",
-    "title": "اشتباهات رایج در بدنسازی",
+    "title": "cover rilz 5",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 6.webp",
-    "title": "تمرین درست؛ نتیجه بهتر",
+    "title": "cover rilz 6",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 7.webp",
-    "title": "کاور معرفی محصول فروشگاهی",
+    "title": "cover rilz 7",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 8.webp",
-    "title": "تعمیر تخصصی خودرو پس از تصادف",
+    "title": "cover rilz 8",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz 9.webp",
-    "title": "راهنمای انتخاب و تست کفش",
+    "title": "cover rilz 9",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz.webp",
-    "title": "معرفی کیک خانگی خاتون",
+    "title": "cover rilz",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
     "category": "کاور ریلز",
     "src": "cover rilz1.webp",
-    "title": "ویترین شیرین کیک خاتون",
+    "title": "cover rilz1",
     "kind": "کاور ریلز",
     "summary": ""
   },
   {
-    "category": "فاکتور",
+    "category": "طراحی سه‌بعدی",
     "src": "factor 1.webp",
-    "title": "فاکتور فروش خدمات دکوراسیون داخلی",
-    "kind": "فاکتور",
+    "title": "factor 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
+    "src": "golden_glass_mannequin_web_3x.webp",
+    "title": "golden glass mannequin web 3x",
+    "kind": "طراحی سه‌بعدی",
+    "summary": ""
+  },
+  {
+    "category": "طراحی سه‌بعدی",
     "src": "logo 1.webp",
-    "title": "نشان تجاری استودیو بازی POLYNO",
-    "kind": "لوگو",
+    "title": "logo 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 2.webp",
-    "title": "هویت بصری برند هواساز",
-    "kind": "لوگو",
+    "title": "logo 2",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 3.webp",
-    "title": "نشان تجاری مشاور تحصیلی",
-    "kind": "لوگو",
+    "title": "logo 3",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 4.webp",
-    "title": "لوگوی برند پوشاک زنانه تالیا",
-    "kind": "لوگو",
+    "title": "logo 4",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 5.webp",
-    "title": "هویت بصری پوشاک مردانه جنتلمن",
-    "kind": "لوگو",
+    "title": "logo 5",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 6.webp",
-    "title": "لوگوی خدمات ناخن مهتاب",
-    "kind": "لوگو",
+    "title": "logo 6",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 7.webp",
-    "title": "هویت بصری فروشگاه لوازم‌التحریر پیکاسو",
-    "kind": "لوگو",
+    "title": "logo 7",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 8.webp",
-    "title": "لوگوی برند پوشاک زنانه اینائنه",
-    "kind": "لوگو",
+    "title": "logo 8",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "لوگو",
+    "category": "طراحی سه‌بعدی",
     "src": "logo 9.webp",
-    "title": "نشان تجاری مهتاب نیل",
-    "kind": "لوگو",
+    "title": "logo 9",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "منو",
+    "category": "طراحی سه‌بعدی",
     "src": "meno 1.webp",
-    "title": "منوی کافه تک",
-    "kind": "منو",
+    "title": "meno 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "پوستر",
+    "category": "طراحی سه‌بعدی",
     "src": "poster 1.webp",
-    "title": "سفر به فرانسه، اسپانیا و ایتالیا",
-    "kind": "پوستر",
+    "title": "poster 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "پوستر",
+    "category": "طراحی سه‌بعدی",
     "src": "poster 2.webp",
-    "title": "معرفی تجهیزات ورزشی اسپرت‌وند",
-    "kind": "پوستر",
+    "title": "poster 2",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "پوستر",
+    "category": "طراحی سه‌بعدی",
     "src": "poster 3.webp",
-    "title": "نشست تخصصی هوش مصنوعی",
-    "kind": "پوستر",
+    "title": "poster 3",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "پوستر",
+    "category": "طراحی سه‌بعدی",
     "src": "poster 4.webp",
-    "title": "پوستر معرفی GTA VI",
-    "kind": "پوستر",
+    "title": "poster 4",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "سربرگ",
+    "category": "طراحی سه‌بعدی",
     "src": "sar barg 1.webp",
-    "title": "سربرگ شرکت مهر بردان هوامیک",
-    "kind": "سربرگ",
+    "title": "sar barg 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "سربرگ",
+    "category": "طراحی سه‌بعدی",
     "src": "sar barg 2.webp",
-    "title": "سربرگ رسمی وکالت",
-    "kind": "سربرگ",
+    "title": "sar barg 2",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "سرتیفیکیت",
+    "category": "طراحی سه‌بعدی",
     "src": "sertifiket 1.webp",
-    "title": "گواهی حضور در کارگاه رنگ مو",
-    "kind": "سرتیفیکیت",
+    "title": "sertifiket 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "تراکت",
+    "category": "طراحی سه‌بعدی",
     "src": "teracet 2.webp",
-    "title": "تراکت معرفی محصولات آرایشی سامانه",
-    "kind": "تراکت",
+    "title": "teracet 2",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   },
   {
-    "category": "تراکت",
+    "category": "طراحی سه‌بعدی",
     "src": "tracet 1.webp",
-    "title": "تراکت تبلیغاتی کافه‌رستوران چیک دیلز",
-    "kind": "تراکت",
+    "title": "tracet 1",
+    "kind": "طراحی سه‌بعدی",
     "summary": ""
   }
 ]
