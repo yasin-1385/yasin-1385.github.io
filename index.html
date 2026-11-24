@@ -2697,37 +2697,41 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 
 <script>
 
-/* CUSTOMER TESTIMONIALS: automatically read every image in /rezayat */
-let customerTestimonials=[];
+/* CUSTOMER TESTIMONIALS: use direct image paths; no manifest/API request */
+const customerTestimonials=[
+  {name:"n1.webp",src:"/rezayat/n1.webp",fallback:"https://raw.githubusercontent.com/yasin-1385/yasin-1385.github.io/main/rezayat/n1.webp"},
+  {name:"rezayat 2.webp",src:"/rezayat/rezayat%202.webp",fallback:"https://raw.githubusercontent.com/yasin-1385/yasin-1385.github.io/main/rezayat/rezayat%202.webp"}
+];
 let testimonialsLoaded=false;
-async function loadTestimonials(){
+function loadTestimonials(){
   const grid=document.getElementById("testimonialGrid");
   const count=document.getElementById("testimonialCount");
-  try{
-    const response=await fetch("rezayat.json",{cache:"no-store"});
-    if(!response.ok) throw new Error("فهرست تصاویر در دسترس نیست");
-    const files=await response.json();
-    customerTestimonials=files
-      .filter(file=>file && file.name && file.src)
-      .sort((a,b)=>a.name.localeCompare(b.name,"fa",{numeric:true}));
-    count.textContent=String(customerTestimonials.length).padStart(2,"0")+" پیام";
-    grid.innerHTML="";
-    if(!customerTestimonials.length){grid.innerHTML='<div class="testimonial-empty">هنوز تصویری در پوشه رضایت مشتریان ثبت نشده است.</div>';testimonialsLoaded=true;return;}
-    customerTestimonials.forEach((item,index)=>{
-      const button=document.createElement("button");button.type="button";button.className="testimonial-thumb";
-      button.setAttribute("aria-label","نمایش تصویر رضایت مشتری "+(index+1));
-      const img=document.createElement("img");img.src=item.src;img.alt="تصویر رضایت مشتری";img.loading="lazy";
-      const label=document.createElement("span");label.textContent="رضایت مشتری "+(index+1);
-      button.append(img,label);
-      button.addEventListener("click",()=>{closeTestimonials();openImage({src:item.src,title:"رضایت مشتری "+(index+1),kind:"رضایت مشتریان",description:"پیام ثبت‌شده مشتری پس از همکاری"});});
-      grid.appendChild(button);
+  grid.innerHTML="";
+  count.textContent=String(customerTestimonials.length).padStart(2,"0")+" پیام";
+  customerTestimonials.forEach((item,index)=>{
+    const button=document.createElement("button");button.type="button";button.className="testimonial-thumb";
+    button.setAttribute("aria-label","نمایش تصویر رضایت مشتری "+(index+1));
+    const img=document.createElement("img");img.src=item.src;img.alt="تصویر رضایت مشتری";img.loading="eager";
+    img.onerror=()=>{
+      if(img.dataset.fallbackTried!=="1"){
+        img.dataset.fallbackTried="1";
+        img.src=item.fallback;
+      }else{
+        img.alt="تصویر بارگذاری نشد";
+        img.style.display="none";
+        const error=document.createElement("span");error.textContent="بارگذاری تصویر ناموفق بود";button.appendChild(error);
+      }
+    };
+    const label=document.createElement("span");label.textContent="رضایت مشتری "+(index+1);
+    button.append(img,label);
+    button.addEventListener("click",()=>{
+      if(!img.naturalWidth)return;
+      closeTestimonials();
+      openImage({src:img.currentSrc||img.src,title:"رضایت مشتری "+(index+1),kind:"رضایت مشتریان",description:"پیام ثبت‌شده مشتری پس از همکاری"});
     });
-    testimonialsLoaded=true;
-  }catch(error){
-    count.textContent="مشاهده";
-    grid.innerHTML='<div class="testimonial-empty">بارگذاری تصاویر انجام نشد. لطفاً اتصال اینترنت را بررسی و دوباره صفحه را باز کنید.</div>';
-    console.error(error);
-  }
+    grid.appendChild(button);
+  });
+  testimonialsLoaded=true;
 }
 function openTestimonials(){
   document.getElementById("testimonialModal").classList.add("is-open");
