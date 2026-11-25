@@ -91,6 +91,9 @@ jobs:
               if len(parts) < 2 or parts[0] not in categories:
                   continue
               src = path.as_posix()
+              # This artwork is the homepage hero visual, not a portfolio entry.
+              if src == "طراحی سه‌بعدی/golden_glass_mannequin_web_3x.webp":
+                  continue
               title = embedded_title(path)
               if not title:
                   if src not in known:
