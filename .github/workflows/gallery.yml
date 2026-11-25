@@ -35,18 +35,18 @@ jobs:
           from datetime import datetime, timezone
 
           categories = [
-  "کاور ریلز",
-  "بنر",
-  "کارت ویزیت",
-  "کارت ضمانت",
-  "فاکتور",
-  "لوگو",
-  "منو",
-  "پوستر",
-  "سربرگ",
-  "سرتیفیکیت",
-  "تراکت"
-]
+              "کاور ریلز",
+              "بنر",
+              "کارت ویزیت",
+              "کارت ضمانت",
+              "فاکتور",
+              "لوگو",
+              "منو",
+              "پوستر",
+              "سربرگ",
+              "سرتیفیکیت",
+              "تراکت"
+          ]
           manifest_path = Path("images.json")
           if manifest_path.exists():
               try:
@@ -86,7 +86,7 @@ jobs:
               added.append((parts[0], src))
 
           manifest_path.write_text(
-              json.dumps(gallery, ensure_ascii=False, indent=2) + "\\n",
+              json.dumps(gallery, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8"
           )
 
@@ -100,7 +100,7 @@ jobs:
               "## تصاویر جدید"
           ]
           report.extend([f"- {category}: {src}" for category, src in added] or ["- مورد جدیدی اضافه نشد."])
-          Path("upload-report.md").write_text("\\n".join(report) + "\\n", encoding="utf-8")
+          Path("upload-report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
           print(f"Added {len(added)} images. Existing manifest entries were preserved.")
           PY
 
