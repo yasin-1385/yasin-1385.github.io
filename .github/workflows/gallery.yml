@@ -5,8 +5,14 @@ on:
     branches:
       - main
     paths:
-      - '*.webp'
-      - '*.WEBP'
+      - '**/*.webp'
+      - '**/*.WEBP'
+      - '**/*.png'
+      - '**/*.PNG'
+      - '**/*.jpg'
+      - '**/*.JPG'
+      - '**/*.jpeg'
+      - '**/*.JPEG'
       - '.github/workflows/gallery.yml'
   workflow_dispatch:
 
@@ -20,92 +26,90 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate gallery and upload report
-        id: generate
+      - name: Add images from category folders without changing existing entries
         shell: bash
         run: |
           python3 - <<'PY'
-          import os
           import json
+          from pathlib import Path
           from datetime import datetime, timezone
 
-          files = sorted(
-              (name for name in os.listdir(".")
-               if os.path.isfile(name) and name.lower().endswith(".webp")),
-              key=str.lower
-          )
+          categories = [
+  "کاور ریلز",
+  "بنر",
+  "کارت ویزیت",
+  "کارت ضمانت",
+  "فاکتور",
+  "لوگو",
+  "منو",
+  "پوستر",
+  "سربرگ",
+  "سرتیفیکیت",
+  "تراکت"
+]
+          manifest_path = Path("images.json")
+          if manifest_path.exists():
+              try:
+                  gallery = json.loads(manifest_path.read_text(encoding="utf-8"))
+                  if not isinstance(gallery, list):
+                      raise ValueError("images.json must contain a JSON array")
+              except Exception as exc:
+                  raise SystemExit(f"Cannot safely read images.json: {exc}")
+          else:
+              raise SystemExit("images.json is missing; refusing to create a replacement")
 
-          gallery = []
-          unknown = []
-          counts = {"کاور ریلز": 0, "طراحی گرافیک": 0, "طراحی سه‌بعدی": 0}
+          known = {
+              str(item.get("src", "")).replace("\\", "/")
+              for item in gallery if isinstance(item, dict)
+          }
+          added = []
+          extensions = {".webp", ".png", ".jpg", ".jpeg"}
 
-          for filename in files:
-              lower = filename.lower()
-              if lower.startswith("cover"):
-                  category = "کاور ریلز"
-              elif lower.startswith("work"):
-                  category = "طراحی گرافیک"
-              elif lower.startswith("3d") or lower.startswith("golden_glass"):
-                  category = "طراحی سه‌بعدی"
-              else:
-                  category = "طراحی سه‌بعدی"
-                  unknown.append(filename)
-
-              counts[category] += 1
-              title = os.path.splitext(filename)[0].replace("_", " ").replace("-", " ").strip()
+          for path in sorted(Path(".").rglob("*")):
+              if not path.is_file() or path.suffix.lower() not in extensions:
+                  continue
+              parts = path.parts
+              if len(parts) < 2 or parts[0] not in categories:
+                  continue
+              src = path.as_posix()
+              if src in known:
+                  continue
+              title = path.stem.replace("_", " ").replace("-", " ").strip()
               gallery.append({
-                  "category": category,
-                  "src": filename,
+                  "category": parts[0],
+                  "src": src,
                   "title": title,
-                  "kind": category,
+                  "kind": parts[0],
                   "summary": ""
               })
+              known.add(src)
+              added.append((parts[0], src))
 
-          with open("images.json", "w", encoding="utf-8") as f:
-              json.dump(gallery, f, ensure_ascii=False, indent=2)
+          manifest_path.write_text(
+              json.dumps(gallery, ensure_ascii=False, indent=2) + "\\n",
+              encoding="utf-8"
+          )
 
-          now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-          lines = [
+          report = [
               "# گزارش خودکار بارگذاری تصاویر",
               "",
-              f"- زمان بررسی: {now}",
-              f"- تعداد کل تصاویر WEBP: {len(files)}",
+              f"- زمان بررسی: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+              f"- تعداد کل نمونه‌کارها در فهرست: {len(gallery)}",
+              f"- تصاویر جدید اضافه‌شده در این اجرا: {len(added)}",
               "",
-              "## دسته‌بندی انجام‌شده",
-              f"- کاور ریلز: {counts['کاور ریلز']}",
-              f"- طراحی گرافیک: {counts['طراحی گرافیک']}",
-              f"- طراحی سه‌بعدی: {counts['طراحی سه‌بعدی']}",
-              "",
-              "## نام‌هایی که با الگوی دسته‌بندی تطبیق نداشتند",
+              "## تصاویر جدید"
           ]
-          if unknown:
-              lines += [
-                  "این فایل‌ها فعلاً در دسته «طراحی سه‌بعدی» نمایش داده شده‌اند؛ برای دسته‌بندی دقیق‌تر، نامشان را با cover، work یا 3d شروع کن:",
-                  ""
-              ] + [f"- {name}" for name in unknown]
-          else:
-              lines.append("موردی پیدا نشد.")
-          lines += [
-              "",
-              "## الگوی نام‌گذاری",
-              "- cover...webp → کاور ریلز",
-              "- work...webp → طراحی گرافیک",
-              "- 3d...webp → طراحی سه‌بعدی",
-          ]
-          with open("upload-report.md", "w", encoding="utf-8") as f:
-              f.write("\n".join(lines) + "\n")
-
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
-              f.write(f"unknown_count={len(unknown)}\n")
-          print(f"Processed {len(files)} WebP images; {len(unknown)} need filename review.")
+          report.extend([f"- {category}: {src}" for category, src in added] or ["- مورد جدیدی اضافه نشد."])
+          Path("upload-report.md").write_text("\\n".join(report) + "\\n", encoding="utf-8")
+          print(f"Added {len(added)} images. Existing manifest entries were preserved.")
           PY
 
-      - name: Commit gallery and report
+      - name: Commit updated gallery
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add images.json upload-report.md
           git diff --cached --quiet || (
-            git commit -m "Automatically categorize WebP portfolio images" &&
+            git commit -m "Add portfolio images from category folders" &&
             git push
           )
