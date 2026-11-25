@@ -32,6 +32,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json
+          import subprocess
           from pathlib import Path
           from datetime import datetime, timezone
 
@@ -49,6 +50,20 @@ jobs:
               "سرتیفیکیت",
               "تراکت"
           ]
+          # Read titles embedded in each image's metadata (XMP/IPTC/EXIF).
+          # ExifTool supports WebP, PNG, JPEG and other common image formats.
+          subprocess.run(["sudo", "apt-get", "update", "-qq"], check=True)
+          subprocess.run(["sudo", "apt-get", "install", "-y", "-qq", "libimage-exiftool-perl"], check=True)
+
+          def embedded_title(image_path):
+              result = subprocess.run(
+                  ["exiftool", "-s3", "-XMP-dc:Title", "-IPTC:ObjectName", "-EXIF:ImageDescription", str(image_path)],
+                  capture_output=True, text=True, encoding="utf-8", errors="replace", check=False
+              )
+              if result.returncode != 0:
+                  return ""
+              return next((line.strip() for line in result.stdout.splitlines() if line.strip()), "")
+
           manifest_path = Path("images.json")
           if manifest_path.exists():
               try:
@@ -76,15 +91,10 @@ jobs:
               if len(parts) < 2 or parts[0] not in categories:
                   continue
               src = path.as_posix()
-              title_path = path.with_name(path.name + ".title.txt")
-              if not title_path.is_file():
+              title = embedded_title(path)
+              if not title:
                   if src not in known:
                       skipped.append(src)
-                  continue
-
-              title = title_path.read_text(encoding="utf-8").strip()
-              if not title:
-                  skipped.append(src)
                   continue
 
               existing = next(
