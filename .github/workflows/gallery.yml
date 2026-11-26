@@ -36,7 +36,6 @@ jobs:
 
           categories = [
               "کاور ریلز",
-              "طراحی سه‌بعدی",
               "بنر",
               "کارت ویزیت",
               "کارت ضمانت",
@@ -48,7 +47,8 @@ jobs:
               "سرتیفیکیت",
               "تراکت"
           ]
-          # New portfolio titles come from the image filename (without extension).\n\n          manifest_path = Path("images.json")
+          # New portfolio titles come from the image filename (without extension).
+          manifest_path = Path("images.json")
           if manifest_path.exists():
               try:
                   gallery = json.loads(manifest_path.read_text(encoding="utf-8"))
