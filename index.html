@@ -1589,7 +1589,7 @@ html{scroll-behavior:smooth}
 
 <style id="navy-dot-cursor">
 @media (hover:hover) and (pointer:fine){
- html,body,body *{cursor:none!important}
+ html,body,body *{}
  #navyDotCursor{display:block}
 }
 #navyDotCursor{
@@ -1746,7 +1746,7 @@ html{scroll-behavior:smooth}
 
 <style id="visible-navy-cursor-fix">
 @media(hover:hover) and (pointer:fine){
-  html,html *,body,body *{cursor:none!important}
+  html,html *,body,body *{}
   #navyDotCursor{display:block!important;opacity:0;visibility:visible!important}
 }
 @media(hover:none),(pointer:coarse){
@@ -2364,7 +2364,7 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 /* Never hide the real pointer unless the custom pointer has actually started. */
 @media(hover:hover) and (pointer:fine){
  html:not(.cursor-ready),html:not(.cursor-ready) *{cursor:auto!important}
- html.cursor-ready,html.cursor-ready *{cursor:none!important}
+ html.cursor-ready,html.cursor-ready *{}
  #navyDotCursor{display:none!important;opacity:0!important}
  html.cursor-ready #navyDotCursor{display:block!important;opacity:1!important;visibility:visible!important}
 }
@@ -3149,39 +3149,7 @@ document.addEventListener("keydown",event=>{
 
 
 
-<div id="navyDotCursor" aria-hidden="true"></div>
-<script>
-/* Direction-aware elastic cursor: its long axis follows the actual pointer movement. */
-(()=>{
- const dot=document.getElementById("navyDotCursor");
- if(!dot||!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
- let previousX=null,previousY=null,settleTimer=0;
- addEventListener("pointermove",e=>{
-  dot.style.left=e.clientX+"px";
-  dot.style.top=e.clientY+"px";
-  dot.classList.add("is-visible");
-  if(previousX!==null){
-   const dx=e.clientX-previousX,dy=e.clientY-previousY;
-   if(Math.hypot(dx,dy)>.35){
-    const angle=Math.atan2(dy,dx)*180/Math.PI;
-    dot.style.setProperty("--cursor-angle",angle.toFixed(2)+"deg");
-    dot.classList.add("is-moving");
-    clearTimeout(settleTimer);
-    settleTimer=setTimeout(()=>dot.classList.remove("is-moving"),125);
-   }
-  }
-  previousX=e.clientX;previousY=e.clientY;
- },{passive:true});
- addEventListener("pointerleave",()=>{dot.classList.remove("is-moving");previousX=null;previousY=null},{passive:true});
- document.addEventListener("pointerover",e=>{
-  if(e.target.closest("a,button,.item,[role='button']"))dot.classList.add("is-hover");
-  else dot.classList.remove("is-hover");
- },{passive:true});
- addEventListener("blur",()=>dot.classList.remove("is-visible","is-hover","is-moving"));
- addEventListener("pointerdown",()=>dot.classList.add("is-hover"),{passive:true});
- addEventListener("pointerup",()=>dot.classList.remove("is-hover"),{passive:true});
-})();
-</script>
+
 
 <style id="yellow-cursor-and-carousel-fix">
 /* Stronger yellow identity and clearer works heading */
@@ -3418,26 +3386,6 @@ header.gallery-header-active .nav{gap:clamp(10px,1.8vw,24px)}
 
 <script id="site-cursor-and-sound-effects">
 (()=>{
- const dot=document.getElementById("navyDotCursor");
- if(dot && matchMedia("(hover:hover) and (pointer:fine)").matches){
-  let previousX=null,previousY=null,stopTimer=0;
-  addEventListener("pointermove",e=>{
-   document.documentElement.classList.add("cursor-ready");
-   dot.style.left=e.clientX+"px";dot.style.top=e.clientY+"px";
-   dot.classList.add("is-visible");
-   if(previousX!==null){
-    const dx=e.clientX-previousX,dy=e.clientY-previousY;
-    if(Math.hypot(dx,dy)>.35){
-     dot.style.setProperty("--cursor-angle",(Math.atan2(dy,dx)*180/Math.PI).toFixed(1)+"deg");
-     dot.classList.add("is-moving");
-     clearTimeout(stopTimer);
-     stopTimer=setTimeout(()=>dot.classList.remove("is-moving"),95);
-    }
-   }
-   previousX=e.clientX;previousY=e.clientY;
-  },{passive:true});
-  addEventListener("blur",()=>document.documentElement.classList.remove("cursor-ready"));
- }
  let enabled=true,ctx=null,musicBus=null,sfxBus=null,compressor=null,musicTimer=null,chordIndex=0,unlocked=false;
  const toggle=document.createElement("button");
  toggle.id="siteSoundToggle";toggle.type="button";toggle.setAttribute("aria-pressed","true");
@@ -3914,6 +3862,81 @@ body>.category-gallery-toolbar .category-back{
 
 
 
+
+
+<style id="velocity-squish-cursor">
+#velocitySquishCursor{
+ position:fixed;left:0;top:0;width:34px;height:34px;
+ border-radius:50%;background:#fff;pointer-events:none;
+ z-index:2147483647;mix-blend-mode:difference;
+ transform:translate3d(-100px,-100px,0);
+ transform-origin:center;will-change:transform;opacity:0;
+}
+</style>
+<script id="velocity-squish-cursor-controller">
+(()=>{
+ const pointerMedia=window.matchMedia("(hover: hover) and (pointer: fine)");
+ const motionMedia=window.matchMedia("(prefers-reduced-motion: reduce)");
+ let cursor=null,raf=0,cleanup=null;
+
+ function unmount(){
+  if(cleanup){cleanup();cleanup=null;}
+ }
+ function mount(){
+  if(!pointerMedia.matches||motionMedia.matches||cursor)return;
+  cursor=document.createElement("div");
+  cursor.id="velocitySquishCursor";
+  cursor.setAttribute("aria-hidden","true");
+  document.body.appendChild(cursor);
+
+  const follow=.16,deform=.72;
+  let x=-100,y=-100,targetX=-100,targetY=-100;
+  let lastX=null,lastY=null,angle=0,speed=0,hovering=false;
+
+  function onMove(e){
+   targetX=e.clientX;targetY=e.clientY;
+   hovering=!!(e.target instanceof Element&&e.target.closest("a, button, input"));
+   cursor.style.opacity="1";
+  }
+  function onLeave(){
+   cursor.style.opacity="0";
+   lastX=null;lastY=null;speed=0;
+  }
+  function animate(){
+   const dx=lastX===null?0:targetX-lastX;
+   const dy=lastY===null?0:targetY-lastY;
+   const distance=Math.hypot(dx,dy);
+   if(distance>.01)angle=Math.atan2(dy,dx);
+   const velocity=Math.min(distance/24,1);
+   speed+=(velocity-speed)*.2;
+   x+=(targetX-x)*follow;
+   y+=(targetY-y)*follow;
+   lastX=targetX;lastY=targetY;
+
+   const stretch=1+speed*deform;
+   const squash=1-speed*deform;
+   const hoverScale=hovering?1.12:1;
+   cursor.style.transform=
+    "translate3d("+(x-17)+"px,"+(y-17)+"px,0) rotate("+angle+"rad) scale("+
+    (stretch*hoverScale)+","+(squash*hoverScale)+")";
+   raf=requestAnimationFrame(animate);
+  }
+  window.addEventListener("pointermove",onMove,{passive:true});
+  window.addEventListener("pointerleave",onLeave,{passive:true});
+  raf=requestAnimationFrame(animate);
+  cleanup=()=>{
+   window.removeEventListener("pointermove",onMove);
+   window.removeEventListener("pointerleave",onLeave);
+   cancelAnimationFrame(raf);
+   cursor.remove();cursor=null;
+  };
+ }
+ function update(){unmount();mount();}
+ pointerMedia.addEventListener("change",update);
+ motionMedia.addEventListener("change",update);
+ mount();
+})();
+</script>
 
 </body>
 </html>
