@@ -2449,6 +2449,31 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 }
 </style>
 
+
+<style id="site-motion-enhancements">
+/* 1. Minimal branded preloader */
+#sitePreloader{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:#080d19;color:#edf4ff;opacity:1;visibility:visible;transition:opacity .65s ease,visibility .65s ease}
+#sitePreloader.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+#sitePreloader .preloader-mark{font:900 clamp(42px,8vw,68px)/1 Tahoma,Arial,sans-serif;letter-spacing:-5px}
+#sitePreloader .preloader-mark span{color:#b8d8ff}
+#sitePreloader .preloader-track{width:112px;height:2px;overflow:hidden;background:#ffffff20;border-radius:4px}
+#sitePreloader .preloader-track i{display:block;width:40%;height:100%;background:#c9e2ff;animation:preloaderProgress 1.15s ease-in-out infinite}
+#sitePreloader small{font:10px Tahoma,Arial,sans-serif;letter-spacing:.5px;color:#aab8cc}
+@keyframes preloaderProgress{0%{transform:translateX(260%)}100%{transform:translateX(-260%)}}
+/* 2. Soft masked reveal for the existing golden hero artwork */
+#orb .golden-hero-figure{clip-path:inset(0 0 100% 0);opacity:0;transform:translateY(24px) scale(.97);animation:heroArtworkReveal 1.35s cubic-bezier(.2,.75,.2,1) .25s forwards}
+@keyframes heroArtworkReveal{to{clip-path:inset(0 0 0 0);opacity:1;transform:translateY(0) scale(1)}}
+/* 4. Scroll entrance for main content groups; existing gallery item animation is preserved */
+.site-scroll-reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.site-scroll-reveal.site-in-view{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){
+ #sitePreloader{display:none!important}
+ #orb .golden-hero-figure{clip-path:none;opacity:1;transform:none;animation:none}
+ .site-scroll-reveal{opacity:1;transform:none;transition:none}
+ #sitePreloader .preloader-track i{animation:none}
+}
+</style>
+
 </head>
 
 
@@ -3935,6 +3960,43 @@ body>.category-gallery-toolbar .category-back{
  pointerMedia.addEventListener("change",update);
  motionMedia.addEventListener("change",update);
  mount();
+})();
+</script>
+
+
+<script id="site-motion-enhancements-controller">
+(()=>{
+ const preloader=document.getElementById("sitePreloader");
+ const hideLoader=()=>{if(preloader)preloader.classList.add("is-hidden");};
+ if(document.readyState==="complete") hideLoader();
+ else window.addEventListener("load",hideLoader,{once:true});
+ window.setTimeout(hideLoader,4500);
+
+ const targets=[
+  ".section-heading",
+  ".category-showcase",
+  ".about-inner",
+  ".contact-section>small",
+  ".contact-section>h2",
+  ".contact-section>.contact-description",
+  ".contact-card",
+  "footer"
+ ];
+ const elements=document.querySelectorAll(targets.join(","));
+ elements.forEach(el=>el.classList.add("site-scroll-reveal"));
+ if(!("IntersectionObserver" in window)||window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  elements.forEach(el=>el.classList.add("site-in-view"));
+  return;
+ }
+ const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting){
+    entry.target.classList.add("site-in-view");
+    observer.unobserve(entry.target);
+   }
+  });
+ },{threshold:.12,rootMargin:"0px 0px -35px 0px"});
+ elements.forEach(el=>observer.observe(el));
 })();
 </script>
 
