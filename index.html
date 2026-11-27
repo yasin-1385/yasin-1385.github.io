@@ -2529,7 +2529,11 @@ html::-webkit-scrollbar-thumb:hover{background:#c4dcf7}
 <section class="hero">
 
   
-  <div class="hero-orb" id="orb" aria-hidden="true"><img class="golden-hero-figure" src="/طراحی%20سه%E2%80%8Cبعدی/golden_glass_mannequin_web_3x.webp" alt="" fetchpriority="high"></div>
+  <div class="hero-orb" id="orb" aria-label="تصویر تعاملی یاسین">
+  <img class="hero-real-layer" src="/hero-reveal/real.webp" alt="تصویر واقعی یاسین" fetchpriority="high">
+  <canvas class="hero-liquid-canvas" aria-hidden="true"></canvas>
+  <img class="hero-cartoon-source" src="/hero-reveal/cartoon.webp" alt="" aria-hidden="true">
+</div>
 
 
   <div class="hero-content">
@@ -3999,6 +4003,97 @@ body>.category-gallery-toolbar .category-back{
   });
  },{threshold:.12,rootMargin:"0px 0px -35px 0px"});
  elements.forEach(el=>observer.observe(el));
+})();
+</script>
+
+
+<style id="hero-liquid-reveal-effect">
+#orb.hero-orb{pointer-events:auto!important;touch-action:pan-y!important;overflow:visible!important;isolation:isolate!important}
+#orb .hero-real-layer,#orb .hero-liquid-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important}
+#orb .hero-real-layer{z-index:1!important;display:block!important;filter:drop-shadow(0 18px 38px rgba(0,0,0,.24))!important}
+#orb .hero-liquid-canvas{z-index:3!important;display:block!important;pointer-events:none!important}
+#orb .hero-cartoon-source{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+#orb .golden-hero-figure{display:none!important}
+@media(max-width:900px){#orb.hero-orb{pointer-events:auto!important}}
+@media(prefers-reduced-motion:reduce){#orb .hero-liquid-canvas{display:none!important}#orb .hero-cartoon-source{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;opacity:1!important}}
+</style>
+
+<script id="hero-liquid-reveal-controller">
+(()=>{
+ const orb=document.getElementById("orb");
+ if(!orb||orb.dataset.liquidReady)return;
+ orb.dataset.liquidReady="1";
+ const canvas=orb.querySelector(".hero-liquid-canvas");
+ const source=orb.querySelector(".hero-cartoon-source");
+ const ctx=canvas&&canvas.getContext("2d");
+ if(!canvas||!source||!ctx)return;
+ const reduce=window.matchMedia("(prefers-reduced-motion: reduce)");
+ if(reduce.matches)return;
+ let w=0,h=0,dpr=1,raf=0,last=0;
+ const marks=[];
+ const life=1250,brush=42;
+ function resize(){
+  const r=orb.getBoundingClientRect();
+  if(!r.width||!r.height)return;
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  w=r.width;h=r.height;
+  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+  canvas.style.width=w+"px";canvas.style.height=h+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  paint(performance.now());
+ }
+ function fitImage(){
+  const iw=source.naturalWidth,ih=source.naturalHeight;
+  if(!iw||!ih)return null;
+  const scale=Math.min(w/iw,h/ih);
+  const dw=iw*scale,dh=ih*scale;
+  return {x:(w-dw)/2,y:(h-dh)/2,w:dw,h:dh};
+ }
+ function paint(now){
+  if(!source.complete||!source.naturalWidth||!w||!h)return;
+  ctx.clearRect(0,0,w,h);
+  const rect=fitImage();
+  if(!rect)return;
+  ctx.globalCompositeOperation="source-over";
+  ctx.globalAlpha=1;
+  ctx.drawImage(source,rect.x,rect.y,rect.w,rect.h);
+  ctx.globalCompositeOperation="destination-out";
+  for(let i=marks.length-1;i>=0;i--){
+   const m=marks[i],age=now-m.t,fade=Math.max(0,1-age/life);
+   if(fade<=0){marks.splice(i,1);continue;}
+   ctx.globalAlpha=fade;
+   ctx.lineCap="round";ctx.lineJoin="round";
+   ctx.strokeStyle="#000";ctx.fillStyle="#000";
+   ctx.shadowColor="rgba(0,0,0,.95)";
+   ctx.shadowBlur=18+12*fade;
+   ctx.lineWidth=brush*(.72+.28*fade);
+   ctx.beginPath();ctx.arc(m.x,m.y,brush*.46,0,Math.PI*2);ctx.fill();
+   if(m.px!==undefined){
+    ctx.beginPath();ctx.moveTo(m.px,m.py);ctx.lineTo(m.x,m.y);ctx.stroke();
+   }
+  }
+  ctx.globalAlpha=1;ctx.globalCompositeOperation="source-over";ctx.shadowBlur=0;
+  if(marks.length)raf=requestAnimationFrame(paint);
+  else raf=0;
+ }
+ function point(e){
+  const r=orb.getBoundingClientRect();
+  const x=e.clientX-r.left,y=e.clientY-r.top;
+  if(x<0||y<0||x>w||y>h)return;
+  const now=performance.now(),p=marks.length?marks[marks.length-1]:null;
+  marks.push({x,y,px:p&&now-p.t<90?p.x:undefined,py:p&&now-p.t<90?p.y:undefined,t:now});
+  while(marks.length>90)marks.shift();
+  if(!raf)raf=requestAnimationFrame(paint);
+ }
+ function clearOnExit(){/* marks naturally dissolve and the illustration restores */}
+ source.addEventListener("load",resize,{once:true});
+ if(source.complete)resize();
+ const ro=("ResizeObserver" in window)?new ResizeObserver(resize):null;
+ if(ro)ro.observe(orb);else window.addEventListener("resize",resize,{passive:true});
+ orb.addEventListener("pointermove",point,{passive:true});
+ orb.addEventListener("pointerdown",point,{passive:true});
+ orb.addEventListener("pointerleave",clearOnExit,{passive:true});
+ window.addEventListener("pagehide",()=>{if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();},{once:true});
 })();
 </script>
 
